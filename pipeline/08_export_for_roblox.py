@@ -114,7 +114,8 @@ for r in roads.itertuples(index=False):
             width = float(str(row.get("lanes")).split(";")[0]) * 3.5
         except (TypeError, ValueError):
             width = DEFAULT_W.get(hwy, 7)
-    pts = [[lx(x), lz(y), elev_at(x, y)] for x, y in r.geometry.coords]
+    # simplify (1.5 m) so a road becomes ~4.7k segment parts instead of ~16k
+    pts = [[lx(x), lz(y), elev_at(x, y)] for x, y in r.geometry.simplify(1.5).coords]
     mid = r.geometry.interpolate(0.5, normalized=True)
     rshards[cell_of(mid.x, mid.y)].append(dict(pts=pts, width_m=round(width, 1), hwy=hwy,
                                                elevated=bool(r.elevated_or_tunnel), name=row.get("name") if isinstance(row.get("name"), str) else None,
