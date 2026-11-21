@@ -19,7 +19,8 @@ Hexes on the grid edge are only partly covered: land_m2 counts the part inside t
 Inputs : data/processed/flood_depth_<ft>ft.tif, hazard/sea_mask.tif, hazard/inland_water.tif,
          buildings_final.geojson, stats.json; oakland-flood-vulnerability/outputs/hex_scores.csv
          (optional, to flag hexes FloodWatch already scores).
-Outputs: data/processed/floodwatch/hex_slr.csv (long: one row per hex x scenario)
+Outputs: data/processed/floodwatch/hex_slr.csv (long: one row per hex x scenario; also carries the
+         hex's buildings_total and residents_total, so shares can be computed)
          data/processed/floodwatch/hex_slr_check.json (reconciliation against stats.json)
 """
 import json
@@ -30,8 +31,8 @@ import numpy as np
 import pandas as pd
 from pyproj import Transformer
 from rasterio.features import rasterize
+import shapely
 from shapely.geometry import Polygon, box
-from shapely.ops import transform as shp_transform
 
 from common import GRID_SHAPE, GRID_TRANSFORM, read
 from config import (CRS_GEO, CRS_METRIC, FLOODWATCH_H3_RES, GRID_BOUNDS, HAZ, PROC, ROOT, SCENARIO_IDS,
@@ -41,6 +42,10 @@ OUT = PROC / "floodwatch"
 OUT.mkdir(parents=True, exist_ok=True)
 to_geo = Transformer.from_crs(CRS_METRIC, CRS_GEO, always_xy=True)
 to_utm = Transformer.from_crs(CRS_GEO, CRS_METRIC, always_xy=True)
+
+
+def shp_transform(tf, geom):
+    return shapely.transform(geom, lambda xy: np.column_stack(tf(xy[:, 0], xy[:, 1])))
 
 # ------------------------------------------------------------------ hexes covering the grid
 grid_utm = box(*GRID_BOUNDS)
@@ -77,6 +82,8 @@ b["h3"] = [h3.latlng_to_cell(p.y, p.x, FLOODWATCH_H3_RES) for p in pts]
 missing = set(b.h3) - set(cells)
 assert not missing, f"{len(missing)} building hexes are outside the hex set"
 b["hid"] = b.h3.map(idx)
+bldg_total = np.bincount(b.hid, minlength=n)
+res_total = np.bincount(b.hid, weights=b.residents_est, minlength=n)
 
 # ------------------------------------------------------------------ per scenario
 stats = json.loads((PROC / "stats.json").read_text())
@@ -97,14 +104,15 @@ for ft, sid in zip(SCENARIOS_FT, SCENARIO_IDS):
                          flooded_share=round(fl_m2[i] / land_m2[i], 4) if land_m2[i] else None,
                          flooded_land_m2=int(fl_m2[i]), land_m2=int(land_m2[i]),
                          buildings_flooded=int(nb[i]), residents_affected=round(float(res[i]), 2),
+                         buildings_total=int(bldg_total[i]), residents_total=round(float(res_total[i]), 2),
                          grid_coverage=round(grid_m2[i] / hex_area[i], 3), in_floodwatch=c in fw))
     s = st[sid]
     chk = dict(scenario=sid,
                buildings_flooded=(int(nb.sum()), s["buildings_flooded"]),
                residents_affected=(int(round(res.sum())), s["residents_affected"]),
-               flooded_land_km2=(round(fl_m2.sum() / 1e6, 4), s["flooded_land_km2"]))
-    chk["ok"] = all(a == e for a, e in (chk["buildings_flooded"], chk["residents_affected"])) and \
-        abs(chk["flooded_land_km2"][0] - chk["flooded_land_km2"][1]) < 1e-4
+               flooded_land_km2=(round(float(fl_m2.sum()) / 1e6, 4), s["flooded_land_km2"]))
+    chk["ok"] = bool(all(a == e for a, e in (chk["buildings_flooded"], chk["residents_affected"]))
+                     and abs(chk["flooded_land_km2"][0] - chk["flooded_land_km2"][1]) < 1e-4)
     check.append(chk)
     print(f"{sid}: hex sums vs stats.json  buildings {chk['buildings_flooded']}  residents "
           f"{chk['residents_affected']}  land km2 {chk['flooded_land_km2']}  {'OK' if chk['ok'] else 'MISMATCH'}")
