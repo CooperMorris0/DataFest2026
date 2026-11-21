@@ -108,7 +108,7 @@ app.post('/api/requests', requireUser, (req, res) => {
   const request = {
     id: crypto.randomUUID(), lat, lng, category, details: text, people,
     status: 'open', requesterId: req.user.id, requesterName: req.user.name,
-    volunteers: [], createdAt: now, updatedAt: now,
+    volunteers: [], comments: [], createdAt: now, updatedAt: now,
   };
   db.requests.push(request);
   save();
@@ -143,6 +143,23 @@ app.post('/api/requests/:id/resolve', requireUser, (req, res) => {
   request.updatedAt = new Date().toISOString();
   save();
   res.json({ request });
+});
+
+// Comments: any signed-in user can comment on any request (older requests may not have the array yet)
+app.post('/api/requests/:id/comments', requireUser, (req, res) => {
+  const request = db.requests.find((r) => r.id === req.params.id);
+  if (!request) return res.status(404).json({ error: 'Request not found' });
+  const text = typeof (req.body || {}).text === 'string' ? req.body.text.trim() : '';
+  if (!text || text.length > 500) {
+    return res.status(400).json({ error: 'Comment must be 1-500 characters' });
+  }
+  request.comments = request.comments || [];
+  request.comments.push({
+    id: crypto.randomUUID(), userId: req.user.id, name: req.user.name, text, at: new Date().toISOString(),
+  });
+  request.updatedAt = new Date().toISOString();
+  save();
+  res.status(201).json({ request });
 });
 
 module.exports = app;

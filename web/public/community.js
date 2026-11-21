@@ -70,7 +70,7 @@
     const list = open.slice(0, 6).map(r => `<li><a href="#" data-act="open" data-id="${h(r.id)}">
         <span class="cm-chip cm-${h(r.status)}">${h(STATUS[r.status] || r.status)}</span>
         <b>${h(CATS[r.category] || r.category)}</b>
-        <small>${h(r.requesterName)} · ${ago(r.createdAt)}${(r.volunteers || []).length ? ` · ${r.volunteers.length} helping` : ""}</small></a></li>`).join("");
+        <small>${h(r.requesterName)} · ${ago(r.createdAt)}${(r.volunteers || []).length ? ` · ${r.volunteers.length} helping` : ""}${(r.comments || []).length ? ` · ${r.comments.length} ${r.comments.length === 1 ? "comment" : "comments"}` : ""}</small></a></li>`).join("");
     box.innerHTML = `<h2><i class="fa-solid fa-hand-holding-heart"></i> Help requests <span class="cm-count">${open.length} open</span></h2>
       <a href="#" class="cm-btn cm-primary cm-askbig" data-act="ask"><i class="fa-solid fa-hand-holding-heart"></i> Ask for help</a>
       <p class="note cm-who">${me ? `Signed in as <b>${h(me.name)}</b> · <a href="#" data-act="logout">Log out</a>`
@@ -171,7 +171,8 @@
       <p class="note">Asked by ${h(r.requesterName)} · ${ago(r.createdAt)}</p>
       <p class="note">Volunteers: ${vols.length ? vols.map(v => h(v.name)).join(", ") : "No one yet"}</p>
       ${btns ? `<div class="cm-actions">${btns}</div>` : ""}
-      ${msg ? `<p class="cm-err">${h(msg)}</p>` : ""}${SAFETY}</div>`);
+      ${msg ? `<p class="cm-err">${h(msg)}</p>` : ""}
+      ${commentsHtml(r)}${SAFETY}</div>`);
     details.querySelectorAll("button[data-act]").forEach(b => b.onclick = async () => {
       b.disabled = true;
       try {
@@ -180,6 +181,33 @@
         load();
       } catch (ex) { showCard(r, ex.message); }
     });
+    const cf = details.querySelector(".cm-cform");
+    if (cf) cf.onsubmit = async e => {
+      e.preventDefault();
+      const text = cf.text.value.trim(), btn = cf.querySelector("button");
+      if (!text) return;
+      btn.disabled = true;
+      try {
+        const {request} = await api("POST", `/api/requests/${encodeURIComponent(r.id)}/comments`, {text});
+        showCard(request);
+        load();
+      } catch (ex) { showCard(r, ex.message); }
+    };
+  }
+
+  // ------------------------------------------------------------ comments on a request
+  function commentsHtml(r) {
+    const cs = r.comments || [];
+    const list = cs.length
+      ? `<ul class="cm-comments">${cs.map(c => `<li><b>${h(c.name)}</b>${c.userId === r.requesterId ? ' <span class="cm-tag">requester</span>' : ""}
+          <small>${ago(c.at)}</small><p>${h(c.text)}</p></li>`).join("")}</ul>`
+      : '<p class="note">No comments yet.</p>';
+    const form = me
+      ? `<form class="cm-cform"><textarea name="text" rows="2" maxlength="500" required
+          placeholder="Ask a question, share an update, or say you're on your way"></textarea>
+          <button type="submit" class="cm-btn cm-primary">Post comment</button></form>`
+      : `<p class="note"><a href="${LOGIN}">Log in</a> to comment.</p>`;
+    return `<h3 class="cm-h3">Comments (${cs.length})</h3>${list}${form}`;
   }
 
   // ------------------------------------------------------------ markers

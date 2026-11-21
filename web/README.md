@@ -27,6 +27,7 @@ Open http://localhost:3000 (set `PORT` to change the port). Run tests with `npm 
 | POST | `/api/requests` | login required; `{lat, lng, category, details, people}` → 201 `{request}` |
 | POST | `/api/requests/:id/volunteer` | login required; sets status to `help_on_the_way` |
 | POST | `/api/requests/:id/resolve` | requester only; sets status to `resolved` |
+| POST | `/api/requests/:id/comments` | `{text}` (1–500 chars); any logged-in user; comments are returned on each request |
 
 Categories: flooding, sandbags, evacuation, cleanup, supplies, other.
 Locations must be inside Oakland (lat 37.69–37.89, lng -122.36 to -122.11).

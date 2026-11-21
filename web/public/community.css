@@ -57,6 +57,17 @@
 .cm-new { background: #1f4e9c; }
 .cm-chip { padding: 3px 10px; border-radius: 999px; font-weight: 600; font-size: 13px; color: #fff; white-space: nowrap; }
 
+/* comments on a request */
+.cm-h3 { font-size: 13px; margin: 14px 0 6px; padding-top: 10px; border-top: 1px solid #e3e5e6; }
+.cm-comments { list-style: none; margin: 0; padding: 0; }
+.cm-comments li { padding: 6px 0; border-bottom: 1px solid #f0f1f2; font-size: 13px; }
+.cm-comments small { color: #5f6b73; margin-left: 6px; }
+.cm-comments p { margin: 2px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cm-tag { background: #eef2f7; color: #1f4e9c; border-radius: 999px; padding: 0 6px; font-size: 11px; font-weight: 600; }
+.cm-cform textarea { display: block; width: 100%; box-sizing: border-box; margin: 8px 0 6px; padding: 7px 9px;
+  border: 1px solid #c8cdd1; border-radius: 8px; font: inherit; font-size: 13px; resize: vertical; }
+.cm-cform textarea:focus { outline: 2px solid #1f4e9c; outline-offset: 0; }
+
 /* help markers */
 .cm-marker { background: none; border: none; }
 .cm-pin { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
