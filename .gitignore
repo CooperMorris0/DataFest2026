@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+data/raw/
+backups/
+*.rbxl
+.DS_Store
+# regenerable intermediates (rerun the pipeline)
+data/processed/*.tif
+data/processed/buildings.geojson
+data/processed/buildings_flood.geojson
+data/processed/roads_flood.geojson

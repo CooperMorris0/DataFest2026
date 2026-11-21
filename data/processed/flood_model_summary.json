@@ -1,0 +1,53 @@
+{
+  "mhhw_navd88_m": 1.941,
+  "scenarios": [
+    {
+      "slr_ft": 0,
+      "water_level_navd88_m": 1.941,
+      "flooded_land_km2": 0.1887,
+      "disconnected_low_km2": 0.1481,
+      "buildings_flooded": 6,
+      "road_km_impassable": 0.0,
+      "road_segments_impassable": 0
+    },
+    {
+      "slr_ft": 1,
+      "water_level_navd88_m": 2.2458,
+      "flooded_land_km2": 0.3098,
+      "disconnected_low_km2": 0.1828,
+      "buildings_flooded": 7,
+      "road_km_impassable": 0.691,
+      "road_segments_impassable": 1
+    },
+    {
+      "slr_ft": 2,
+      "water_level_navd88_m": 2.5506,
+      "flooded_land_km2": 0.396,
+      "disconnected_low_km2": 0.3699,
+      "buildings_flooded": 9,
+      "road_km_impassable": 0.958,
+      "road_segments_impassable": 2
+    },
+    {
+      "slr_ft": 3,
+      "water_level_navd88_m": 2.8554,
+      "flooded_land_km2": 0.8806,
+      "disconnected_low_km2": 0.7386,
+      "buildings_flooded": 46,
+      "road_km_impassable": 4.172,
+      "road_segments_impassable": 16
+    },
+    {
+      "slr_ft": 5,
+      "water_level_navd88_m": 3.465,
+      "flooded_land_km2": 3.3841,
+      "disconnected_low_km2": 1.653,
+      "buildings_flooded": 417,
+      "road_km_impassable": 22.553,
+      "road_segments_impassable": 132
+    }
+  ],
+  "n_buildings": 13602,
+  "road_km_total": 365.358,
+  "n_road_segments": 2691
+}
