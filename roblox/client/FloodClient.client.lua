@@ -279,12 +279,12 @@ text(bottom, "Exploration tool, not an official hazard or evacuation map. Flood 
 	13, { Position = UDim2.fromOffset(14, 54), Size = UDim2.new(1, -28, 0, 30), TextColor3 = MUTED })
 
 -- walk HUD (top center, only while walking)
-local hud = frame({ Size = UDim2.fromOffset(520, 104), Position = UDim2.new(0.5, -260, 0, 136), Visible = false })
+local hud = frame({ Size = UDim2.fromOffset(520, 124), Position = UDim2.new(0.5, -260, 0, 136), Visible = false })
 hud.Parent = gui
 list(hud, 2)
 local hudStreet = text(hud, "", 20, { Font = Enum.Font.GothamBold })
 local hudWater = text(hud, "", 18)
-local hudHex = text(hud, "", 15, { TextColor3 = MUTED, Size = UDim2.new(1, 0, 0, 40) })
+local hudHex = text(hud, "", 15, { TextColor3 = MUTED, Size = UDim2.new(1, 0, 0, 60) })
 
 local scenButtons, modeButtons = {}, {}
 
@@ -542,8 +542,10 @@ RunService.Heartbeat:Connect(function(dt)
 	local street, d = nearestStreet(pos, 120, true)
 	hudStreet.Text = (street and d < 120 and street:GetAttribute("Street")) or "Off-street"
 	local h = hexAt(pos.X / SPM, pos.Z / SPM)
-	hudHex.Text = h and ("FloodWatch block: %s risk today · higher than %d%% of Oakland · %d flood reports to 311"):format(
-		h.risk, h.fvi_pct, h.reports) or "Outside FloodWatch coverage (Oakland only)"
+	local share = h and h.slr and h.slr[Config.SCENARIOS[state.scenario]]
+	hudHex.Text = h and (("FloodWatch block: %s risk today · higher than %d%% of Oakland · %d flood reports to 311%s"):format(
+		h.risk, h.fvi_pct, h.reports, (share and state.scenario > 1) and ("\nAt %s: %.0f%% of this block floods"):format(
+		Config.SCENARIO_LABELS[state.scenario], share * 100) or "")) or "Outside FloodWatch coverage (Oakland only)"
 end)
 
 -- ------------------------------------------------------------------ click info
@@ -553,6 +555,11 @@ local function hexPanel(h)
 	text(info, ("%d flood reports to 311 (2013–2026)%s"):format(h.reports, h.under and " · may be under-reported" or ""), 15)
 	text(info, ("Flood hazard rank: %d percentile · %s"):format(h.hazard_pct, h.fema), 14)
 	if h.why ~= "" then text(info, "Why: " .. h.why, 14, { Size = UDim2.new(1, 0, 0, 36), TextColor3 = MUTED }) end
+	local share = h.slr and h.slr[Config.SCENARIOS[state.scenario]]
+	if share then
+		text(info, ("And at %s of sea-level rise: %.0f%% of this block's land floods"):format(
+			Config.SCENARIO_LABELS[state.scenario], share * 100), 14, { TextColor3 = Color3.fromRGB(140, 200, 255) })
+	end
 	text(info, ("Households without a car: %.0f%% · hex %s"):format(h.no_car, h.h3), 13, { TextColor3 = MUTED })
 end
 

@@ -84,7 +84,8 @@ if K1.exists():
     k1 = pd.read_csv(K1)
     if "flooded_share" in k1:
         for h, grp in k1.groupby("h3"):
-            slr[h] = {str(r.scenario): round(float(r.flooded_share), 3) for _, r in grp.iterrows()}
+            slr[h] = {str(r.scenario): round(float(r.flooded_share), 3) for _, r in grp.iterrows()
+                      if pd.notna(r.flooded_share)}  # hexes with no land in the grid have no share
 
 z = read(HAZ / "dem_filled.tif")
 inv = ~GRID_TRANSFORM
