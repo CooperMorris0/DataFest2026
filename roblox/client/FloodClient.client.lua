@@ -394,7 +394,9 @@ local vel = Vector3.zero
 local VIEWS = {
 	{ "Overview", Vector3.new(W_STUDS * 0.62, 2600, -H_STUDS * 0.05), 180, -42, { 4600, -420 } },
 	{ "West Oakland", Vector3.new(m(3300), 700, m(-1700)), 200, -35, { 3350, -2150 } },
-	{ "Jack London", Vector3.new(m(4700), 420, m(-150)), 170, -30, { 4600, -420 } },
+	-- walk target = Jefferson St (Jack London district): dry today and at +3 ft, ~0.3 m at +4 ft,
+	-- ~0.7 m at +5 ft, so the wading readout shows up on a single click (docs/demo_script.md)
+	{ "Jack London", Vector3.new(m(4700), 420, m(-150)), 170, -30, { 4816, -749 } },
 	{ "Port", Vector3.new(m(1500), 900, m(-1800)), 235, -35, { 1900, -2000 } },
 	{ "Fire Station 2", Vector3.new(m(4420), 300, m(-60)), 160, -30, { 4400, -230 } },
 }
