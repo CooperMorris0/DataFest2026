@@ -104,5 +104,25 @@
   558520,
   4182723
  ],
- "axes": "X=east, Z=-north, Y=up; elevations in m NAVD88"
+ "axes": "X=east, Z=-north, Y=up; elevations in m NAVD88",
+ "terrain_tiles": {
+  "dir": "terrain",
+  "tile_cols": 128,
+  "ni": 6317,
+  "nk": 4010,
+  "tiles_i": 50,
+  "tiles_k": 32,
+  "voxel_studs": 4,
+  "zmin_m": -12.0,
+  "zmax_m": 42.0,
+  "materials": [
+   "Pavement",
+   "Asphalt",
+   "Grass",
+   "Mud",
+   "Rock"
+  ],
+  "layout": "u16 cols,u16 rows,u16 h[rows*cols],u8 mat[rows*cols]; rows from south"
+ },
+ "water": "water.json"
 }
