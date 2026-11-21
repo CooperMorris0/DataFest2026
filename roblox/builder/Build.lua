@@ -39,7 +39,9 @@ local function writeStatsModule()
 	-- Bake stats.json into a ModuleScript so play mode never needs HTTP.
 	local json = DataLoader.get(Config.SERVER .. "/data/processed/stats.json")
 	local fv = ReplicatedStorage.FloodViewer
-	local mod = fv:FindFirstChild("StatsJSON") or Instance.new("ModuleScript")
+	-- always a fresh instance: require() caches a ModuleScript's first result per session
+	if fv:FindFirstChild("StatsJSON") then fv.StatsJSON:Destroy() end
+	local mod = Instance.new("ModuleScript")
 	mod.Name = "StatsJSON"
 	mod.Source = "-- generated from data/processed/stats.json by FloodBuilder.Build; do not edit\nreturn [==[" .. json .. "]==]\n"
 	mod.Parent = fv

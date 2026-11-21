@@ -9,6 +9,8 @@ local last = 0
 
 function DataLoader.get(path)
 	local url = path:match("^http") and path or (Config.DATA .. "/" .. path)
+	-- cache-buster: Studio's HTTP layer can return a stale copy even with nocache = true
+	url ..= (url:find("?", 1, true) and "&" or "?") .. "v=" .. tostring(os.time()) .. tostring(math.random(1e6))
 	for attempt = 1, 2 do
 		local wait = MIN_GAP - (os.clock() - last)
 		if wait > 0 then task.wait(wait) end

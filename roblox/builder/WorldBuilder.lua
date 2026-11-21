@@ -249,7 +249,10 @@ function WorldBuilder.floodwatch(city)
 	-- client data (no per-building list, no outline points)
 	local client = { source = fw.source, reports_total = fw.reports_total, risk_counts = fw.risk_counts,
 		note = fw.note, hexes = fw.hexes }
-	local mod = game:GetService("ReplicatedStorage").FloodViewer:FindFirstChild("FloodwatchJSON") or Instance.new("ModuleScript")
+	-- always a fresh instance: require() caches a ModuleScript's first result per session
+	local fv = game:GetService("ReplicatedStorage").FloodViewer
+	if fv:FindFirstChild("FloodwatchJSON") then fv.FloodwatchJSON:Destroy() end
+	local mod = Instance.new("ModuleScript")
 	mod.Name = "FloodwatchJSON"
 	mod.Source = "-- generated from data/processed/roblox/floodwatch.json (FloodWatch, Kai); do not edit\nreturn [==["
 		.. HttpService:JSONEncode(client) .. "]==]\n"
