@@ -238,7 +238,7 @@
   "buildings_without_baseline_route": 88
  },
  "routing_facilities": {
-  "fire": 12,
+  "fire": 17,
   "medical": 96,
   "hospital": 5
  }

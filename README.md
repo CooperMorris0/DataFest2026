@@ -27,7 +27,7 @@ This is an exploration tool, **not an official hazard or evacuation map**. Defer
 - **Equity:** at +3 and +4 ft, 96% and 94% of affected residents live in CalEnviroScreen top-quartile tracts, against 28% of all Oakland residents (3.4× over-represented). At +5 ft (ART 66 in) the share is 93%. Within the study area itself, 62% of residents are in such tracts. These are ecological, tract-level comparisons.
 - **Emergency access:** Oakland Fire Station 2 (Jack London waterfront) floods from +4 ft, which more than doubles response times for 235 residents. At +5 ft (ART 66 in), 5,536 residents are cut off from fire or medical services.
 - **Hidden risk:** at +4 ft, 422 more buildings sit below the water level but behind higher ground (ART "low-lying" areas). Groundwater rise and drainage failure are not modeled.
-- **Top priority tracts (+4 ft):** 4033.02 (Oakland, CalEnviroScreen 83rd percentile), 4287 (Alameda, 78), 9832 (Oakland, 55), 4017 (Oakland, 80), 4060 (Oakland, 88). The full ranking per scenario is in `stats.json` → `top_priority`, and the tract table is in `tract_table.csv`.
+- **Top priority tracts (+4 ft):** 4287 (Alameda, CalEnviroScreen 78th percentile), 9832 (Oakland, 55; 203 residents see response times double when Fire Station 2 floods), 4033.02 (Oakland, 83), 4017 (Oakland, 80), 4060 (Oakland, 88). The full ranking per scenario is in `stats.json` → `top_priority`, and the tract table is in `tract_table.csv`.
 
 ### Flooding today vs. flooding tomorrow (with Kai's FloodWatch)
 
@@ -61,7 +61,7 @@ This is an exploration tool, **not an official hazard or evacuation map**. Defer
 - *Contamination:* open or managed-in-place EnviroStor and GeoTracker sites in or within 100 m of flooding.
 
 **Equity and priority (07).** Tract population (2020 Census) is allocated to residential parcels (MTC/SFEI land use) by footprint area × height. Priority = Exposure × Vulnerability:
-- Exposure is the mean of three components, each normalized 0–1 across tracts: share of buildings flooded, facilities lost, and share of residents cut off. The weights are in `PRIORITY_WEIGHTS`.
+- Exposure is the weighted mean of two components, each normalized 0–1 across tracts: share of buildings flooded, and **emergency access loss** = (residents cut off + ½ × residents whose response time more than doubles) ÷ tract residents. A flooded fire station or clinic counts through the residents it serves, not in its own tract. Weights are `PRIORITY_WEIGHTS` and `DEGRADED_ACCESS_WEIGHT` in `pipeline/config.py`.
 - Vulnerability is the CalEnviroScreen 4.0 percentile ÷ 100.
 
 ## Validation
@@ -82,10 +82,10 @@ This is an exploration tool, **not an official hazard or evacuation map**. Defer
 - Exploration tool, not an official hazard or evacuation map. Still-water flooding only: no storm surge, rainfall, groundwater rise, or compound events. A 100-year storm tide adds ~0.84 m; supplementary bathtub runs are in `hazard/bathtub_summary.json`.
 - **Depth is estimated** (ART extent combined with LiDAR). "+5 ft" is ART's 5.5 ft map, so it overstates exactly 5 ft on purpose.
 - **Residents per building** is an area-based estimate. **97% of building heights are estimated** (OSM rarely tags height here).
-- Drive times are free-flow estimates by road class, with no traffic, signals or dispatch time. TIGER ring roads are treated as two-way. Fire stations are Oakland's only, so Alameda and Emeryville stations are missing; the bbox includes part of Alameda.
+- Drive times are free-flow estimates by road class, with no traffic, signals or dispatch time. TIGER ring roads are treated as two-way. Fire stations include neighboring departments (Alameda, Emeryville/Alameda County Fire, Piedmont; USGS National Map); they change baseline response for 83 buildings near Emeryville but no flood scenario totals.
 - Contaminated-site proximity **does not mean residents are exposed**.
 - CalEnviroScreen 4.0 uses 2010 tracts and population uses 2020 tracts; they are joined per building.
-- **Priority sensitivity:** with equal weights, one lost facility in a tract carries a full third of the exposure score. At +5 ft this ranks a tract with zero affected residents #2. Adjust `PRIORITY_WEIGHTS` if that's not the intended emphasis.
+- **Priority weights are a choice:** flooding and emergency-access loss count equally, and a doubled response time counts half as much as being cut off (`DEGRADED_ACCESS_WEIGHT`, an assumption). Before 2026-11-21 lost facilities were counted in their own tract, which ranked tracts with few affected residents near the top.
 - Overpass (the OSM API) refused automated requests during the build, so facilities come from authoritative agency datasets and the outer road ring comes from TIGER.
 - **FloodWatch:** 311 reports partly reflect who calls 311 (see its README). It covers Oakland only, so the Alameda and Emeryville parts of the study area have no FloodWatch data.
 
@@ -100,7 +100,7 @@ This is an exploration tool, **not an official hazard or evacuation map**. Defer
 | Buildings, study-area roads, coastline | OpenStreetMap via OSMnx, © OpenStreetMap contributors (ODbL) |
 | Outer road ring | U.S. Census Bureau TIGER/Line 2025 roads, Alameda County |
 | Land use (residential parcels) | MTC / SFEI Existing Land Use 2020 |
-| Fire stations | City of Oakland GIS, OFD_Basemap |
+| Fire stations | City of Oakland GIS, OFD_Basemap (Oakland); USGS National Map Structures, Fire Stations/EMS Stations (Alameda, Emeryville, Piedmont) |
 | Hospitals, clinics, nursing facilities | CDPH Licensed and Certified Healthcare Facilities (CalHHS) |
 | Schools | California Department of Education, California Public Schools 2024-25 |
 | BART stations | City of Oakland GIS, Bart_Stations |
