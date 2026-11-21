@@ -101,23 +101,25 @@ A walkable model of the study area (1 stud = 0.28 m) in the team's Roblox place 
 
 ## Data sources (all accessed 2026-11-21)
 
-| Data | Source |
-|---|---|
-| Flood hazard | ART Bay Shoreline Flood Explorer, SF Bay Conservation and Development Commission (WMS `mapserver.adaptingtorisingtides.org`, layers `inundation0/12/24/36/48/52/66`, `lowlying*`) |
-| Elevation | USGS 3DEP 1 m DEM, project CA_AlamedaCounty_2021_B21 (QL1, 10 cm RMSEz class) |
-| Tide datum | NOAA CO-OPS 9414750 Alameda datums; Extreme Water Levels product |
-| Validation | NOAA Office for Coastal Management Sea Level Rise Viewer (`coast.noaa.gov/arcgis/rest/services/dc_slr`) |
-| Buildings, study-area roads, coastline | OpenStreetMap via OSMnx, © OpenStreetMap contributors (ODbL) |
-| Outer road ring | U.S. Census Bureau TIGER/Line 2025 roads, Alameda County |
-| Land use (residential parcels) | MTC / SFEI Existing Land Use 2020 |
-| Fire stations | City of Oakland GIS, OFD_Basemap |
-| Hospitals, clinics, nursing facilities | CDPH Licensed and Certified Healthcare Facilities (CalHHS) |
-| Schools | California Department of Education, California Public Schools 2024-25 |
-| BART stations | City of Oakland GIS, Bart_Stations |
-| Contaminated sites | DTSC EnviroStor (`Envirostor_Public_Data_Export`); SWRCB GeoTracker (`geotracker_sites_download`) |
-| Equity | CalEnviroScreen 4.0 (OEHHA); 2020 Census tracts and places (TIGERweb) |
-| Alignment check | Esri World Imagery |
-| Flooding today (via FloodWatch, Kai) | OAK 311 service requests (data.oaklandca.gov `quth-gb8e`), FEMA National Flood Hazard Layer, CDC/ATSDR SVI 2022, USGS 3DEP. See `oakland-flood-vulnerability/README.md` |
+Links and service endpoints below were checked on 2026-11-21. “Reachable” means the page or service returned a response; it does not revalidate the underlying dataset or its methods. The MTC/SFEI landing page returned HTTP 403 from this environment, so its access is blocked here.
+
+| Data | Source | Link check (2026-11-21) |
+|---|---|---|
+| Flood hazard | [ART Bay Shoreline Flood Explorer](https://explorer.adaptingtorisingtides.org/home), SF Bay Conservation and Development Commission ([WMS service](https://mapserver.adaptingtorisingtides.org/cgi-bin/mapserv?map=/opt/slrviewer/mapfiles/bcdc.map), layers `inundation0/12/24/36/48/52/66`, `lowlying*`) | Reachable (HTTP 200) |
+| Elevation | USGS 3DEP 1 m DEM, project CA_AlamedaCounty_2021_B21 (QL1, 10 cm RMSEz class; [project report](https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/metadata/CA_AlamedaCounty_2021_B21/CA_AlamedaCo_3_2021/reports/Alameda_Technical_Data_Report_Final_Signed.pdf)) | Reachable (HTTP 200) |
+| Tide datum | NOAA CO-OPS [9414750 Alameda datums](https://tidesandcurrents.noaa.gov/datums.html?id=9414750); [Extreme Water Levels](https://tidesandcurrents.noaa.gov/est/est_station.shtml?stnid=9414750) product | Reachable (HTTP 200) |
+| Validation | NOAA Office for Coastal Management [Sea Level Rise Viewer](https://coast.noaa.gov/slr/); [dc_slr map service](https://coast.noaa.gov/arcgis/rest/services/dc_slr/slr_1ft/MapServer) | Reachable (HTTP 200) |
+| Buildings, study-area roads, coastline | [OpenStreetMap](https://www.openstreetmap.org/), via OSMnx; © OpenStreetMap contributors (ODbL) | Reachable (HTTP 200) |
+| Outer road ring | U.S. Census Bureau [TIGER/Line 2025 roads, Alameda County](https://www2.census.gov/geo/tiger/TIGER2025/ROADS/tl_2025_06001_roads.zip) | Reachable (HTTP 200) |
+| Land use (residential parcels) | [MTC / SFEI Enhanced Existing Land Use 2020](https://www.sfei.org/data/sfei-enhanced-mtc-2020-land-use) | Link access blocked here (HTTP 403); search metadata was available |
+| Fire stations | City of Oakland GIS, [OFD_Basemap FeatureServer](https://services.arcgis.com/9tC74aDHuml0x5Yz/arcgis/rest/services/OFD_Basemap/FeatureServer/5) | Reachable (HTTP 200) |
+| Hospitals, clinics, nursing facilities | CDPH Licensed and Certified Healthcare Facilities (CalHHS), [FeatureServer](https://services5.arcgis.com/FlidZxdI0LGC9vAw/arcgis/rest/services/CDPH_LC_Facilities_Data/FeatureServer/0) | Reachable (HTTP 200) |
+| Schools | California Department of Education, [California Public Schools 2024-25](https://services3.arcgis.com/fdvHcZVgB2QSRNkL/arcgis/rest/services/SchoolSites2425/FeatureServer/0) | Reachable (HTTP 200) |
+| BART stations | City of Oakland GIS, [Bart_Stations FeatureServer](https://services.arcgis.com/9tC74aDHuml0x5Yz/arcgis/rest/services/Bart_Stations/FeatureServer/0) | Reachable (HTTP 200) |
+| Contaminated sites | DTSC EnviroStor ([`Envirostor_Public_Data_Export`](https://services3.arcgis.com/Oy2JTCD10wkoelxS/arcgis/rest/services/Envirostor_Public_Data_Export/FeatureServer/0)); SWRCB GeoTracker ([`geotracker_sites_download`](https://gispublic.waterboards.ca.gov/portalserver/rest/services/Hosted/geotracker_sites_download/FeatureServer/371)) | Both reachable (HTTP 200) |
+| Equity | [CalEnviroScreen 4.0](https://oehha.ca.gov/calenviroscreen/report/calenviroscreen-40) (OEHHA); 2020 Census tracts and places ([TIGERweb service](https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer)) | Both reachable (HTTP 200) |
+| Alignment check | [Esri World Imagery](https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer) | Reachable (HTTP 200) |
+| Flooding today (via FloodWatch, Kai) | OAK 311 service requests ([dataset `quth-gb8e`](https://data.oaklandca.gov/Infrastructure/Service-requests-received-by-the-Oakland-Call-Cent/quth-gb8e)), FEMA National Flood Hazard Layer ([FEMA Flood Map Service Center](https://msc.fema.gov/portal/home)), CDC/ATSDR SVI 2022 ([data and documentation](https://www.atsdr.cdc.gov/placeandhealth/svi/data_documentation_download.html)), and USGS 3DEP ([project report](https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/metadata/CA_AlamedaCounty_2021_B21/CA_AlamedaCo_3_2021/reports/Alameda_Technical_Data_Report_Final_Signed.pdf)). See `oakland-flood-vulnerability/README.md` | All four links reachable (HTTP 200) |
 
 ## How to run
 
@@ -128,6 +130,40 @@ pipeline/run_all.sh
 ```
 
 All downloads are cached in `data/raw/`. After the first run, a full rerun takes about 4 minutes.
+
+### Windows setup
+
+From the repository root in Command Prompt, create the environment and install the requirements:
+
+```bat
+py -3 -m venv .venv
+.venv\Scripts\pip install -r requirements.txt
+```
+
+The shell runner is Bash, so on Windows run its scripts one by one in the same order from the repository root:
+
+```bat
+.venv\Scripts\python pipeline\01_fetch_osm.py
+.venv\Scripts\python pipeline\01b_fetch_landuse.py
+.venv\Scripts\python pipeline\01c_fetch_network_osm.py
+.venv\Scripts\python pipeline\01d_fetch_facilities.py
+.venv\Scripts\python pipeline\01e_fetch_tiger_roads.py
+.venv\Scripts\python pipeline\01f_fetch_contamination.py
+.venv\Scripts\python pipeline\02_fetch_hazard.py
+.venv\Scripts\python pipeline\03_fetch_elevation.py
+.venv\Scripts\python pipeline\04_building_heights.py
+.venv\Scripts\python pipeline\04b_alignment_check.py
+.venv\Scripts\python pipeline\hazard_bathtub.py
+.venv\Scripts\python pipeline\05_flood_exposure.py
+.venv\Scripts\python pipeline\05b_validate_hazard.py
+.venv\Scripts\python pipeline\06_consequences.py
+.venv\Scripts\python pipeline\07_equity_priority.py
+.venv\Scripts\python pipeline\08_export_for_roblox.py
+.venv\Scripts\python pipeline\08b_export_roblox_world.py
+.venv\Scripts\python pipeline\09_findings_brief.py
+.venv\Scripts\python pipeline\10_floodwatch_slr.py
+.venv\Scripts\python pipeline\08c_import_floodwatch.py
+```
 
 | Step | Script | Key outputs (`data/processed/`) |
 |---|---|---|
