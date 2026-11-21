@@ -1,0 +1,49 @@
+pick_rank,site_id,ftype,name,address,detail,lat,lng,h3,risk_c,flood_reports_250m,in_study_area,streets_impassable_5ft,high_risk_hexes_within_1km,high_risk_residents_within_1km,new_high_risk_hexes,new_residents_covered
+1.0,school:Cox Academy,school,Cox Academy,9860 Sunnyside St.,446 students,37.746307,-122.161414,89283098353ffff,Moderate,8,False,,24,16110,24.0,16110.0
+2.0,school:McClymonds High,school,McClymonds High,2607 Myrtle St.,273 students,37.818183,-122.279062,89283081397ffff,Moderate,4,True,0.001,23,14611,23.0,14611.0
+3.0,school:Westlake Middle,school,Westlake Middle,2629 Harrison St.,279 students,37.814707,-122.260894,892830812b3ffff,Moderate,8,True,0.0,19,12184,17.0,11032.0
+4.0,school:Melrose Leadership Academy,school,Melrose Leadership Academy,4730 Fleming Ave.,722 students,37.780487,-122.197661,89283098a03ffff,Moderate,10,False,,13,8728,13.0,8728.0
+5.0,school:Bella Vista Elementary,school,Bella Vista Elementary,1025 East 28th St.,349 students,37.800215,-122.237434,89283081643ffff,Moderate,5,False,,11,8760,11.0,8760.0
+6.0,school:Infant and Preschool Program,school,Infant and Preschool Program,3550 64th Ave.,1 students,37.775228,-122.177204,89283099d3bffff,Moderate,5,False,,9,6086,9.0,6086.0
+7.0,school:Bret Harte Middle,school,Bret Harte Middle,3700 Coolidge Ave.,337 students,37.799716,-122.20683,8928308a4abffff,Moderate,5,False,,7,5368,7.0,5368.0
+8.0,library:Brookfield Branch,library,Brookfield Branch,9255 Edes Avenue,,37.737806,-122.188554,89283098147ffff,Moderate,3,False,,16,5561,16.0,5561.0
+9.0,"school:Oakland Military Institute, College Preparatory Academy",school,"Oakland Military Institute, College Preparatory Academy",3877 Lusk St.,480 students,37.82954,-122.27275,89283081303ffff,Moderate,6,True,0.0,12,9162,8.0,6092.0
+10.0,school:Prescott Elementary,school,Prescott Elementary,920 Campbell St.,135 students,37.808786,-122.297547,8928308118bffff,Moderate,9,True,0.019,6,2720,6.0,2720.0
+11.0,school:Cleveland Elementary,school,Cleveland Elementary,745 Cleveland St.,376 students,37.804005,-122.244013,89283081673ffff,Moderate,1,False,,5,2265,4.0,1381.0
+12.0,school:Edna Brewer Middle,school,Edna Brewer Middle,3748 13th Ave.,785 students,37.803543,-122.228816,8928308a587ffff,Moderate,7,False,,7,4739,2.0,1224.0
+,senior_center:East Oakland Senior Center,senior_center,East Oakland Senior Center,9255 Edes Ave,,37.737806,-122.188554,89283098147ffff,Moderate,3,False,,16,5561,,
+,school:Burbank Child Development Center,school,Burbank Child Development Center,3550 64Th Ave.,36 students,37.775725,-122.177424,89283099d23ffff,Moderate,6,False,,8,5435,,
+,school:Oakland International High,school,Oakland International High,4521 Webster St.,270 students,37.833848,-122.260503,8928308134bffff,Moderate,7,False,,6,4746,,
+,rec_center:East Oakland Sports Center,rec_center,East Oakland Sports Center,9161 Edes Avenue,Pool,37.73806,-122.189504,89283098147ffff,Moderate,4,False,,16,4626,,
+,rec_center:Ira Jenkins,rec_center,Ira Jenkins,9175 Edes Avenue,Recreation Center,37.738025,-122.189371,89283098147ffff,Moderate,3,False,,16,4626,,
+,school:Brookfield Elementary,school,Brookfield Elementary,401 Jones Ave.,133 students,37.734979,-122.189237,89283098157ffff,Moderate,1,False,,12,4122,,
+,school:Sequoia Elementary,school,Sequoia Elementary,3730 Lincoln Ave.,452 students,37.802333,-122.211062,8928308a4afffff,Moderate,8,False,,5,3707,,
+,school:Emerson Elementary,school,Emerson Elementary,4803 Lawton Ave.,354 students,37.834105,-122.257901,8928308ac87ffff,Moderate,5,False,,4,3164,,
+,school:Oakland High,school,Oakland High,1023 MacArthur Blvd.,"1,579 students",37.804485,-122.236897,8928308164fffff,Moderate,7,False,,4,2990,,
+,school:Oakland Technical High,school,Oakland Technical High,4351 Broadway,"1,812 students",37.832436,-122.254655,8928308ac97ffff,Moderate,5,False,,3,2373,,
+,school:Glenview Elementary,school,Glenview Elementary,4215 La Cresta Ave.,476 students,37.805627,-122.219301,8928308a5c7ffff,Moderate,10,False,,3,2071,,
+,school:Burckhalter Elementary,school,Burckhalter Elementary,3994 Burckhalter Ave.,193 students,37.775355,-122.166738,89283099d7bffff,Moderate,5,False,,2,994,,
+,school:East Bay Innovation Academy,school,East Bay Innovation Academy,3400 Malcolm Ave.,451 students,37.746037,-122.141377,89283098263ffff,Low,0,False,,2,906,,
+,rec_center:Lions Pool,rec_center,Lions Pool,3860 Hanly Road,Pool,37.807083,-122.214417,8928308a5cbffff,Moderate,4,False,,1,847,,
+,rec_center:Dimond,rec_center,Dimond,3860 Hanly Road,Recreation Center,37.807083,-122.214417,8928308a5cbffff,Moderate,4,False,,1,847,,
+,school:Piedmont Avenue Elementary,school,Piedmont Avenue Elementary,4314 Piedmont Ave.,310 students,37.828759,-122.24861,89283081267ffff,Moderate,3,False,,1,817,,
+,library:Piedmont Avenue Branch,library,Piedmont Avenue Branch,80 Echo Avenue,,37.827671,-122.248219,89283081277ffff,Moderate,3,False,,1,817,,
+,school:Oakland Academy of Knowledge Elementary,school,Oakland Academy of Knowledge Elementary,8755 Fontaine St.,231 students,37.762246,-122.152705,89283099c33ffff,Moderate,1,False,,1,207,,
+,school:Bay Area Technology,school,Bay Area Technology,8251 Fontaine St.,255 students,37.765735,-122.153936,89283099c23ffff,Moderate,1,False,,0,0,,
+,school:Aspire Berkley Maynard Academy,school,Aspire Berkley Maynard Academy,6200 San Pablo Ave.,515 students,37.845774,-122.283339,8928308ad87ffff,Moderate,8,False,,0,0,,
+,school:Young Adult Program,school,Young Adult Program,915 54th St.,126 students,37.83812,-122.274329,89283081367ffff,Moderate,0,False,,0,0,,
+,school:Home and Hospital Program,school,Home and Hospital Program,915 54th St.,3 students,37.83812,-122.274329,89283081367ffff,Moderate,0,False,,0,0,,
+,school:Rudsdale Continuation High,school,Rudsdale Continuation High,8251 Fontaine St.,333 students,37.765735,-122.153936,89283099c23ffff,Moderate,1,False,,0,0,,
+,school:Skyline High,school,Skyline High,12250 Skyline Blvd.,"1,250 students",37.798825,-122.160874,89283099bb3ffff,Very low,0,False,,0,0,,
+,school:Kaiser Early Childhood Center,school,Kaiser Early Childhood Center,25 South Hill Ct.,118 students,37.852797,-122.231647,8928308aebbffff,Low,0,False,,0,0,,
+,school:Hintil Kuu Ka Child Development Center,school,Hintil Kuu Ka Child Development Center,11850 Campus Dr,47 students,37.794651,-122.175014,8928309990fffff,Very low,3,False,,0,0,,
+,school:Chabot Elementary,school,Chabot Elementary,6686 Chabot Rd.,576 students,37.850195,-122.2428,8928308ac7bffff,Moderate,9,False,,0,0,,
+,school:Carl B. Munck Elementary,school,Carl B. Munck Elementary,11900 Campus Dr.,151 students,37.795014,-122.173756,8928309990fffff,Very low,5,False,,0,0,,
+,school:Crocker Highlands Elementary,school,Crocker Highlands Elementary,525 Midcrest Rd.,415 students,37.811105,-122.2273,8928308a507ffff,Very low,5,False,,0,0,,
+,school:Peralta Elementary,school,Peralta Elementary,460 63rd St.,355 students,37.849548,-122.258753,8928308ac27ffff,Moderate,3,False,,0,0,,
+,school:Redwood Heights Elementary,school,Redwood Heights Elementary,4401 39th Ave.,374 students,37.797543,-122.186173,8928308a4cbffff,Moderate,8,False,,0,0,,
+,school:Claremont Middle,school,Claremont Middle,5750 College Ave.,487 students,37.845405,-122.251407,8928308ac0fffff,Low,10,False,,0,0,,
+,"school:Independent Study, Sojourner Truth",school,"Independent Study, Sojourner Truth",8251 Fontaine St.,481 students,37.765735,-122.153936,89283099c23ffff,Moderate,1,False,,0,0,,
+,library:Rockridge Branch,library,Rockridge Branch,5366 College Avenue,,37.839357,-122.251258,8928308ac13ffff,Moderate,6,False,,0,0,,
+,rec_center:Montclair,rec_center,Montclair,6300 Moraga Avenue,Recreation Center,37.828527,-122.212434,8928308a1cbffff,Very low,7,False,,0,0,,
+,rec_center:Bushrod,rec_center,Bushrod,560 - 59th Street,Recreation Center,37.844818,-122.263471,8928308addbffff,Moderate,6,False,,0,0,,
