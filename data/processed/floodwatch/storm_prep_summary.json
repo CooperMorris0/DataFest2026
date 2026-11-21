@@ -1,9 +1,5 @@
 {
   "hex_score_column": "fvi_base",
-  "inlets": 13058,
-  "drains_listed": 100,
-  "spacing_m": 60,
-  "drains_top25_flood_reports_100m": 322,
   "shelter_candidates": 172,
   "safe_candidates": 48,
   "shelters_picked": 12,
@@ -14,8 +10,6 @@
   "gap_hexes": 289,
   "gap_residents": 142345,
   "assumptions": [
-    "Drain ranking shows where clearing likely helps most; it does not model pipe capacity.",
-    "The city's drain-cleaning records are not public, so recently cleared drains may rank high.",
     "Residents per hex = tract population / hexes in tract (estimate).",
     "Shelter sites are suggestions: capacity, accessibility and agreements with each site are not checked.",
     "Library, senior center and Parks & Rec locations come from 2013 city datasets."

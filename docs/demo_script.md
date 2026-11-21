@@ -36,8 +36,8 @@ Type **47 Clay St, Oakland** (Oakland Fire Station 2, Jack London waterfront) an
 - Equity line: "At 3 and 4 feet, 94 to 96% of the affected residents live in the state's most pollution-burdened neighborhoods, 3.4 times their share of Oakland."
 
 ### 3:20 · What to do before the next storm (Storm prep)
-Click the link to the **Storm prep** page. Show **Drains to clear**, then **Shelters**.
-**Say:** "Before the next storm: the drains to clear first, ranked by flood history, vulnerable residents and nearby services. The top 25 sites have 322 flood reports within 100 meters. And only 48 of 172 candidate shelters are on safe ground. About 142,000 people in high-risk areas have no safe site within walking distance. That's the case for resilience hubs in the flatlands."
+Click the link to the **Storm prep** page and show **Shelters**.
+**Say:** "Before the next storm: where people can go. Only 48 of 172 candidate shelters are on safe ground. About 142,000 people in high-risk areas have no safe site within walking distance. That's the case for resilience hubs in the flatlands."
 
 ### 3:50 · Close
 **Say:** "Everything here is public data: ART, USGS, NOAA, FEMA, CDC, CalEnviroScreen, the Census and city 311 records. It's not an official hazard map, but it shows where help should start."
