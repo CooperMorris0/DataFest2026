@@ -145,7 +145,7 @@ water = dict(cell_studs=WS, sea=greedy(sea_c), inland=greedy(inland_c & ~sea_c),
 for sid in SCENARIO_IDS:
     fl = coarse(read(PROC / f"flood_depth_{sid}.tif") > 0) & ~sea_c
     water["flood"][sid] = greedy(fl)
-(OUT / "water.json").write_text(json.dumps(water, separators=(",", ":")))
+(OUT / "water.json").write_text(json.dumps(water, separators=(",", ":"), allow_nan=False))
 
 man = json.loads((OUT / "manifest.json").read_text())
 man["terrain_tiles"] = dict(dir="terrain", tile_cols=TILE, ni=NI, nk=NK, tiles_i=math.ceil(NI / TILE),

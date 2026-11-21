@@ -53,12 +53,11 @@ local function setupPlace(stats)
 	local L = game:GetService("Lighting")
 	L.ClockTime = 13
 	L.GeographicLatitude = 37.8
-	if not L:FindFirstChildOfClass("Atmosphere") then
-		local a = Instance.new("Atmosphere")
-		a.Density = 0.25
-		a.Haze = 1
-		a.Parent = L
-	end
+	local a = L:FindFirstChildOfClass("Atmosphere") or Instance.new("Atmosphere")
+	a.Density = 0.08 -- light haze only: the study area is ~25,000 studs across
+	a.Haze = 0.3
+	a.Glare = 0
+	a.Parent = L
 	-- spawn for walk mode: Jack London Square
 	local spawn = workspace:FindFirstChild("FloodSpawn") or Instance.new("SpawnLocation")
 	spawn.Name = "FloodSpawn"

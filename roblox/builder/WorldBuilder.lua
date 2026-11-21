@@ -136,7 +136,7 @@ local function waterParts(rects, parent, levelStuds, color, transparency, prefix
 				p.Position = Vector3.new(x + xw / 2, levelStuds - 1, z + zw / 2)
 				p.Color = color
 				p.Transparency = transparency
-				p.Material = Enum.Material.Glass
+				p.Material = Enum.Material.SmoothPlastic -- Glass mirrors the sky and hides the city
 				p.Parent = parent
 				count += 1
 				z += zw
