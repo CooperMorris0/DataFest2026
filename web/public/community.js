@@ -15,6 +15,8 @@
   const defaultDetails = details.innerHTML;
 
   let me = null, requests = [], picking = false, temp = null;
+  // help pins get their own pane, above every other marker layer (the page's "sites" pane is 620)
+  map.createPane("help"); map.getPane("help").style.zIndex = 640;
   const layer = L.layerGroup().addTo(map);
 
   // ------------------------------------------------------------ helpers
@@ -41,34 +43,41 @@
     return Math.floor(s / 86400) + " d ago";
   }
   function icon(kind) {
-    return L.divIcon({className: "cm-marker", iconSize: [26, 26], iconAnchor: [13, 13],
+    return L.divIcon({className: "cm-marker", iconSize: [30, 30], iconAnchor: [15, 15],
       html: `<span class="cm-pin cm-${kind}"><i class="fa-solid fa-hand-holding-heart"></i></span>`});
   }
   function clearTemp() { if (temp) { map.removeLayer(temp); temp = null; } }
 
-  // ------------------------------------------------------------ account box (bottom left)
-  const Account = L.Control.extend({
-    options: {position: "bottomleft"},
-    onAdd() {
-      const d = L.DomUtil.create("div", "cm-box");
-      L.DomEvent.disableClickPropagation(d);
-      L.DomEvent.disableScrollPropagation(d);
-      return d;
-    },
-  });
-  const box = new Account().addTo(map).getContainer();
+  // ------------------------------------------------------------ "Help requests" section: first thing in the panel
+  const box = document.createElement("section");
+  box.className = "cm-section";
+  const sub = panel.querySelector(".sub");
+  sub ? sub.after(box) : panel.prepend(box);
   box.addEventListener("change", e => { e.target.checked ? layer.addTo(map) : map.removeLayer(layer); });
   box.addEventListener("click", e => {
-    if (!e.target.closest("[data-act=logout]")) return;
+    const a = e.target.closest("[data-act]");
+    if (!a) return;
     e.preventDefault();
-    api("POST", "/api/logout").catch(() => {}).finally(() => location.reload());
+    if (a.dataset.act === "logout") api("POST", "/api/logout").catch(() => {}).finally(() => location.reload());
+    if (a.dataset.act === "ask") startPick();
+    if (a.dataset.act === "open") {
+      const r = requests.find(x => x.id === a.dataset.id);
+      if (r) { map.flyTo([r.lat, r.lng], Math.max(map.getZoom(), 15), {duration: 0.6}); showCard(r); }
+    }
   });
   function renderBox() {
-    const n = requests.filter(r => r.status !== "resolved").length;
-    box.innerHTML = (me
-      ? `Signed in as <b>${h(me.name)}</b> · <a href="#" data-act="logout">Log out</a>`
-      : `<a href="${LOGIN}">Log in / Sign up</a>`) +
-      `<label><input type="checkbox" ${map.hasLayer(layer) ? "checked" : ""}> Show help requests (${n} open)</label>`;
+    const open = requests.filter(r => r.status !== "resolved");
+    const list = open.slice(0, 6).map(r => `<li><a href="#" data-act="open" data-id="${h(r.id)}">
+        <span class="cm-chip cm-${h(r.status)}">${h(STATUS[r.status] || r.status)}</span>
+        <b>${h(CATS[r.category] || r.category)}</b>
+        <small>${h(r.requesterName)} · ${ago(r.createdAt)}${(r.volunteers || []).length ? ` · ${r.volunteers.length} helping` : ""}</small></a></li>`).join("");
+    box.innerHTML = `<h2><i class="fa-solid fa-hand-holding-heart"></i> Help requests <span class="cm-count">${open.length} open</span></h2>
+      <a href="#" class="cm-btn cm-primary cm-askbig" data-act="ask"><i class="fa-solid fa-hand-holding-heart"></i> Ask for help</a>
+      <p class="note cm-who">${me ? `Signed in as <b>${h(me.name)}</b> · <a href="#" data-act="logout">Log out</a>`
+        : `<a href="${LOGIN}">Log in / Sign up</a> to ask for help or volunteer.`}</p>
+      ${open.length ? `<ul class="cm-list">${list}</ul>${open.length > 6 ? `<p class="note">+ ${open.length - 6} more on the map</p>` : ""}`
+        : '<p class="note">No open requests right now.</p>'}
+      <label class="note"><input type="checkbox" ${map.hasLayer(layer) ? "checked" : ""}> Show help pins on the map</label>`;
   }
 
   // ------------------------------------------------------------ "Ask for help" button + pick-a-spot mode
@@ -104,7 +113,7 @@
   // ------------------------------------------------------------ new request form
   function showForm(ll) {
     clearTemp();
-    temp = L.marker(ll, {pane: "sites", icon: icon("new"), interactive: false}).addTo(map);
+    temp = L.marker(ll, {pane: "help", icon: icon("new"), interactive: false}).addTo(map);
     const hex = typeof hexAt === "function" ? hexAt(ll) : null;
     const risk = hex && hex.feature.properties.risk;
     show(`<h2>Ask for help</h2><div class="card cm-form">
@@ -177,7 +186,7 @@
   function draw() {
     layer.clearLayers();
     requests.filter(r => r.status !== "resolved").forEach(r => {
-      L.marker([r.lat, r.lng], {pane: "sites", icon: icon(r.status), riseOnHover: true, keyboard: false})
+      L.marker([r.lat, r.lng], {pane: "help", icon: icon(r.status), riseOnHover: true, keyboard: false})
         .bindTooltip(`<b>${h(CATS[r.category] || r.category)}</b><br>${h(STATUS[r.status] || r.status)}`,
           {direction: "top", offset: [0, -12], className: "risk-tip"})
         .on("click", () => { if (!picking) showCard(r); })
