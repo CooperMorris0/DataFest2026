@@ -48,6 +48,7 @@ function WorldBuilder.buildings(manifest, city, shardFilter)
 				for _, r in ipairs(recs) do
 					local p = basePart(tostring(r.id))
 					p.CanQuery = true
+					p.CanCollide = true -- walk mode: walk around buildings, not through them
 					local h = m(r.h + Config.BUILDING_SINK_M)
 					p.Size = Vector3.new(m(r.w), h, m(r.d))
 					local y = m(r.base - Config.BUILDING_SINK_M) + h / 2
@@ -104,6 +105,9 @@ function WorldBuilder.roads(manifest, city, shardFilter)
 							p.CFrame = CFrame.lookAt((pa + pb) / 2, pb)
 							p.Color = Config.COLORS.road
 							p:SetAttribute("Imp", r.imp)
+							if r.name then p:SetAttribute("Street", r.name) end
+							p:SetAttribute("Hwy", r.hwy or "")
+							p:SetAttribute("Elevated", r.elevated == true)
 							p.Parent = staging
 						end
 					end
@@ -130,7 +134,7 @@ local function waterParts(rects, parent, levelStuds, color, transparency, prefix
 			while z < z1 do
 				local zw = math.min(MAX_PART, z1 - z)
 				local p = basePart(prefix)
-				p.CanQuery = false
+				p.CanQuery = true -- walk mode raycasts up from the ground to measure water depth
 				p.CastShadow = false
 				p.Size = Vector3.new(xw, 2, zw)
 				p.Position = Vector3.new(x + xw / 2, levelStuds - 1, z + zw / 2)
@@ -223,6 +227,105 @@ function WorldBuilder.markers(manifest, city)
 		p.Parent = sites
 	end
 	root:SetAttribute("Done", true)
+end
+
+-- ------------------------------------------------------------------ FloodWatch (Kai's website)
+-- Same hexes as the FloodWatch website: ground outlines from the website's own geometry,
+-- translucent 3D columns (height = 311 flood reports), building Hex/Risk attributes, and a
+-- FloodwatchJSON module for the client panels.
+local SQRT3 = math.sqrt(3)
+
+local function groundY(xs, zs)
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Include
+	params.FilterDescendantsInstances = { workspace.Terrain }
+	local hit = workspace:Raycast(Vector3.new(xs, 2000, zs), Vector3.new(0, -4000, 0), params)
+	return hit and hit.Position.Y or 0
+end
+
+function WorldBuilder.floodwatch(city)
+	local HttpService = game:GetService("HttpService")
+	local fw = DataLoader.json("floodwatch.json")
+	-- client data (no per-building list, no outline points)
+	local client = { source = fw.source, reports_total = fw.reports_total, risk_counts = fw.risk_counts,
+		note = fw.note, hexes = fw.hexes }
+	local mod = game:GetService("ReplicatedStorage").FloodViewer:FindFirstChild("FloodwatchJSON") or Instance.new("ModuleScript")
+	mod.Name = "FloodwatchJSON"
+	mod.Source = "-- generated from data/processed/roblox/floodwatch.json (FloodWatch, Kai); do not edit\nreturn [==["
+		.. HttpService:JSONEncode(client) .. "]==]\n"
+	mod.Parent = game:GetService("ReplicatedStorage").FloodViewer
+
+	local root = folder(city, "FloodWatch")
+	root:ClearAllChildren()
+	local byId = {}
+	for _, h in ipairs(fw.hexes) do byId[h.id] = h end
+
+	-- building attributes
+	local partsById = {}
+	for _, p in ipairs(city.Buildings:GetDescendants()) do
+		if p:IsA("BasePart") then partsById[tonumber(p.Name)] = p end
+	end
+	for n, bh in ipairs(fw.bldg_hex) do
+		local p, h = partsById[bh[1]], byId[bh[2]]
+		if p and h then
+			p:SetAttribute("Hex", h.id)
+			p:SetAttribute("Risk", h.risk)
+		end
+		if n % 3000 == 0 then task.wait() end
+	end
+
+	-- outlines on the ground (white, like the website's hex borders)
+	local outl = Instance.new("Folder")
+	outl.Name = "Outlines"
+	for _, e in ipairs(fw.edges) do
+		for i = 1, #e - 1 do
+			local a, b = e[i], e[i + 1]
+			local pa = Vector3.new(m(a[1]), m(a[3]) + 0.8, m(a[2]))
+			local pb = Vector3.new(m(b[1]), m(b[3]) + 0.8, m(b[2]))
+			local len = (pb - pa).Magnitude
+			if len > 0.5 then
+				local p = basePart("edge")
+				p.CanQuery = false
+				p.CastShadow = false
+				p.Size = Vector3.new(1.4, 1.6, len + 1.4)
+				p.CFrame = CFrame.lookAt((pa + pb) / 2, pb)
+				p.Color = Color3.new(1, 1, 1)
+				p.Material = Enum.Material.Neon
+				p.Transparency = 1 -- shown in FloodWatch mode
+				p.Parent = outl
+			end
+		end
+	end
+	outl.Parent = root
+	task.wait()
+
+	-- 3D columns: a regular hexagon = 3 boxes (sqrt3*R x R) rotated 60 degrees apart
+	local cols = Instance.new("Folder")
+	cols.Name = "Columns"
+	for _, h in ipairs(fw.hexes) do
+		local cx, cz, R = m(h.cx), m(h.cz), m(h.r)
+		local y0 = groundY(cx, cz)
+		local hgt = m(math.clamp(6 + 2.5 * h.reports, 6, 140))
+		local col = Instance.new("Model")
+		col.Name = h.h3
+		for k = 0, 2 do
+			local p = basePart("hex")
+			p.CanQuery = true
+			p.CastShadow = false
+			p.Size = Vector3.new(SQRT3 * R, hgt, R)
+			p.CFrame = CFrame.new(cx, y0 + hgt / 2, cz) * CFrame.Angles(0, math.rad(h.rot + 30 + 60 * k), 0)
+			p.Color = Config.RISK_COLORS[h.risk] or Color3.new(1, 1, 1)
+			p.Transparency = 1 -- shown in FloodWatch mode while flying
+			p:SetAttribute("HexId", h.id)
+			p.Parent = col
+		end
+		col:SetAttribute("HexId", h.id)
+		col.Parent = cols
+	end
+	cols.Parent = root
+	root:SetAttribute("Source", fw.source)
+	root:SetAttribute("Done", true)
+	return #fw.hexes
 end
 
 return WorldBuilder

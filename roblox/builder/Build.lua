@@ -89,6 +89,7 @@ function Build.run(opts)
 		WorldBuilder.roads(manifest, city, filter)
 		WorldBuilder.water(manifest, city, levels)
 		WorldBuilder.markers(manifest, city)
+		WorldBuilder.floodwatch(city)
 		city:SetAttribute("BuiltSub", opts.sub == true)
 		city:SetAttribute("Progress", "done")
 	end)
@@ -96,6 +97,29 @@ function Build.run(opts)
 		city:SetAttribute("Progress", "ERROR: " .. tostring(err))
 		warn("[Build] " .. tostring(err))
 	end
+end
+
+-- Upgrade an already-built place in place (no terrain rewrite): solid buildings, street
+-- names on roads (roads rebuilt), water detectable by raycasts, FloodWatch layer.
+function Build.upgrade()
+	local city = workspace.City
+	city:SetAttribute("Progress", "upgrade: buildings")
+	for n, p in ipairs(city.Buildings:GetDescendants()) do
+		if p:IsA("BasePart") then p.CanCollide = true end
+		if n % 3000 == 0 then task.wait() end
+	end
+	for n, p in ipairs(city.Water:GetDescendants()) do
+		if p:IsA("BasePart") then p.CanQuery = true end
+		if n % 3000 == 0 then task.wait() end
+	end
+	city:SetAttribute("Progress", "upgrade: roads")
+	city.Roads:Destroy()
+	local manifest = DataLoader.json("manifest.json")
+	WorldBuilder.roads(manifest, city)
+	city:SetAttribute("Progress", "upgrade: floodwatch")
+	writeStatsModule()
+	WorldBuilder.floodwatch(city)
+	city:SetAttribute("Progress", "done")
 end
 
 return Build

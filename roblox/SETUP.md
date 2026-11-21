@@ -14,12 +14,14 @@ The 3D world is **built once in Edit mode and saved in the place**. In play mode
 | `roblox/builder/Build.lua` | `ServerStorage.FloodBuilder.Build` | ModuleScript |
 | `roblox/builder/Verify.lua` | `ServerStorage.FloodBuilder.Verify` | ModuleScript |
 | `roblox/client/FloodClient.client.lua` | `StarterPlayer.StarterPlayerScripts.FloodClient` | LocalScript |
+| `roblox/server/LaunchLink.server.lua` | `ServerScriptService.LaunchLink` | Script (deep link from the FloodWatch website) |
+| *(generated)* | `ReplicatedStorage.FloodViewer.FloodwatchJSON` | ModuleScript holding the FloodWatch hexes (written by the builder) |
 
 `roblox/sync.json` lists the same mapping. An agent with the Roblox Studio MCP can sync all the files in one step (see "Sync with an agent" below).
 
 ## Build the world
 
-1. Run the data pipeline (`pipeline/run_all.sh`). It must include `08_export_for_roblox` and `08b_export_roblox_world`.
+1. Run the data pipeline (`pipeline/run_all.sh`). It must include `08_export_for_roblox`, `08b_export_roblox_world` and `08c_import_floodwatch` (FloodWatch layer).
 2. Serve the repo root locally (keep this terminal open during the build):
    ```bash
    .venv/bin/python -m http.server 8770 --bind 127.0.0.1
@@ -42,6 +44,11 @@ The 3D world is **built once in Edit mode and saved in the place**. In play mode
    ```lua
    print(require(game.ServerStorage.FloodBuilder.Verify).run())
    ```
+   To refresh an existing place without rewriting the terrain (new road or building attributes, or a new FloodWatch layer), run:
+   ```lua
+   task.spawn(require(game.ServerStorage.FloodBuilder.Build).upgrade)
+   ```
+   **Studio caches `require`d modules.** After changing a ModuleScript's source, replace the script with a fresh instance (the sync snippet below does this) before requiring it again.
 8. **Save** (File → Save). Also export a backup to `backups/oakland_<step>_<time>.rbxl`, which is gitignored.
 
 You can turn *Allow HTTP Requests* back off after the build, because play mode doesn't need it.
@@ -49,9 +56,12 @@ You can turn *Allow HTTP Requests* back off after the build, because play mode d
 ## Controls (play mode)
 
 - **Scenario buttons** (Today, +1 … +5 ft): raise the water and recolor everything.
-- **Map modes:** Flood / Cut off / Contamination / Priority, each with its own legend.
+- **Map modes:** Flood / Cut off / Contamination / Priority / **FloodWatch**, each with its own legend.
+- **FloodWatch mode** shows Kai's website in 3D. It uses the same H3 hexagons (outlines drawn on the ground from the website's own geometry), the same five risk categories and colors, and the same "higher than X% of Oakland" percentiles and 311 report counts (checked: 289/289 hexagons identical). Translucent columns rise with the number of flood reports while you fly. Click a column or building to get the website's panel.
 - **Fly camera:** WASD to move, Q/E for down/up, hold the right mouse button to look around, mouse wheel to change speed, Shift for ×5 speed.
-- **Viewpoints:** Overview, West Oakland, Jack London, Port, Fire Station 2. **Walk here** drops your avatar at the current spot.
+- **Viewpoints:** Overview, West Oakland, Jack London, Port, Fire Station 2. **Walk here** drops your avatar onto the nearest walkable street (never a freeway or bridge). While walking, the viewpoint buttons teleport you on foot.
+- **Walking:** solid buildings; about 3.4 m/s walking and about 7.8 m/s with Shift. An on-screen readout shows the **street name**, the **water depth at your feet** for the current scenario (ankle-, knee-, waist-deep...; wading slows you down), and the **FloodWatch block** you're standing in. Press **H** to hide the panels.
+- **Deep link from the website:** `https://www.roblox.com/games/start?placeId=139477133252061&launchData=<h3 index>` opens the world in FloodWatch mode, walking on a street in that hexagon. This needs the experience to be published and accessible. In Studio, set `workspace:SetAttribute("TestLaunchHex", "<h3>")` before pressing Play.
 - **Click a building** to see its estimated depth, emergency access, height and tract.
 
 ## Sync with an agent (Roblox Studio MCP)
@@ -62,15 +72,19 @@ With the server running and `127.0.0.1:8770` allowlisted, run this through `exec
 local HS = game:GetService("HttpService")
 local base = "http://127.0.0.1:8770/"
 for _, e in ipairs(HS:JSONDecode(HS:GetAsync(base .. "roblox/sync.json", true))) do
-	local parent = game
 	local parts = string.split(e.path, ".")
-	for i = 1, #parts - 1 do
-		parent = parent:FindFirstChild(parts[i]) or (i == 1 and game:GetService(parts[i])) or (function()
-			local f = Instance.new("Folder"); f.Name = parts[i]; f.Parent = parent; return f end)()
+	local parent = game:GetService(parts[1])
+	for i = 2, #parts - 1 do
+		local f = parent:FindFirstChild(parts[i])
+		if not f then f = Instance.new("Folder"); f.Name = parts[i]; f.Parent = parent end
+		parent = f
 	end
-	local s = parent:FindFirstChild(parts[#parts]) or Instance.new(e.class)
+	-- always a FRESH instance: require() caches modules, so editing Source in place isn't enough
+	local old = parent:FindFirstChild(parts[#parts])
+	local s = Instance.new(e.class)
 	s.Name = parts[#parts]
 	s.Source = HS:GetAsync(base .. e.file, true)
+	if old then old:Destroy() end
 	s.Parent = parent
 end
 ```
