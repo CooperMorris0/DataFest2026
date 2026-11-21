@@ -199,7 +199,7 @@
   function commentsHtml(r) {
     const cs = r.comments || [];
     const list = cs.length
-      ? `<ul class="cm-comments">${cs.map(c => `<li><b>${h(c.name)}</b>${c.userId === r.requesterId ? ' <span class="cm-tag">asked</span>' : ""}
+      ? `<ul class="cm-comments">${cs.map(c => `<li><b>${h(c.name)}</b>${c.userId === r.requesterId ? ' <span class="cm-tag">requester</span>' : ""}
           <small>${ago(c.at)}</small><p>${h(c.text)}</p></li>`).join("")}</ul>`
       : '<p class="note">No comments yet.</p>';
     const form = me
