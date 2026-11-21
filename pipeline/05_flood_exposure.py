@@ -7,7 +7,8 @@ Hazard per scenario s (ft above MHHW, water level W_s = MHHW_NAVD88 + s):
     (ART's WMS does not expose its depth values). The 0.01 m floor keeps ART's extent intact
     where our DEM sits slightly above W_s; the share of such cells is reported.
     Low-lying = ART "disconnected low-lying" extent.
-  * No ART level (5 ft = 60 in): bathtub model depth (flagged as fallback);
+  * "5 ft" uses ART 66 in (5.5 ft; ART has no 60 in layer). Depth uses that map's level.
+  * No ART level configured: bathtub model depth (flagged as fallback);
     low-lying = below W_s but not connected.
 Exposure:
   * building: max depth over footprint, wet fraction, low-lying flag
@@ -30,7 +31,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
 from common import LineSampler, PolygonSampler, point_rowcol, read, write
-from config import (ART_BRACKET_LEVELS_IN, ART_LEVEL_FOR_FT, CRS_METRIC, HAZ, PROC, RAW,
+from config import (ART_BRACKET_LEVELS_IN, ART_LEVEL_FOR_FT, CRS_METRIC, HAZ, IN_TO_M, MHHW_NAVD88_M, PROC, RAW,
                     ROAD_IMPASSABLE_DEPTH_M, SCENARIOS_FT, water_level_m)
 
 z = read(HAZ / "dem_filled.tif")
@@ -60,8 +61,9 @@ fac["in_study_area"] = f_on
 
 
 def hazard(ft):
-    W = water_level_m(ft)
     lvl = ART_LEVEL_FOR_FT.get(ft)
+    # water level of the map actually used (ART 66 in for the "5 ft" scenario)
+    W = MHHW_NAVD88_M + lvl * IN_TO_M if lvl is not None else water_level_m(ft)
     if lvl is not None:
         art = read(HAZ / f"art_{lvl}in.tif")
         ext = (art == 1) & ~not_land
@@ -114,7 +116,7 @@ for ft in SCENARIOS_FT:
           f"facilities {s['facilities_flooded']}")
 
     # ART vs bathtub at the same water level (cross-check)
-    if info["source"] == "ART" and ft > 0:
+    if info["source"] == "ART" and ft > 0 and info["art_level_in"] == 12 * ft:  # same water level only
         bt = read(HAZ / f"bathtub_{sid}.tif") > 0
         a = depth > 0
         summary["art_vs_bathtub"].append(dict(
@@ -144,6 +146,11 @@ for lvl in ART_BRACKET_LEVELS_IN:
 print("ART bracket for 5 ft:", summary["art_bracket"])
 print("ART vs bathtub:", pd.DataFrame(summary["art_vs_bathtub"]).to_string(index=False))
 
+# reference: buildings flooded by our bathtub model at each exact level (independent of ART)
+summary["bathtub_buildings_by_ft"] = {
+    str(ft): int((bs.max((read(HAZ / f"bathtub_{ft}ft.tif") > 0).astype(np.float32)) > 0).sum())
+    for ft in SCENARIOS_FT}
+print("bathtub buildings by ft:", summary["bathtub_buildings_by_ft"])
 summary["n_buildings"] = len(b)
 summary["n_road_segments"] = len(roads)
 summary["road_km_total"] = round(roads["length_m"].sum() / 1000, 3)

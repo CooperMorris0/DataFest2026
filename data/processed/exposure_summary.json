@@ -73,14 +73,15 @@
     {
       "id": "5ft",
       "slr_ft": 5,
-      "water_level_navd88_m": 3.465,
-      "source": "bathtub (fallback: no ART layer at this level)",
-      "art_level_in": null,
-      "flooded_land_km2": 3.3841,
-      "lowlying_km2": 1.653,
-      "buildings_flooded": 417,
-      "buildings_lowlying_only": 560,
-      "road_km_impassable": 21.596,
+      "water_level_navd88_m": 3.617,
+      "source": "ART",
+      "art_level_in": 66,
+      "share_art_cells_dem_above_water": 0.095,
+      "flooded_land_km2": 5.7888,
+      "lowlying_km2": 0.3388,
+      "buildings_flooded": 1137,
+      "buildings_lowlying_only": 46,
+      "road_km_impassable": 46.732,
       "facilities_flooded": 2
     }
   ],
@@ -132,6 +133,14 @@
       "bathtub_buildings": 109
     }
   ],
+  "bathtub_buildings_by_ft": {
+    "0": 6,
+    "1": 7,
+    "2": 9,
+    "3": 46,
+    "4": 109,
+    "5": 417
+  },
   "n_buildings": 13581,
   "n_road_segments": 2691,
   "road_km_total": 365.358,

@@ -52,10 +52,12 @@ def water_level_m(ft):
 
 
 # ART Bay Shoreline Flood Explorer water levels (inches above MHHW) used per scenario.
-# ART publishes 0, 12, 24, 36, 48, 52, 66, 77, 84, 96, 108 in. There is NO 60 in level, so
-# 5 ft falls back to our bathtub model (flagged) and ART 52/66 in are reported as a bracket.
-ART_LEVEL_FOR_FT = {0: 0, 1: 12, 2: 24, 3: 36, 4: 48, 5: None}
+# ART publishes 0, 12, 24, 36, 48, 52, 66, 77, 84, 96, 108 in. There is NO 60 in level.
+# Team decision (2026-11-21): the "5 ft" scenario uses ART 66 in (5.5 ft), the conservative
+# choice; it is labeled as such everywhere. Set 5: None to use our bathtub model at 60 in.
+ART_LEVEL_FOR_FT = {0: 0, 1: 12, 2: 24, 3: 36, 4: 48, 5: 66}
 ART_BRACKET_LEVELS_IN = [52, 66]
+IN_TO_M = 0.0254
 ART_WMS = "https://mapserver.adaptingtorisingtides.org/cgi-bin/mapserv?map=/opt/slrviewer/mapfiles/bcdc.map"
 
 # 1% annual-chance (100-year) still-water extreme at Alameda, above MHHW (NOAA CO-OPS

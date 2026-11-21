@@ -44,7 +44,7 @@
      "type": "fire_station"
     },
     {
-     "name": "Order Of Malta Clinic Of Northern California",
+     "name": "Ahs Mobile Unit #2",
      "type": "clinic"
     }
    ]
@@ -137,21 +137,21 @@
    "buildings_degraded": 140
   },
   "5ft": {
-   "edges_removed": 207,
+   "edges_removed": 505,
    "fire": {
-    "cut_off": 354,
-    "degraded": 106
+    "cut_off": 1135,
+    "degraded": 53
    },
    "medical": {
-    "cut_off": 383,
-    "degraded": 85
+    "cut_off": 1103,
+    "degraded": 13
    },
    "hospital": {
-    "cut_off": 383,
+    "cut_off": 1103,
     "degraded": 0
    },
-   "buildings_cut_off": 391,
-   "buildings_degraded": 191
+   "buildings_cut_off": 1171,
+   "buildings_degraded": 51
   }
  },
  "contamination": {
@@ -198,13 +198,13 @@
    "buildings_within_buffer": 104
   },
   "5ft": {
-   "sites_in_flood": 28,
-   "sites_near_flood": 62,
+   "sites_in_flood": 59,
+   "sites_near_flood": 110,
    "by_category": {
-    "open": 51,
-    "managed_in_place": 11
+    "open": 91,
+    "managed_in_place": 19
    },
-   "buildings_within_buffer": 387
+   "buildings_within_buffer": 953
   }
  },
  "network": {

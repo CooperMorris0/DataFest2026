@@ -22,7 +22,8 @@ def n(x):
 rows = []
 for sid in S["scenario_ids"]:
     s = sc[sid]
-    src = "ART" if s["hazard_source"] == "ART" else "model*"
+    src = (f"ART {s['art_level_in']} in" + ("*" if s["art_level_in"] != 12 * s["slr_ft"] else "")) \
+        if s["hazard_source"] == "ART" else "model"
     rows.append(f"| +{s['slr_ft']} ft | {src} | {n(s['buildings_flooded'])} | {n(s['residents_affected'])} | "
                 f"{s['facilities_lost']} | {n(s['residents_cut_off'])} | {n(s['residents_degraded'])} | "
                 f"{s['contaminated_sites_near_flooding']} | {s['road_km_impassable']:.1f} |")
@@ -63,7 +64,7 @@ ART, BCDC, and City of Oakland plans. Generated {S['generated']} from `stats.jso
    ({s4['representation_ratio']['oakland']:.1f}x over-represented at +4 ft).
 2. **Emergency access fails before homes flood.** At +4 ft, {n(s4['residents_cut_off'])} residents are cut off
    from fire or medical services and {n(s4['residents_degraded'])} more face at least doubled response times,
-   largely because **{fac_line('4ft')}** floods. At +5 ft: {n(s5['residents_cut_off'])} cut off.
+   largely because **{fac_line('4ft')}** floods. At +5 ft (ART 66 in): {n(s5['residents_cut_off'])} cut off.
 3. **Contamination is close to the water.** {s4['contaminated_sites_near_flooding']} open or managed-in-place
    cleanup sites lie in or within 100 m of +4 ft flooding ({s5['contaminated_sites_near_flooding']} at +5 ft), with
    {n(s5['residents_near_flooded_contamination'])} residents nearby at +5 ft. *Proximity, not proof of exposure.*
@@ -77,9 +78,9 @@ ART, BCDC, and City of Oakland plans. Generated {S['generated']} from `stats.jso
 |---|---|---|---|---|---|---|---|---|
 {chr(10).join(rows)}
 
-\\* ART publishes no 60-inch layer, so +5 ft uses our LiDAR flood model (it matches NOAA's
-5 ft map at 0.88 overlap). ART's own maps flood **{n(br[52]['buildings_flooded'])} buildings at +4.3 ft** and
-**{n(br[66]['buildings_flooded'])} at +5.5 ft**, so treat +5 ft as a likely **underestimate**.
+\\* ART publishes no 60-inch layer, so the "+5 ft" row uses ART's **66-inch (+5.5 ft)** map, a
+deliberately conservative choice. For reference, ART floods {n(br[52]['buildings_flooded'])} buildings at
++4.3 ft (52 in), and our LiDAR model floods {n(S['hazard']['bathtub_5ft_buildings'])} at exactly +5 ft.
 
 ## Where help should start: top priority tracts (+4 ft)
 
@@ -94,7 +95,7 @@ CalEnviroScreen score are not ranked.
 
 ## Method (3 sentences)
 
-Flood extents come from the ART Bay Shoreline Flood Explorer (BCDC) at 12-48 inches above
+Flood extents come from the ART Bay Shoreline Flood Explorer (BCDC) at 12-66 inches above
 today's high tide, with depth estimated from 2021 USGS LiDAR. We intersected these with
 13,600 buildings, the road network (routing to Oakland fire stations and CDPH-licensed
 hospitals and clinics), and state cleanup-site databases. Residents are allocated from
@@ -104,7 +105,7 @@ hospitals and clinics), and state cleanup-site databases. Residents are allocate
 
 - Exploration tool, not an official hazard or evacuation map. Still-water flooding only: no
   storm surge (a 100-year storm adds ~0.84 m), rainfall, groundwater rise, or compound events.
-- Depth is estimated from LiDAR inside ART's extent. Residents per building are an
+- Depth is estimated from LiDAR inside ART's extent. "+5 ft" is ART's 5.5 ft map. Residents per building are an
   area-based estimate. 97% of building heights are estimated. Roblox buildings are boxes.
 - Drive times are free-flow estimates without traffic or dispatch time. Fire stations are
   Oakland's only (Alameda and Emeryville stations not included).

@@ -14,10 +14,10 @@ ART, BCDC, and City of Oakland plans. Generated 2026-11-21 from `stats.json`.*
    (3.4x over-represented at +4 ft).
 2. **Emergency access fails before homes flood.** At +4 ft, 217 residents are cut off
    from fire or medical services and 235 more face at least doubled response times,
-   largely because **Oakland Fire Station 2 (fire station)** floods. At +5 ft: 1,999 cut off.
+   largely because **Oakland Fire Station 2 (fire station)** floods. At +5 ft (ART 66 in): 5,536 cut off.
 3. **Contamination is close to the water.** 30 open or managed-in-place
-   cleanup sites lie in or within 100 m of +4 ft flooding (62 at +5 ft), with
-   4,020 residents nearby at +5 ft. *Proximity, not proof of exposure.*
+   cleanup sites lie in or within 100 m of +4 ft flooding (110 at +5 ft), with
+   5,607 residents nearby at +5 ft. *Proximity, not proof of exposure.*
 4. **A hidden risk below the waterline.** At +4 ft, 422 more buildings sit below the
    water level but are protected by higher ground (ART "low-lying" areas). Groundwater rise
    and drainage failure, not modeled here, could make these the next to flood.
@@ -26,16 +26,16 @@ ART, BCDC, and City of Oakland plans. Generated 2026-11-21 from `stats.json`.*
 
 | Sea-level rise | Hazard | Buildings flooded | Residents affected | Facilities lost | Residents cut off | Residents degraded access | Contaminated sites near flooding | Impassable road km |
 |---|---|---|---|---|---|---|---|---|
-| +0 ft | ART | 0 | 0 | 0 | 0 | 0 | 0 | 0.0 |
-| +1 ft | ART | 6 | 8 | 0 | 0 | 0 | 17 | 0.0 |
-| +2 ft | ART | 14 | 8 | 0 | 0 | 0 | 17 | 0.0 |
-| +3 ft | ART | 49 | 907 | 0 | 71 | 0 | 23 | 2.9 |
-| +4 ft | ART | 117 | 1,341 | 1 | 217 | 235 | 30 | 4.7 |
-| +5 ft | model* | 417 | 3,796 | 2 | 1,999 | 1,123 | 62 | 21.6 |
+| +0 ft | ART 0 in | 0 | 0 | 0 | 0 | 0 | 0 | 0.0 |
+| +1 ft | ART 12 in | 6 | 8 | 0 | 0 | 0 | 17 | 0.0 |
+| +2 ft | ART 24 in | 14 | 8 | 0 | 0 | 0 | 17 | 0.0 |
+| +3 ft | ART 36 in | 49 | 907 | 0 | 71 | 0 | 23 | 2.9 |
+| +4 ft | ART 48 in | 117 | 1,341 | 1 | 217 | 235 | 30 | 4.7 |
+| +5 ft | ART 66 in* | 1,137 | 7,689 | 2 | 5,536 | 41 | 110 | 46.7 |
 
-\* ART publishes no 60-inch layer, so +5 ft uses our LiDAR flood model (it matches NOAA's
-5 ft map at 0.88 overlap). ART's own maps flood **620 buildings at +4.3 ft** and
-**1,137 at +5.5 ft**, so treat +5 ft as a likely **underestimate**.
+\* ART publishes no 60-inch layer, so the "+5 ft" row uses ART's **66-inch (+5.5 ft)** map, a
+deliberately conservative choice. For reference, ART floods 620 buildings at
++4.3 ft (52 in), and our LiDAR model floods 417 at exactly +5 ft.
 
 ## Where help should start: top priority tracts (+4 ft)
 
@@ -56,7 +56,7 @@ CalEnviroScreen score are not ranked.
 
 ## Method (3 sentences)
 
-Flood extents come from the ART Bay Shoreline Flood Explorer (BCDC) at 12-48 inches above
+Flood extents come from the ART Bay Shoreline Flood Explorer (BCDC) at 12-66 inches above
 today's high tide, with depth estimated from 2021 USGS LiDAR. We intersected these with
 13,600 buildings, the road network (routing to Oakland fire stations and CDPH-licensed
 hospitals and clinics), and state cleanup-site databases. Residents are allocated from
@@ -66,7 +66,7 @@ hospitals and clinics), and state cleanup-site databases. Residents are allocate
 
 - Exploration tool, not an official hazard or evacuation map. Still-water flooding only: no
   storm surge (a 100-year storm adds ~0.84 m), rainfall, groundwater rise, or compound events.
-- Depth is estimated from LiDAR inside ART's extent. Residents per building are an
+- Depth is estimated from LiDAR inside ART's extent. "+5 ft" is ART's 5.5 ft map. Residents per building are an
   area-based estimate. 97% of building heights are estimated. Roblox buildings are boxes.
 - Drive times are free-flow estimates without traffic or dispatch time. Fire stations are
   Oakland's only (Alameda and Emeryville stations not included).

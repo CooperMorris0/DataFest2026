@@ -25,9 +25,10 @@
    "2": 24,
    "3": 36,
    "4": 48,
-   "5": null
+   "5": 66
   },
-  "fallback": "connected bathtub on USGS 3DEP 1 m LiDAR (5 ft: ART has no 60 in layer)",
+  "fallback": "connected bathtub on USGS 3DEP 1 m LiDAR (used only where no ART level is configured)",
+  "note_5ft": "ART has no 60 in layer; the 5 ft scenario uses ART 66 in (5.5 ft), conservative",
   "art_bracket_for_5ft": [
    {
     "art_level_in": 52,
@@ -76,6 +77,15 @@
     "bathtub_buildings": 109
    }
   ],
+  "bathtub_buildings_by_ft": {
+   "0": 6,
+   "1": 7,
+   "2": 9,
+   "3": 46,
+   "4": 109,
+   "5": 417
+  },
+  "bathtub_5ft_buildings": 417,
   "depth_note": "Depth estimated as water level minus LiDAR ground inside ART's extent"
  },
  "baseline_water": {
@@ -293,15 +303,15 @@
   {
    "id": "5ft",
    "slr_ft": 5,
-   "water_level_navd88_m": 3.465,
-   "hazard_source": "bathtub (fallback: no ART layer at this level)",
-   "art_level_in": null,
-   "flooded_land_km2": 3.3841,
-   "lowlying_km2": 1.653,
-   "buildings_flooded": 417,
-   "buildings_lowlying_only": 560,
-   "residents_affected": 3796,
-   "residents_lowlying_only": 3290,
+   "water_level_navd88_m": 3.617,
+   "hazard_source": "ART",
+   "art_level_in": 66,
+   "flooded_land_km2": 5.7888,
+   "lowlying_km2": 0.3388,
+   "buildings_flooded": 1137,
+   "buildings_lowlying_only": 46,
+   "residents_affected": 7689,
+   "residents_lowlying_only": 1657,
    "facilities_lost": 2,
    "facilities_lost_list": [
     {
@@ -309,37 +319,37 @@
      "type": "fire_station"
     },
     {
-     "name": "Order Of Malta Clinic Of Northern California",
+     "name": "Ahs Mobile Unit #2",
      "type": "clinic"
     }
    ],
-   "buildings_cut_off": 391,
-   "residents_cut_off": 1999,
-   "buildings_degraded": 191,
-   "residents_degraded": 1123,
-   "contaminated_sites_near_flooding": 62,
-   "contaminated_sites_in_flooding": 28,
-   "residents_near_flooded_contamination": 4020,
-   "road_km_impassable": 21.596,
-   "residents_affected_high_burden": 1929,
-   "share_affected_high_burden": 0.508,
+   "buildings_cut_off": 1171,
+   "residents_cut_off": 5536,
+   "buildings_degraded": 51,
+   "residents_degraded": 41,
+   "contaminated_sites_near_flooding": 110,
+   "contaminated_sites_in_flooding": 59,
+   "residents_near_flooded_contamination": 5607,
+   "road_km_impassable": 46.732,
+   "residents_affected_high_burden": 7142,
+   "share_affected_high_burden": 0.929,
    "representation_ratio": {
-    "study_area": 0.83,
-    "oakland": 1.85,
-    "alameda_county": 5.98
+    "study_area": 1.51,
+    "oakland": 3.38,
+    "alameda_county": 10.93
    },
    "affected_demographics": {
-    "Hispanic/Latino": 10.8,
-    "Black/African American": 15.8,
-    "Asian American": 35.0,
+    "Hispanic/Latino": 17.5,
+    "Black/African American": 22.3,
+    "Asian American": 22.5,
     "White": 31.9,
-    "Other/multiple": 5.6,
-    "Below 2x poverty line": 33.2,
-    "Linguistically isolated households": 16.1,
-    "Age 65+": 15.2,
-    "Under age 10": 8.8
+    "Other/multiple": 5.0,
+    "Below 2x poverty line": 33.4,
+    "Linguistically isolated households": 9.8,
+    "Age 65+": 10.1,
+    "Under age 10": 11.0
    },
-   "water_level_studs": 12.37
+   "water_level_studs": 12.92
   }
  ],
  "top_priority": {
@@ -581,29 +591,29 @@
   "5ft": [
    {
     "rank": 1,
+    "tract_id": "06001401700",
+    "name": "Census Tract 4017",
+    "city": "Oakland",
+    "ces_pctl": 80.1,
+    "priority": 0.669,
+    "exposure": 0.835,
+    "buildings_flooded": 493,
+    "residents_affected": 2388,
+    "residents_cut_off": 2550,
+    "facilities_lost": 1
+   },
+   {
+    "rank": 2,
     "tract_id": "06001428700",
     "name": "Census Tract 4287",
     "city": "Alameda",
     "ces_pctl": 77.5,
     "priority": 0.434,
     "exposure": 0.56,
-    "buildings_flooded": 60,
+    "buildings_flooded": 79,
     "residents_affected": 1017,
     "residents_cut_off": 386,
     "facilities_lost": 0
-   },
-   {
-    "rank": 2,
-    "tract_id": "06001402900",
-    "name": "Census Tract 4029",
-    "city": "Oakland",
-    "ces_pctl": 69.7,
-    "priority": 0.241,
-    "exposure": 0.345,
-    "buildings_flooded": 3,
-    "residents_affected": 0,
-    "residents_cut_off": 0,
-    "facilities_lost": 1
    },
    {
     "rank": 3,
@@ -611,37 +621,37 @@
     "name": "Census Tract 9832",
     "city": "Oakland",
     "ces_pctl": 55.3,
-    "priority": 0.235,
-    "exposure": 0.425,
-    "buildings_flooded": 22,
-    "residents_affected": 206,
-    "residents_cut_off": 18,
+    "priority": 0.364,
+    "exposure": 0.657,
+    "buildings_flooded": 37,
+    "residents_affected": 326,
+    "residents_cut_off": 312,
     "facilities_lost": 1
    },
    {
     "rank": 4,
-    "tract_id": "06001403401",
-    "name": "Census Tract 4034.01",
-    "city": "Oakland",
-    "ces_pctl": 57.7,
-    "priority": 0.182,
-    "exposure": 0.316,
-    "buildings_flooded": 15,
-    "residents_affected": 795,
-    "residents_cut_off": 925,
-    "facilities_lost": 0
-   },
-   {
-    "rank": 5,
     "tract_id": "06001403302",
     "name": "Census Tract 4033.02",
     "city": "Oakland",
     "ces_pctl": 83.1,
-    "priority": 0.172,
-    "exposure": 0.207,
-    "buildings_flooded": 43,
-    "residents_affected": 636,
-    "residents_cut_off": 208,
+    "priority": 0.286,
+    "exposure": 0.345,
+    "buildings_flooded": 63,
+    "residents_affected": 1116,
+    "residents_cut_off": 813,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 5,
+    "tract_id": "06001402200",
+    "name": "Census Tract 4022",
+    "city": "Oakland",
+    "ces_pctl": 93.1,
+    "priority": 0.191,
+    "exposure": 0.205,
+    "buildings_flooded": 191,
+    "residents_affected": 1790,
+    "residents_cut_off": 424,
     "facilities_lost": 0
    }
   ],
@@ -729,52 +739,80 @@
  "validation": {
   "vs_noaa": [
    {
-    "slr_ft": 1,
-    "noaa_connected_km2": 0.165,
-    "noaa_lowlying_disconnected_km2": 0.033,
-    "used_km2": 0.179,
-    "used_iou": 0.623,
-    "used_covers_noaa": 0.8,
-    "bathtub_km2": 0.218,
-    "bathtub_iou": 0.641,
-    "bathtub_covers_noaa": 0.906
+    "scenario": "1ft",
+    "used": {
+     "noaa_level_ft": 1.0,
+     "noaa_connected_km2": 0.165,
+     "km2": 0.179,
+     "iou": 0.623,
+     "covers_noaa": 0.8
+    },
+    "bathtub": {
+     "noaa_level_ft": 1,
+     "noaa_connected_km2": 0.165,
+     "km2": 0.218,
+     "iou": 0.641,
+     "covers_noaa": 0.906
+    }
    },
    {
-    "slr_ft": 2,
-    "noaa_connected_km2": 0.285,
-    "noaa_lowlying_disconnected_km2": 0.118,
-    "used_km2": 0.322,
-    "used_iou": 0.684,
-    "used_covers_noaa": 0.865,
-    "bathtub_km2": 0.311,
-    "bathtub_iou": 0.669,
-    "bathtub_covers_noaa": 0.838
+    "scenario": "2ft",
+    "used": {
+     "noaa_level_ft": 2.0,
+     "noaa_connected_km2": 0.285,
+     "km2": 0.322,
+     "iou": 0.684,
+     "covers_noaa": 0.865
+    },
+    "bathtub": {
+     "noaa_level_ft": 2,
+     "noaa_connected_km2": 0.285,
+     "km2": 0.311,
+     "iou": 0.669,
+     "covers_noaa": 0.838
+    }
    },
    {
-    "slr_ft": 3,
-    "noaa_unavailable": "NOAA service returned a blank all-low-lying render"
+    "scenario": "3ft",
+    "used": {
+     "noaa_level_ft": 3.0,
+     "noaa_unavailable": "blank all-low-lying render"
+    },
+    "bathtub": {
+     "noaa_level_ft": 3,
+     "noaa_unavailable": "blank all-low-lying render"
+    }
    },
    {
-    "slr_ft": 4,
-    "noaa_connected_km2": 1.345,
-    "noaa_lowlying_disconnected_km2": 1.114,
-    "used_km2": 1.495,
-    "used_iou": 0.729,
-    "used_covers_noaa": 0.89,
-    "bathtub_km2": 1.491,
-    "bathtub_iou": 0.859,
-    "bathtub_covers_noaa": 0.974
+    "scenario": "4ft",
+    "used": {
+     "noaa_level_ft": 4.0,
+     "noaa_connected_km2": 1.345,
+     "km2": 1.495,
+     "iou": 0.729,
+     "covers_noaa": 0.89
+    },
+    "bathtub": {
+     "noaa_level_ft": 4,
+     "noaa_connected_km2": 1.345,
+     "km2": 1.491,
+     "iou": 0.859,
+     "covers_noaa": 0.974
+    }
    },
    {
-    "slr_ft": 5,
-    "noaa_connected_km2": 3.066,
-    "noaa_lowlying_disconnected_km2": 1.342,
-    "used_km2": 3.377,
-    "used_iou": 0.882,
-    "used_covers_noaa": 0.985,
-    "bathtub_km2": 3.377,
-    "bathtub_iou": 0.882,
-    "bathtub_covers_noaa": 0.985
+    "scenario": "5ft",
+    "used": {
+     "noaa_level_ft": 5.5,
+     "noaa_unavailable": "blank all-low-lying render"
+    },
+    "bathtub": {
+     "noaa_level_ft": 5,
+     "noaa_connected_km2": 3.066,
+     "km2": 3.377,
+     "iou": 0.882,
+     "covers_noaa": 0.985
+    }
    }
   ],
   "art_vs_bathtub": [
@@ -862,11 +900,11 @@
    "res_cut_off_4ft": 125,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 1.243,
-   "bldg_flooded_5ft": 43,
-   "res_affected_5ft": 636,
-   "res_cut_off_5ft": 208,
+   "bldg_flooded_5ft": 63,
+   "res_affected_5ft": 1116,
+   "res_cut_off_5ft": 813,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 2.207,
+   "road_km_5ft": 2.514,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -877,8 +915,8 @@
    "priority_3ft": 0.512,
    "exposure_4ft": 0.461,
    "priority_4ft": 0.383,
-   "exposure_5ft": 0.207,
-   "priority_5ft": 0.172
+   "exposure_5ft": 0.345,
+   "priority_5ft": 0.286
   },
   {
    "tract_id": "06001428700",
@@ -915,7 +953,7 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 60,
+   "bldg_flooded_5ft": 79,
    "res_affected_5ft": 1017,
    "res_cut_off_5ft": 386,
    "facilities_lost_5ft": 0,
@@ -968,11 +1006,11 @@
    "res_cut_off_4ft": 3,
    "facilities_lost_4ft": 1,
    "road_km_4ft": 0.231,
-   "bldg_flooded_5ft": 22,
-   "res_affected_5ft": 206,
-   "res_cut_off_5ft": 18,
+   "bldg_flooded_5ft": 37,
+   "res_affected_5ft": 326,
+   "res_cut_off_5ft": 312,
    "facilities_lost_5ft": 1,
-   "road_km_5ft": 1.025,
+   "road_km_5ft": 2.318,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.333,
@@ -983,8 +1021,8 @@
    "priority_3ft": 0.042,
    "exposure_4ft": 0.411,
    "priority_4ft": 0.227,
-   "exposure_5ft": 0.425,
-   "priority_5ft": 0.235
+   "exposure_5ft": 0.657,
+   "priority_5ft": 0.364
   },
   {
    "tract_id": "06001401700",
@@ -1021,11 +1059,11 @@
    "res_cut_off_4ft": 89,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 2.774,
-   "bldg_flooded_5ft": 27,
-   "res_affected_5ft": 25,
-   "res_cut_off_5ft": 89,
-   "facilities_lost_5ft": 0,
-   "road_km_5ft": 6.89,
+   "bldg_flooded_5ft": 493,
+   "res_affected_5ft": 2388,
+   "res_cut_off_5ft": 2550,
+   "facilities_lost_5ft": 1,
+   "road_km_5ft": 23.601,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.05,
@@ -1036,8 +1074,8 @@
    "priority_3ft": 0.011,
    "exposure_4ft": 0.149,
    "priority_4ft": 0.119,
-   "exposure_5ft": 0.025,
-   "priority_5ft": 0.02
+   "exposure_5ft": 0.835,
+   "priority_5ft": 0.669
   },
   {
    "tract_id": "06001406000",
@@ -1074,8 +1112,8 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.46,
-   "bldg_flooded_5ft": 26,
-   "res_affected_5ft": 31,
+   "bldg_flooded_5ft": 36,
+   "res_affected_5ft": 37,
    "res_cut_off_5ft": 31,
    "facilities_lost_5ft": 0,
    "road_km_5ft": 1.256,
@@ -1089,8 +1127,8 @@
    "priority_3ft": 0.075,
    "exposure_4ft": 0.038,
    "priority_4ft": 0.034,
-   "exposure_5ft": 0.09,
-   "priority_5ft": 0.08
+   "exposure_5ft": 0.094,
+   "priority_5ft": 0.083
   },
   {
    "tract_id": "06001425104",
@@ -1127,8 +1165,8 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 0,
-   "res_affected_5ft": 0,
+   "bldg_flooded_5ft": 4,
+   "res_affected_5ft": 24,
    "res_cut_off_5ft": 0,
    "facilities_lost_5ft": 0,
    "road_km_5ft": 0.0,
@@ -1142,8 +1180,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.0,
-   "priority_5ft": 0.0
+   "exposure_5ft": 0.036,
+   "priority_5ft": 0.02
   },
   {
    "tract_id": "06001410500",
@@ -1180,11 +1218,11 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 0,
-   "res_affected_5ft": 0,
-   "res_cut_off_5ft": 0,
+   "bldg_flooded_5ft": 13,
+   "res_affected_5ft": 323,
+   "res_cut_off_5ft": 323,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 0.0,
+   "road_km_5ft": 2.673,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -1195,8 +1233,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.0,
-   "priority_5ft": 0.0
+   "exposure_5ft": 0.084,
+   "priority_5ft": 0.076
   },
   {
    "tract_id": "06001405302",
@@ -1233,11 +1271,11 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 17,
-   "res_affected_5ft": 763,
-   "res_cut_off_5ft": 15,
+   "bldg_flooded_5ft": 0,
+   "res_affected_5ft": 0,
+   "res_cut_off_5ft": 0,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 0.819,
+   "road_km_5ft": 0.0,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -1248,8 +1286,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.149,
-   "priority_5ft": 0.088
+   "exposure_5ft": 0.0,
+   "priority_5ft": 0.0
   },
   {
    "tract_id": "06001404102",
@@ -1502,7 +1540,7 @@
    "res_affected_5ft": 0,
    "res_cut_off_5ft": 0,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 0.125,
+   "road_km_5ft": 0.0,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -1657,11 +1695,11 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 1,
-   "res_affected_5ft": 7,
-   "res_cut_off_5ft": 16,
+   "bldg_flooded_5ft": 0,
+   "res_affected_5ft": 0,
+   "res_cut_off_5ft": 0,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 0.082,
+   "road_km_5ft": 0.0,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -1672,8 +1710,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.003,
-   "priority_5ft": 0.001
+   "exposure_5ft": 0.0,
+   "priority_5ft": 0.0
   },
   {
    "tract_id": "06001403402",
@@ -1763,11 +1801,11 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 15,
-   "res_affected_5ft": 795,
-   "res_cut_off_5ft": 925,
+   "bldg_flooded_5ft": 0,
+   "res_affected_5ft": 0,
+   "res_cut_off_5ft": 0,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 1.541,
+   "road_km_5ft": 0.0,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -1778,8 +1816,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.316,
-   "priority_5ft": 0.182
+   "exposure_5ft": 0.0,
+   "priority_5ft": 0.0
   },
   {
    "tract_id": "06001404101",
@@ -1871,7 +1909,7 @@
    "road_km_4ft": 0.0,
    "bldg_flooded_5ft": 0,
    "res_affected_5ft": 0,
-   "res_cut_off_5ft": 0,
+   "res_cut_off_5ft": 16,
    "facilities_lost_5ft": 0,
    "road_km_5ft": 0.0,
    "exposure_0ft": 0.0,
@@ -1884,8 +1922,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.0,
-   "priority_5ft": 0.0
+   "exposure_5ft": 0.004,
+   "priority_5ft": 0.003
   },
   {
    "tract_id": "06001401100",
@@ -1975,11 +2013,11 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 127,
-   "res_affected_5ft": 221,
-   "res_cut_off_5ft": 184,
+   "bldg_flooded_5ft": 191,
+   "res_affected_5ft": 1790,
+   "res_cut_off_5ft": 424,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 2.006,
+   "road_km_5ft": 3.835,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -1990,8 +2028,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.145,
-   "priority_5ft": 0.135
+   "exposure_5ft": 0.205,
+   "priority_5ft": 0.191
   },
   {
    "tract_id": "06001401200",
@@ -2136,7 +2174,7 @@
    "road_km_4ft": 0.0,
    "bldg_flooded_5ft": 0,
    "res_affected_5ft": 0,
-   "res_cut_off_5ft": 0,
+   "res_cut_off_5ft": 128,
    "facilities_lost_5ft": 0,
    "road_km_5ft": 0.0,
    "exposure_0ft": 0.0,
@@ -2149,8 +2187,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.0,
-   "priority_5ft": 0.0
+   "exposure_5ft": 0.014,
+   "priority_5ft": 0.012
   },
   {
    "tract_id": "06001401500",
@@ -2187,11 +2225,11 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 0,
+   "bldg_flooded_5ft": 3,
    "res_affected_5ft": 0,
    "res_cut_off_5ft": 0,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 0.0,
+   "road_km_5ft": 0.213,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -2202,8 +2240,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.0,
-   "priority_5ft": 0.0
+   "exposure_5ft": 0.002,
+   "priority_5ft": 0.001
   },
   {
    "tract_id": "06001401600",
@@ -2240,11 +2278,11 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 0,
-   "res_affected_5ft": 0,
-   "res_cut_off_5ft": 0,
+   "bldg_flooded_5ft": 114,
+   "res_affected_5ft": 446,
+   "res_cut_off_5ft": 352,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 0.0,
+   "road_km_5ft": 3.168,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -2255,8 +2293,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.0,
-   "priority_5ft": 0.0
+   "exposure_5ft": 0.148,
+   "priority_5ft": 0.128
   },
   {
    "tract_id": "06001401800",
@@ -2293,11 +2331,11 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 0,
+   "bldg_flooded_5ft": 1,
    "res_affected_5ft": 0,
    "res_cut_off_5ft": 0,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 0.0,
+   "road_km_5ft": 0.086,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -2308,8 +2346,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.0,
-   "priority_5ft": 0.0
+   "exposure_5ft": 0.001,
+   "priority_5ft": 0.001
   },
   {
    "tract_id": "06001402400",
@@ -2346,11 +2384,11 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 0,
-   "res_affected_5ft": 0,
-   "res_cut_off_5ft": 0,
+   "bldg_flooded_5ft": 14,
+   "res_affected_5ft": 99,
+   "res_cut_off_5ft": 73,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 0.0,
+   "road_km_5ft": 0.807,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -2361,8 +2399,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.0,
-   "priority_5ft": 0.0
+   "exposure_5ft": 0.031,
+   "priority_5ft": 0.022
   },
   {
    "tract_id": "06001403000",
@@ -2717,11 +2755,11 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 3,
+   "bldg_flooded_5ft": 0,
    "res_affected_5ft": 0,
    "res_cut_off_5ft": 0,
-   "facilities_lost_5ft": 1,
-   "road_km_5ft": 0.569,
+   "facilities_lost_5ft": 0,
+   "road_km_5ft": 0.0,
    "exposure_0ft": 0.0,
    "priority_0ft": 0.0,
    "exposure_1ft": 0.0,
@@ -2732,8 +2770,8 @@
    "priority_3ft": 0.0,
    "exposure_4ft": 0.0,
    "priority_4ft": 0.0,
-   "exposure_5ft": 0.345,
-   "priority_5ft": 0.241
+   "exposure_5ft": 0.0,
+   "priority_5ft": 0.0
   },
   {
    "tract_id": "06001403100",
@@ -2823,7 +2861,7 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 31,
+   "bldg_flooded_5ft": 35,
    "res_affected_5ft": 11,
    "res_cut_off_5ft": 11,
    "facilities_lost_5ft": 0,
@@ -2838,7 +2876,7 @@
    "priority_3ft": null,
    "exposure_4ft": 0.0,
    "priority_4ft": null,
-   "exposure_5ft": 0.318,
+   "exposure_5ft": 0.295,
    "priority_5ft": null
   },
   {
@@ -2876,11 +2914,11 @@
    "res_cut_off_4ft": 0,
    "facilities_lost_4ft": 0,
    "road_km_4ft": 0.0,
-   "bldg_flooded_5ft": 45,
-   "res_affected_5ft": 83,
+   "bldg_flooded_5ft": 54,
+   "res_affected_5ft": 110,
    "res_cut_off_5ft": 115,
    "facilities_lost_5ft": 0,
-   "road_km_5ft": 2.715,
+   "road_km_5ft": 3.21,
    "exposure_0ft": 0.0,
    "priority_0ft": null,
    "exposure_1ft": 0.0,
@@ -2891,7 +2929,7 @@
    "priority_3ft": null,
    "exposure_4ft": 0.0,
    "priority_4ft": null,
-   "exposure_5ft": 0.554,
+   "exposure_5ft": 0.534,
    "priority_5ft": null
   }
  ]

@@ -1,52 +1,80 @@
 {
   "vs_noaa": [
     {
-      "slr_ft": 1,
-      "noaa_connected_km2": 0.165,
-      "noaa_lowlying_disconnected_km2": 0.033,
-      "used_km2": 0.179,
-      "used_iou": 0.623,
-      "used_covers_noaa": 0.8,
-      "bathtub_km2": 0.218,
-      "bathtub_iou": 0.641,
-      "bathtub_covers_noaa": 0.906
+      "scenario": "1ft",
+      "used": {
+        "noaa_level_ft": 1.0,
+        "noaa_connected_km2": 0.165,
+        "km2": 0.179,
+        "iou": 0.623,
+        "covers_noaa": 0.8
+      },
+      "bathtub": {
+        "noaa_level_ft": 1,
+        "noaa_connected_km2": 0.165,
+        "km2": 0.218,
+        "iou": 0.641,
+        "covers_noaa": 0.906
+      }
     },
     {
-      "slr_ft": 2,
-      "noaa_connected_km2": 0.285,
-      "noaa_lowlying_disconnected_km2": 0.118,
-      "used_km2": 0.322,
-      "used_iou": 0.684,
-      "used_covers_noaa": 0.865,
-      "bathtub_km2": 0.311,
-      "bathtub_iou": 0.669,
-      "bathtub_covers_noaa": 0.838
+      "scenario": "2ft",
+      "used": {
+        "noaa_level_ft": 2.0,
+        "noaa_connected_km2": 0.285,
+        "km2": 0.322,
+        "iou": 0.684,
+        "covers_noaa": 0.865
+      },
+      "bathtub": {
+        "noaa_level_ft": 2,
+        "noaa_connected_km2": 0.285,
+        "km2": 0.311,
+        "iou": 0.669,
+        "covers_noaa": 0.838
+      }
     },
     {
-      "slr_ft": 3,
-      "noaa_unavailable": "NOAA service returned a blank all-low-lying render"
+      "scenario": "3ft",
+      "used": {
+        "noaa_level_ft": 3.0,
+        "noaa_unavailable": "blank all-low-lying render"
+      },
+      "bathtub": {
+        "noaa_level_ft": 3,
+        "noaa_unavailable": "blank all-low-lying render"
+      }
     },
     {
-      "slr_ft": 4,
-      "noaa_connected_km2": 1.345,
-      "noaa_lowlying_disconnected_km2": 1.114,
-      "used_km2": 1.495,
-      "used_iou": 0.729,
-      "used_covers_noaa": 0.89,
-      "bathtub_km2": 1.491,
-      "bathtub_iou": 0.859,
-      "bathtub_covers_noaa": 0.974
+      "scenario": "4ft",
+      "used": {
+        "noaa_level_ft": 4.0,
+        "noaa_connected_km2": 1.345,
+        "km2": 1.495,
+        "iou": 0.729,
+        "covers_noaa": 0.89
+      },
+      "bathtub": {
+        "noaa_level_ft": 4,
+        "noaa_connected_km2": 1.345,
+        "km2": 1.491,
+        "iou": 0.859,
+        "covers_noaa": 0.974
+      }
     },
     {
-      "slr_ft": 5,
-      "noaa_connected_km2": 3.066,
-      "noaa_lowlying_disconnected_km2": 1.342,
-      "used_km2": 3.377,
-      "used_iou": 0.882,
-      "used_covers_noaa": 0.985,
-      "bathtub_km2": 3.377,
-      "bathtub_iou": 0.882,
-      "bathtub_covers_noaa": 0.985
+      "scenario": "5ft",
+      "used": {
+        "noaa_level_ft": 5.5,
+        "noaa_unavailable": "blank all-low-lying render"
+      },
+      "bathtub": {
+        "noaa_level_ft": 5,
+        "noaa_connected_km2": 3.066,
+        "km2": 3.377,
+        "iou": 0.882,
+        "covers_noaa": 0.985
+      }
     }
   ],
   "art_vs_bathtub": [

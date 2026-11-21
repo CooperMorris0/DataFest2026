@@ -63,36 +63,41 @@ def ours(path):
     return a.reshape(H, RES, W, RES).any(axis=(1, 3))  # 4 m cell wet if any 1 m cell is
 
 
-# Land = not sea / inland water in our model. Use NOAA 0 ft depth too as a sanity reference.
-results = []
-for ft in [s for s in SCENARIOS_FT if s > 0]:
-    noaa_conn, noaa_low = noaa_masks(ft)
+expo = json.loads((PROC / "exposure_summary.json").read_text())
+used_level = {sc["slr_ft"]: (sc["art_level_in"] / 12 if sc["art_level_in"] is not None else sc["slr_ft"])
+              for sc in expo["scenarios"]}
+sea_like = noaa_masks('0')[0]  # NOAA 0 ft (MHHW) inundation ~ existing water surface
+land = ~sea_like
+
+
+def noaa_key(level_ft):
+    return f"{int(level_ft)}" if float(level_ft).is_integer() else f"{int(level_ft)}_5"
+
+
+def score(path, level_ft):
+    """Compare a hazard raster with NOAA at the SAME water level (e.g. ART 66 in vs NOAA 5.5 ft)."""
+    noaa_conn, noaa_low = noaa_masks(noaa_key(level_ft))
     if noaa_low.mean() > 0.95:
         # Observed 2026-11-21: NOAA's slr_3ft service renders every pixel as "low-lying"
-        # for this area (any projection/size); slr_4ft renders correctly. Don't score it.
-        r = dict(slr_ft=ft, noaa_unavailable="NOAA service returned a blank all-low-lying render")
-        results.append(r)
-        print(r)
-        continue
-    # NOAA's depth layer also paints open water; restrict both to land.
-    sea_like = noaa_masks(0)[0]  # NOAA 0 ft (MHHW) inundation ~ existing water surface
-    land = ~sea_like
+        # for this area (any projection/size). Don't score it.
+        return dict(noaa_level_ft=level_ft, noaa_unavailable="blank all-low-lying render"), None, None
     n_conn = noaa_conn & land
-    r = dict(slr_ft=ft, noaa_connected_km2=round(n_conn.sum() * RES**2 / 1e6, 3),
-             noaa_lowlying_disconnected_km2=round((noaa_low & land).sum() * RES**2 / 1e6, 3))
-    for tag, path in (("used", PROC / f"flood_depth_{ft}ft.tif"), ("bathtub", HAZ / f"bathtub_{ft}ft.tif")):
-        m = ours(path) & land
-        inter, union = (n_conn & m).sum(), (n_conn | m).sum()
-        r[f"{tag}_km2"] = round(m.sum() * RES**2 / 1e6, 3)
-        r[f"{tag}_iou"] = round(inter / union, 3) if union else None
-        r[f"{tag}_covers_noaa"] = round(inter / n_conn.sum(), 3) if n_conn.sum() else None
-        if tag == "used":
-            mine = m
-    r = {k: (float(v) if isinstance(v, np.floating) else v) for k, v in r.items()}
+    m = ours(path) & land
+    inter, union = (n_conn & m).sum(), (n_conn | m).sum()
+    return dict(noaa_level_ft=level_ft, noaa_connected_km2=round(n_conn.sum() * RES**2 / 1e6, 3),
+                km2=round(m.sum() * RES**2 / 1e6, 3), iou=round(float(inter / union), 3) if union else None,
+                covers_noaa=round(float(inter / n_conn.sum()), 3) if n_conn.sum() else None), n_conn, m
+
+
+results = []
+for ft in [s for s in SCENARIOS_FT if s > 0]:
+    used, n_conn, m = score(PROC / f"flood_depth_{ft}ft.tif", used_level[ft])
+    bath, _, _ = score(HAZ / f"bathtub_{ft}ft.tif", ft)
+    r = dict(scenario=f"{ft}ft", used=used, bathtub=bath)
     results.append(r)
     print(r)
-    m = mine
-
+    if m is None:
+        continue
     rgb = np.full((H, W, 3), 0.92)
     rgb[~land] = (0.75, 0.82, 0.92)
     rgb[n_conn & ~m] = (0.95, 0.55, 0.1)   # NOAA only
@@ -100,12 +105,11 @@ for ft in [s for s in SCENARIOS_FT if s > 0]:
     rgb[m & n_conn] = (0.1, 0.35, 0.8)     # both
     fig, ax = plt.subplots(figsize=(14, 9))
     ax.imshow(rgb)
-    ax.set_title(f"+{ft} ft: blue = both, orange = NOAA only, purple = hazard we use only "
-                 f"(IoU {r['used_iou']})", fontsize=13)
+    ax.set_title(f"'{ft} ft' scenario vs NOAA {used_level[ft]:g} ft: blue = both, orange = NOAA only, "
+                 f"purple = hazard we use only (IoU {used['iou']})", fontsize=12)
     ax.set_xticks([]); ax.set_yticks([])
     fig.savefig(PROC / f"noaa_compare_{ft}ft.png", dpi=70, bbox_inches="tight")
     plt.close(fig)
 
-expo = json.loads((PROC / "exposure_summary.json").read_text())
 (PROC / "hazard_validation.json").write_text(json.dumps(
     dict(vs_noaa=results, art_vs_bathtub=expo["art_vs_bathtub"], art_bracket_for_5ft=expo["art_bracket"]), indent=2))

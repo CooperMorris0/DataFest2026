@@ -17,18 +17,18 @@ This is an exploration tool, **not an official hazard or evacuation map**. Defer
 | +2 ft | ART 24 in | 14 | 8 | 0 | 0 | 0 | 17 | 0 km |
 | +3 ft | ART 36 in | 49 | 907 | 0 | 71 | 0 | 23 | 2.9 km |
 | +4 ft | ART 48 in | 117 | 1,341 | 1 (Fire Station 2) | 217 | 235 | 30 | 4.7 km |
-| +5 ft | bathtub model* | 417 | 3,796 | 2 | 1,999 | 1,123 | 62 | 21.6 km |
+| +5 ft | ART 66 in* | 1,137 | 7,689 | 2 | 5,536 | 41 | 110 | 46.7 km |
 
-\*ART has no 60-inch layer. ART's own maps flood 620 buildings at 52 in (4.3 ft) and 1,137 at 66 in (5.5 ft), so our +5 ft row is likely an **underestimate** relative to ART. To use an ART level instead, change `ART_LEVEL_FOR_FT[5]` in `pipeline/config.py`.
+\*ART has no 60-inch layer. By team decision (2026-11-21), the "+5 ft" scenario uses ART's **66-inch (5.5 ft)** map, a deliberately conservative choice; it is labeled as ART 66 in everywhere. For reference, ART 52 in (4.3 ft) floods 620 buildings and our LiDAR bathtub model at exactly 5 ft floods 417. Set `ART_LEVEL_FOR_FT[5] = None` in `pipeline/config.py` to use the bathtub model instead. Degraded access is low at +5 ft because most affected residents are fully cut off.
 
-- **Equity:** at +3 and +4 ft, 96% and 94% of affected residents live in CalEnviroScreen top-quartile tracts, against 28% of all Oakland residents (3.4× over-represented). At +5 ft the share is 51%. Within the study area itself, 62% of residents are in such tracts. These are ecological, tract-level comparisons.
-- **Emergency access:** Oakland Fire Station 2 (Jack London waterfront) floods from +4 ft, which more than doubles response times for 235 residents. At +5 ft, 1,999 residents are cut off from fire or medical services.
+- **Equity:** at +3 and +4 ft, 96% and 94% of affected residents live in CalEnviroScreen top-quartile tracts, against 28% of all Oakland residents (3.4× over-represented). At +5 ft (ART 66 in) the share is 93%. Within the study area itself, 62% of residents are in such tracts. These are ecological, tract-level comparisons.
+- **Emergency access:** Oakland Fire Station 2 (Jack London waterfront) floods from +4 ft, which more than doubles response times for 235 residents. At +5 ft (ART 66 in), 5,536 residents are cut off from fire or medical services.
 - **Hidden risk:** at +4 ft, 422 more buildings sit below the water level but behind higher ground (ART "low-lying" areas). Groundwater rise and drainage failure are not modeled.
 - **Top priority tracts (+4 ft):** 4033.02 (Oakland, CalEnviroScreen 83rd percentile), 4287 (Alameda, 78), 9832 (Oakland, 55), 4017 (Oakland, 80), 4060 (Oakland, 88). The full ranking per scenario is in `stats.json` → `top_priority`, and the tract table is in `tract_table.csv`.
 
 ## Method
 
-**Hazard (02, 05).** Flood extents come from the **ART Bay Shoreline Flood Explorer** (BCDC), read from its official MapServer (`mapserver.adaptingtorisingtides.org`, WMS layers `inundation<N>` / `lowlying<N>`). Each layer is rendered onto our 1 m grid. ART's WMS doesn't expose depth values, so **depth is estimated** inside ART's extent as water level minus 2021 USGS LiDAR ground, with a 1 cm floor so ART's extent is kept. Water level is MHHW 1.941 m NAVD88 (NOAA 9414750, Alameda) plus the scenario. For +5 ft, which ART doesn't publish, a **connected bathtub model** on the same LiDAR is used (`hazard_bathtub.py`): 4-connected flood fill from verified open-water seeds, with the sea mask cut from the OSM coastline and Lake Merritt treated as inland water.
+**Hazard (02, 05).** Flood extents come from the **ART Bay Shoreline Flood Explorer** (BCDC), read from its official MapServer (`mapserver.adaptingtorisingtides.org`, WMS layers `inundation<N>` / `lowlying<N>`). Each layer is rendered onto our 1 m grid. ART's WMS doesn't expose depth values, so **depth is estimated** inside ART's extent as water level minus 2021 USGS LiDAR ground, with a 1 cm floor so ART's extent is kept. Water level is MHHW 1.941 m NAVD88 (NOAA 9414750, Alameda) plus the scenario. ART has no 60-inch layer, so "+5 ft" uses ART 66 in, with depth estimated at the 66-inch water level. A **connected bathtub model** on the same LiDAR (`hazard_bathtub.py`) is the fallback and the cross-check: 4-connected flood fill from verified open-water seeds, with the sea mask cut from the OSM coastline and Lake Merritt treated as inland water.
 
 **Exposure (05).**
 - Building: flooded if any 1 m cell under the footprint floods.
@@ -51,19 +51,19 @@ This is an exploration tool, **not an official hazard or evacuation map**. Defer
 
 | Check | 1 ft | 2 ft | 3 ft | 4 ft | 5 ft |
 |---|---|---|---|---|---|
-| ART vs our bathtub (IoU, land) | 0.74 | 0.80 | 0.68 | 0.73 | n/a |
-| ART vs NOAA SLR Viewer (IoU) | 0.62 | 0.68 | NOAA n/a† | 0.73 | n/a |
+| ART vs our bathtub (IoU, land) | 0.74 | 0.80 | 0.68 | 0.73 | n/a (66 in vs 60 in) |
+| ART vs NOAA SLR Viewer (IoU, same level) | 0.62 | 0.68 | NOAA n/a† | 0.73 | NOAA 5.5 ft n/a† |
 | Bathtub vs NOAA (IoU) | 0.64 | 0.67 | NOAA n/a† | 0.86 | 0.88 |
-| Buildings flooded: ART / bathtub | 6 / 7 | 14 / 9 | 49 / 46 | 117 / 109 | n/a / 417 |
+| Buildings flooded: ART / bathtub | 6 / 7 | 14 / 9 | 49 / 46 | 117 / 109 | 1,137 (66 in) / 417 (60 in) |
 
-†NOAA's `slr_3ft` service returns a blank render for this area (checked 2026-11-21).
+†NOAA's `slr_3ft` and `slr_5_5ft` services return a blank render for this area (checked 2026-11-21), so ART 66 in has no independent NOAA check. ART itself is validated at 1, 2 and 4 ft.
 - A Port strip that NOAA treats as disconnected connects in our model through a single 1 m cell at an at-grade intersection, at +4.73 ft (`port_discrepancy_sill.png`). That's a threshold effect, not a missing seawall.
 - The bathtub's ±0.196 m DEM-accuracy runs give 150–1,200 flooded buildings at 5 ft. West Oakland is flat around 3.4–3.7 m, so counts near that level are very sensitive.
 
 ## Limitations and assumptions
 
 - Exploration tool, not an official hazard or evacuation map. Still-water flooding only: no storm surge, rainfall, groundwater rise, or compound events. A 100-year storm tide adds ~0.84 m; supplementary bathtub runs are in `hazard/bathtub_summary.json`.
-- **Depth is estimated** (ART extent combined with LiDAR). +5 ft uses our model, not ART.
+- **Depth is estimated** (ART extent combined with LiDAR). "+5 ft" is ART's 5.5 ft map, so it overstates exactly 5 ft on purpose.
 - **Residents per building** is an area-based estimate. **97% of building heights are estimated** (OSM rarely tags height here). Roblox buildings are boxes.
 - Drive times are free-flow estimates by road class, with no traffic, signals or dispatch time. TIGER ring roads are treated as two-way. Fire stations are Oakland's only, so Alameda and Emeryville stations are missing; the bbox includes part of Alameda.
 - Contaminated-site proximity **does not mean residents are exposed**.
