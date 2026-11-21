@@ -103,3 +103,25 @@ test('full help request flow', async () => {
   const list = await (await api('GET', '/api/requests')).json();
   assert.ok(list.requests.some((r) => r.id === request.id));
 });
+
+test('comments on a request', async () => {
+  const alice = await login('Alice');
+  const bob = await login('Bob');
+  const { request } = await (await api('POST', '/api/requests', goodRequest, alice)).json();
+  assert.deepStrictEqual(request.comments, []);
+
+  let res = await api('POST', `/api/requests/${request.id}/comments`, { text: 'On my way' });
+  assert.strictEqual(res.status, 401, 'must be logged in');
+
+  res = await api('POST', `/api/requests/${request.id}/comments`, { text: '   ' }, bob);
+  assert.strictEqual(res.status, 400, 'empty comment');
+
+  res = await api('POST', `/api/requests/${request.id}/comments`, { text: ' Bringing 10 sandbags ' }, bob);
+  assert.strictEqual(res.status, 201);
+  res = await api('POST', `/api/requests/${request.id}/comments`, { text: 'Thank you!' }, alice);
+  const { request: updated } = await res.json();
+  assert.deepStrictEqual(updated.comments.map((c) => [c.name, c.text]), [['Bob', 'Bringing 10 sandbags'], ['Alice', 'Thank you!']]);
+
+  res = await api('POST', '/api/requests/nope/comments', { text: 'hi' }, bob);
+  assert.strictEqual(res.status, 404);
+});
