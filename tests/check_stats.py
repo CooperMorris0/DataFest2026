@@ -1,10 +1,9 @@
 """Sanity checks for the viewer-facing stats export."""
 
 import json
-from pathlib import Path
 
 
-STATS_PATH = Path(__file__).resolve().parents[1] / "data" / "processed" / "stats.json"
+STATS_PATH = "data/processed/stats.json"
 EXPECTED_SCENARIOS = ["0ft", "1ft", "2ft", "3ft", "4ft", "5ft"]
 VIEWER_FIELDS = {
     "id",
@@ -22,7 +21,7 @@ VIEWER_FIELDS = {
 
 
 def main():
-    with STATS_PATH.open(encoding="utf-8") as stats_file:
+    with open(STATS_PATH, encoding="utf-8") as stats_file:
         stats = json.load(stats_file)
 
     assert stats["scenario_ids"] == EXPECTED_SCENARIOS, "scenario_ids must be 0ft through 5ft"
