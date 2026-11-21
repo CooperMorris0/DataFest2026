@@ -106,19 +106,6 @@
    "residents_cut_off_share": 0.3333333333333333
   }
  },
- "terrain": {
-  "file": "heightmap.png",
-  "width_px": 2048,
-  "height_px": 1300,
-  "meters_per_px": 3.4551,
-  "elev_min_m": -11.0,
-  "elev_max_m": 41.0,
-  "extent_m": [
-   7076,
-   4492
-  ]
- },
- "studs_per_meter": 3.571428571428571,
  "n_buildings": 13581,
  "road_km_total": 365.358,
  "facilities_in_study_area": {
@@ -156,8 +143,7 @@
    "residents_near_flooded_contamination": 0,
    "road_km_impassable": 0.0,
    "residents_affected_high_burden": 0,
-   "share_affected_high_burden": null,
-   "water_level_studs": 6.93
+   "share_affected_high_burden": null
   },
   {
    "id": "1ft",
@@ -182,8 +168,7 @@
    "residents_near_flooded_contamination": 125,
    "road_km_impassable": 0.0,
    "residents_affected_high_burden": 0,
-   "share_affected_high_burden": null,
-   "water_level_studs": 8.02
+   "share_affected_high_burden": null
   },
   {
    "id": "2ft",
@@ -208,8 +193,7 @@
    "residents_near_flooded_contamination": 125,
    "road_km_impassable": 0.0,
    "residents_affected_high_burden": 0,
-   "share_affected_high_burden": null,
-   "water_level_studs": 9.11
+   "share_affected_high_burden": null
   },
   {
    "id": "3ft",
@@ -250,8 +234,7 @@
     "Linguistically isolated households": 13.4,
     "Age 65+": 13.0,
     "Under age 10": 11.9
-   },
-   "water_level_studs": 10.2
+   }
   },
   {
    "id": "4ft",
@@ -297,8 +280,7 @@
     "Linguistically isolated households": 11.6,
     "Age 65+": 11.8,
     "Under age 10": 13.0
-   },
-   "water_level_studs": 11.29
+   }
   },
   {
    "id": "5ft",
@@ -348,8 +330,7 @@
     "Linguistically isolated households": 9.8,
     "Age 65+": 10.1,
     "Under age 10": 11.0
-   },
-   "water_level_studs": 12.92
+   }
   }
  ],
  "top_priority": {

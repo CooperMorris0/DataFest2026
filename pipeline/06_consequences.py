@@ -17,7 +17,7 @@ C. Contamination proximity: open / managed-in-place EnviroStor + GeoTracker site
 Speeds (no maxspeed data in our cached OSM extract) are typical urban values per road
 class, a documented assumption. Outputs: buildings_consequences.parquet-like GeoJSON,
 facilities_consequences.geojson, contaminated_sites_flagged.geojson,
-network_edges.geojson (for Roblox / maps), consequences_summary.json
+network_edges.geojson (for maps), consequences_summary.json
 """
 import json
 

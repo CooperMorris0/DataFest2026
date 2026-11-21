@@ -67,7 +67,7 @@ hospitals and clinics), and state cleanup-site databases. Residents are allocate
 - Exploration tool, not an official hazard or evacuation map. Still-water flooding only: no
   storm surge (a 100-year storm adds ~0.84 m), rainfall, groundwater rise, or compound events.
 - Depth is estimated from LiDAR inside ART's extent. "+5 ft" is ART's 5.5 ft map. Residents per building are an
-  area-based estimate. 97% of building heights are estimated. Roblox buildings are boxes.
+  area-based estimate. 97% of building heights are estimated.
 - Drive times are free-flow estimates without traffic or dispatch time. Fire stations are
   Oakland's only (Alameda and Emeryville stations not included).
 - Contaminated-site proximity does not mean residents are exposed.

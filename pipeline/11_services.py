@@ -22,7 +22,7 @@ Exposure per site:
     streets_impassable_<ft>ft = share of local street length within 400 m (~5-minute walk) that is impassable,
     since the single nearest road can stay dry while the streets around it flood.
 Outputs: data/processed/floodwatch/services.csv, data/processed/floodwatch/services_summary.json,
-         oakland-flood-vulnerability/outputs/facilities.geojson (K2: one marker list for the website and Roblox;
+         oakland-flood-vulnerability/outputs/facilities.geojson (K2: one marker list for the website;
          flooded / access_lost are 6-character per-scenario flags, 0..5 ft)
 """
 import json
@@ -245,8 +245,8 @@ cols = ["site_id", "category", "ftype", "name", "address", "detail", "source", "
     [f"access_lost_{s}" for s in SCENARIO_IDS] + [f"streets_impassable_{s}" for s in SCENARIO_IDS]
 svc[cols].to_csv(OUT / "services.csv", index=False)
 
-# K2: facility markers shared by the FloodWatch website and the Roblox viewer (one list, same types and risk).
-# Flags are 6-character strings, one per scenario (0..5 ft), like the Roblox building shards.
+# K2: facility markers for the FloodWatch website (one list, same types and risk).
+# Flags are 6-character strings, one per scenario (0..5 ft), like the building export shards.
 WEBSITE_TYPES = {"hospital", "nursing_home", "dialysis", "fire_station", "school", "bart"}
 
 

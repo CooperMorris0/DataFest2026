@@ -1,5 +1,7 @@
 # Small tasks for Henry's and Leo's agents
 
+> **Update 2026-11-21:** the Roblox viewer was dropped; the FloodWatch website is the demo. Roblox parts below (the `roblox/` folder, viewer contract, L2 viewpoints) no longer apply. The building export moved to `data/processed/export/` (step `08_export`). Current plan: section 19 of the team doc.
+
 *Created 2026-11-21. Mirrors section 15 of the team Google Doc. Keep both in sync.*
 
 These tasks are **deliberately small** (about 30-60 minutes each for an AI agent on a free model). Each one:
