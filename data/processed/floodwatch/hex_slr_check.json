@@ -1,0 +1,103 @@
+{
+  "h3_res": 9,
+  "n_hexes": 290,
+  "n_hexes_in_floodwatch": 255,
+  "scenarios": [
+    {
+      "scenario": "0ft",
+      "buildings_flooded": [
+        0,
+        0
+      ],
+      "residents_affected": [
+        0,
+        0
+      ],
+      "flooded_land_km2": [
+        0.0,
+        0.0
+      ],
+      "ok": true
+    },
+    {
+      "scenario": "1ft",
+      "buildings_flooded": [
+        6,
+        6
+      ],
+      "residents_affected": [
+        8,
+        8
+      ],
+      "flooded_land_km2": [
+        0.3013,
+        0.3013
+      ],
+      "ok": true
+    },
+    {
+      "scenario": "2ft",
+      "buildings_flooded": [
+        14,
+        14
+      ],
+      "residents_affected": [
+        8,
+        8
+      ],
+      "flooded_land_km2": [
+        0.4261,
+        0.4261
+      ],
+      "ok": true
+    },
+    {
+      "scenario": "3ft",
+      "buildings_flooded": [
+        49,
+        49
+      ],
+      "residents_affected": [
+        907,
+        907
+      ],
+      "flooded_land_km2": [
+        0.8575,
+        0.8575
+      ],
+      "ok": true
+    },
+    {
+      "scenario": "4ft",
+      "buildings_flooded": [
+        117,
+        117
+      ],
+      "residents_affected": [
+        1341,
+        1341
+      ],
+      "flooded_land_km2": [
+        1.5274,
+        1.5274
+      ],
+      "ok": true
+    },
+    {
+      "scenario": "5ft",
+      "buildings_flooded": [
+        1137,
+        1137
+      ],
+      "residents_affected": [
+        7689,
+        7689
+      ],
+      "flooded_land_km2": [
+        5.7888,
+        5.7888
+      ],
+      "ok": true
+    }
+  ]
+}
