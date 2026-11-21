@@ -26,6 +26,23 @@ FT_TO_M = 0.3048
 SCENARIOS_FT = [0, 1, 2, 3, 5]
 WATER_LEVELS_M = [MHHW_NAVD88_M + s * FT_TO_M for s in SCENARIOS_FT]
 
+# 1% annual-chance (100-year) still-water extreme at Alameda 9414750, relative to MHHW.
+# NOAA CO-OPS Extreme Water Levels (GEV, detrended), accessed 2026-11-21:
+#   level 0.84 m, 90% CI 0.77-0.96 m. Stored in data/raw/noaa_ewl_9414750.json.
+SURGE_100YR_M = 0.84
+
+# Scenario ids. Still-water ids keep the "<ft>ft" form used in file names.
+SCENARIOS = (
+    [dict(id=f"{ft}ft", slr_ft=ft, storm=None, water_m=MHHW_NAVD88_M + ft * FT_TO_M)
+     for ft in SCENARIOS_FT]
+    + [dict(id=f"{ft}ft_100yr", slr_ft=ft, storm="100yr",
+            water_m=MHHW_NAVD88_M + ft * FT_TO_M + SURGE_100YR_M) for ft in SCENARIOS_FT]
+)
+
+# DEM vertical accuracy: CA_AlamedaCounty_2021 QL1, 10 cm RMSEz class,
+# NVA <= 0.196 m at 95% (vendor metadata). Used as a +/- uniform-bias envelope.
+DEM_NVA95_M = 0.196
+
 ROAD_IMPASSABLE_DEPTH_M = 0.15
 
 # Seed points for the hydrologic flood fill, all well out in open water (lon, lat).

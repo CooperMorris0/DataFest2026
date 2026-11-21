@@ -86,11 +86,27 @@ NONRES = {"industrial", "warehouse", "commercial", "retail", "office", "church",
           "hotel", "train_station", "transportation", "civic", "government", "kindergarten",
           "college", "supermarket", "hangar", "storage_tank", "silo", "manufacture", "chapel",
           "fire_station", "sports_hall", "stadium", "toilets", "greenhouse", "boathouse"}
-b["residential_candidate"] = ~b["btype"].isin(NONRES)
+osm_res = ~b["btype"].isin(NONRES)
+
+# Prefer parcel land use (MTC/SFEI Existing Land Use 2020) where a building sits on a parcel.
+RES_LU = {"Multifamily Residential", "Single Family Residential", "Mixed Use Residential",
+          "Mobile Home Park", "Mixed Use Commercial"}
+lu = gpd.read_file(RAW / "landuse_parcels.geojson").to_crs(CRS_METRIC)[["mtc_land_use_category", "geometry"]]
+pts = gpd.GeoDataFrame(geometry=b.geometry.representative_point(), crs=CRS_METRIC)
+j = gpd.sjoin(pts, lu, how="left", predicate="within")
+j = j[~j.index.duplicated()]
+b["parcel_land_use"] = j["mtc_land_use_category"]
+has_lu = b["parcel_land_use"].notna()
+b["residential_candidate"] = np.where(has_lu, b["parcel_land_use"].isin(RES_LU), osm_res)
+b["residential_source"] = np.where(has_lu, "parcel_land_use", "osm_tags")
+agree = (b.loc[has_lu, "residential_candidate"] == osm_res[has_lu]).mean()
+print(f"buildings on a land-use parcel: {has_lu.mean():.1%}; residential: "
+      f"{b['residential_candidate'].mean():.1%} (OSM-tag guess would say {osm_res.mean():.1%}; "
+      f"agrees with parcels on {agree:.1%})")
 
 b["bid"] = np.arange(len(b))
 b = b[["bid", "osm_id", "btype", "name", "height_m", "height_source", "height_estimated",
-       "residential_candidate", "area_m2", "geometry"]]
+       "residential_candidate", "residential_source", "parcel_land_use", "area_m2", "geometry"]]
 b.to_file(PROC / "buildings.geojson", driver="GeoJSON")
 
 print(f"raw polygons: {n0}")
