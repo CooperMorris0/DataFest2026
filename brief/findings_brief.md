@@ -39,16 +39,21 @@ deliberately conservative choice. For reference, ART floods 620 buildings at
 
 ## Where help should start: top priority tracts (+4 ft)
 
-| # | Tract | City | CalEnviroScreen pctl | Flooded bldgs | Residents affected | Residents cut off |
-|---|---|---|---|---|---|---|
-| 1 | 4033.02 | Oakland | 83 | 29 | 335 | 125 |
-| 2 | 4287.00 | Alameda | 78 | 53 | 899 | 0 |
-| 3 | 9832.00 | Oakland | 55 | 12 | 76 | 3 |
-| 4 | 4017.00 | Oakland | 80 | 11 | 0 | 89 |
-| 5 | 4060.00 | Oakland | 88 | 12 | 31 | 0 |
+| # | Tract | City | CalEnviroScreen pctl | Flooded bldgs | Residents affected | Residents cut off | Slower response* |
+|---|---|---|---|---|---|---|---|
+| 1 | 4287.00 | Alameda | 78 | 53 | 899 | 0 | 0 |
+| 2 | 9832.00 | Oakland | 55 | 12 | 76 | 3 | 203 |
+| 3 | 4033.02 | Oakland | 83 | 29 | 335 | 125 | 0 |
+| 4 | 4017.00 | Oakland | 80 | 11 | 0 | 89 | 0 |
+| 5 | 4060.00 | Oakland | 88 | 12 | 31 | 0 | 0 |
 
-Priority = Exposure x Vulnerability. Exposure averages the share of buildings flooded, the
-facilities lost, and the share of residents cut off (each scaled 0-1 across tracts).
+\*Residents whose fire or medical response time more than doubles (for example, because
+Fire Station 2 floods at +4 ft).
+
+Priority = Exposure x Vulnerability. Exposure averages the share of buildings flooded and the
+share of residents losing emergency access (cut off, plus half weight for a doubled response
+time), each scaled 0-1 across tracts. A flooded fire station or clinic counts through the
+people it serves, not in its own tract.
 Vulnerability is the CalEnviroScreen 4.0 percentile. Port/industrial tracts without a
 CalEnviroScreen score are not ranked.
 
@@ -68,6 +73,6 @@ hospitals and clinics), and state cleanup-site databases. Residents are allocate
   storm surge (a 100-year storm adds ~0.84 m), rainfall, groundwater rise, or compound events.
 - Depth is estimated from LiDAR inside ART's extent. "+5 ft" is ART's 5.5 ft map. Residents per building are an
   area-based estimate. 97% of building heights are estimated.
-- Drive times are free-flow estimates without traffic or dispatch time. Fire stations are
-  Oakland's only (Alameda and Emeryville stations not included).
+- Drive times are free-flow estimates without traffic or dispatch time. Fire stations include
+  neighboring departments (Alameda, Emeryville/ACFD, Piedmont).
 - Contaminated-site proximity does not mean residents are exposed.

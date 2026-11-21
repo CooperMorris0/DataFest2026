@@ -9,8 +9,10 @@ land use, step 04) in proportion to footprint area x height (a floor-area proxy)
 
 Priority for tract i and scenario s:
     Exposure_i   = sum_k w_k * norm_k(component_k)       (PRIORITY_WEIGHTS, sum to 1)
-       components: share of the tract's buildings flooded; facilities lost (count);
-                   share of the tract's residents cut off from emergency services
+       components: share of the tract's buildings flooded; emergency access loss share =
+                   (residents cut off + DEGRADED_ACCESS_WEIGHT x residents whose response time
+                   more than doubles) / tract residents. Lost fire stations and clinics count
+                   through the residents they served, not in their own tract.
        norm_k = value / max over tracts in that scenario (0-1; 0 if all zero)
     Vulnerability_i = CalEnviroScreen 4.0 percentile / 100
     Priority_i   = Exposure_i * Vulnerability_i
@@ -26,7 +28,7 @@ import pandas as pd
 import requests
 from shapely.geometry import box
 
-from config import (BBOX, CRS_METRIC, GRID_BOUNDS, HIGH_BURDEN_PCTL, PRIORITY_WEIGHTS, PROC, RAW,
+from config import (BBOX, CRS_METRIC, DEGRADED_ACCESS_WEIGHT, GRID_BOUNDS, HIGH_BURDEN_PCTL, PRIORITY_WEIGHTS, PROC, RAW,
                     SCENARIO_IDS, TOP_N_PRIORITY, USER_AGENT)
 
 CES_URL = ("https://services1.arcgis.com/PCHfdHz4GlDNAhBb/arcgis/rest/services/"
@@ -181,6 +183,7 @@ for gid, g in b.groupby("tract_id"):
         row[f"bldg_flooded_{sid}"] = int(fl.sum())
         row[f"res_affected_{sid}"] = int(round(g.loc[fl, "residents_est"].sum()))
         row[f"res_cut_off_{sid}"] = int(round(g.loc[cut, "residents_est"].sum()))
+        row[f"res_degraded_{sid}"] = int(round(g.loc[g[f"degraded_{sid}"], "residents_est"].sum()))
         row[f"facilities_lost_{sid}"] = int(fac_in[(fac_in.tract_id == gid) & fac_in[f"flooded_{sid}"]].shape[0])
         row[f"road_km_{sid}"] = round(roads.loc[(roads.tract_id == gid) & roads[f"impassable_{sid}"], "length_m"].sum() / 1000, 3)
     rows.append(row)
@@ -190,8 +193,8 @@ top = {}
 for sid in SCENARIO_IDS:
     comp = pd.DataFrame({
         "flooded_building_share": tt[f"bldg_flooded_{sid}"] / tt["n_buildings"].clip(lower=1),
-        "facilities_lost": tt[f"facilities_lost_{sid}"].astype(float),
-        "residents_cut_off_share": tt[f"res_cut_off_{sid}"] / tt["residents_est"].clip(lower=1)})
+        "emergency_access_loss_share": (tt[f"res_cut_off_{sid}"] + DEGRADED_ACCESS_WEIGHT * tt[f"res_degraded_{sid}"])
+                                       / tt["residents_est"].clip(lower=1)})
     norm = comp / comp.max().replace(0, np.nan)
     exposure = sum(PRIORITY_WEIGHTS[k] * norm[k].fillna(0) for k in PRIORITY_WEIGHTS)
     vuln = tt["ces_pctl"] / 100
@@ -201,7 +204,8 @@ for sid in SCENARIO_IDS:
     top[sid] = [dict(rank=i + 1, tract_id=r.tract_id, name=r["name"], city=r.city, ces_pctl=r.ces_pctl,
                      priority=r[f"priority_{sid}"], exposure=r[f"exposure_{sid}"],
                      buildings_flooded=r[f"bldg_flooded_{sid}"], residents_affected=r[f"res_affected_{sid}"],
-                     residents_cut_off=r[f"res_cut_off_{sid}"], facilities_lost=r[f"facilities_lost_{sid}"])
+                     residents_cut_off=r[f"res_cut_off_{sid}"], residents_degraded=r[f"res_degraded_{sid}"],
+                     facilities_lost=r[f"facilities_lost_{sid}"])
                 for i, (_, r) in enumerate(ranked.head(TOP_N_PRIORITY).iterrows())]
     unranked = tt[tt["ces_pctl"].isna() & (exposure > 0)]
     top[sid + "_unranked_exposed_tracts"] = unranked["tract_id"].tolist()

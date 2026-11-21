@@ -1,6 +1,8 @@
 """Fetch critical facilities from authoritative public sources (wider NETWORK_BBOX).
 
-  fire_station      City of Oakland GIS, OFD_Basemap layer 5 "OFD - Stations"
+  fire_station      City of Oakland GIS, OFD_Basemap layer 5 "OFD - Stations" (Oakland), plus
+                    USGS National Map Structures "Fire Stations/EMS Stations" for the stations
+                    outside Oakland (Alameda, Emeryville/ACFD, Piedmont); USGS misses OFD 2
   hospital/clinic/  CDPH Licensed & Certified Healthcare Facilities (CalHHS), active licenses
   nursing_facility
   school            California Public Schools 2024-25 (CA Dept. of Education), active
@@ -22,6 +24,7 @@ ENV = dict(geometry=f"{NETWORK_BBOX['west']},{NETWORK_BBOX['south']},{NETWORK_BB
            outFields="*", outSR=4326, f="geojson")
 SOURCES = {
     "fire_oakland": "https://services.arcgis.com/9tC74aDHuml0x5Yz/arcgis/rest/services/OFD_Basemap/FeatureServer/5",
+    "fire_usgs": "https://carto.nationalmap.gov/arcgis/rest/services/structures/MapServer/51",
     "cdph_health": "https://services5.arcgis.com/FlidZxdI0LGC9vAw/arcgis/rest/services/CDPH_LC_Facilities_Data/FeatureServer/0",
     "cde_schools": "https://services3.arcgis.com/fdvHcZVgB2QSRNkL/arcgis/rest/services/SchoolSites2425/FeatureServer/0",
     "bart": "https://services.arcgis.com/9tC74aDHuml0x5Yz/arcgis/rest/services/Bart_Stations/FeatureServer/0",
@@ -63,6 +66,11 @@ def add(g, ftype, name_col, source, idcol):
 fire = fetch("fire_oakland")
 fire["label"] = "Oakland Fire Station " + fire["STATION"].astype(str)
 add(fire, "fire_station", "label", "OFD", "OBJECTID")
+# neighboring departments (an Oakland address can be served faster from Emeryville, Alameda or Piedmont)
+usgs = fetch("fire_usgs")
+usgs = usgs[usgs["fcode"].eq(74026) & usgs["city"].fillna("").str.lower().ne("oakland")]
+add(usgs, "fire_station", "name", "USGS", "permanent_identifier")
+print("  non-Oakland fire stations:", sorted(usgs["name"]))
 
 h = fetch("cdph_health")
 active = h["LICENSE_STATUS_DESCRIPTION"].fillna("").str.upper().str.contains("ACTIVE") | \

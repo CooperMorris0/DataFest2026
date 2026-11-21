@@ -100,8 +100,13 @@ DEGRADED_MIN_EXTRA_S = 60  # ... AND grows by at least 1 minute (drive times her
 # ------------------------------------------------------------------ equity priority
 HIGH_BURDEN_PCTL = 75  # CalEnviroScreen 4.0 statewide percentile, top quartile
 # Exposure = weighted mean of 0-1 normalized components (weights sum to 1).
-PRIORITY_WEIGHTS = {"flooded_building_share": 1 / 3, "facilities_lost": 1 / 3,
-                    "residents_cut_off_share": 1 / 3}
+# Emergency access loss share = (residents cut off + DEGRADED_ACCESS_WEIGHT x residents whose
+# response time more than doubles) / tract residents. A lost fire station or clinic counts
+# through the residents it served, not as a count in its own tract (Fire Station 2 sits in a
+# tract with few residents). Cut off and degraded are one component, so a handful of degraded
+# residents can't be stretched to a full component by the per-scenario max normalization.
+DEGRADED_ACCESS_WEIGHT = 0.5  # ASSUMPTION: a doubled response time counts half as much as none
+PRIORITY_WEIGHTS = {"flooded_building_share": 0.5, "emergency_access_loss_share": 0.5}
 TOP_N_PRIORITY = 5
 
 # ------------------------------------------------------------------ FloodWatch link (K1+)
