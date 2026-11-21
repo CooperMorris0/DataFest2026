@@ -104,9 +104,6 @@ PRIORITY_WEIGHTS = {"flooded_building_share": 1 / 3, "facilities_lost": 1 / 3,
                     "residents_cut_off_share": 1 / 3}
 TOP_N_PRIORITY = 5
 
-# ------------------------------------------------------------------ Roblox
-STUDS_PER_METER = 1 / 0.28
-
 # ------------------------------------------------------------------ FloodWatch link (K1+)
 # H3 resolution used by oakland-flood-vulnerability/ (FloodWatch): res 9, ~0.1 km2 hexes.
 FLOODWATCH_H3_RES = 9

@@ -9,7 +9,7 @@ S = json.loads((PROC / "stats.json").read_text())
 sc = {s["id"]: s for s in S["scenarios"]}
 out = ROOT / "brief"
 out.mkdir(exist_ok=True)
-# map image: Roblox screenshot once available; pipeline maps until then
+# map images from the pipeline
 for name in ("isolation_5ft.png", "flood_4ft.png"):
     if (PROC / name).exists():
         shutil.copy(PROC / name, out / name)
@@ -106,7 +106,7 @@ hospitals and clinics), and state cleanup-site databases. Residents are allocate
 - Exploration tool, not an official hazard or evacuation map. Still-water flooding only: no
   storm surge (a 100-year storm adds ~0.84 m), rainfall, groundwater rise, or compound events.
 - Depth is estimated from LiDAR inside ART's extent. "+5 ft" is ART's 5.5 ft map. Residents per building are an
-  area-based estimate. 97% of building heights are estimated. Roblox buildings are boxes.
+  area-based estimate. 97% of building heights are estimated.
 - Drive times are free-flow estimates without traffic or dispatch time. Fire stations are
   Oakland's only (Alameda and Emeryville stations not included).
 - Contaminated-site proximity does not mean residents are exposed.

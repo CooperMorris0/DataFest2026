@@ -2,7 +2,6 @@
 __pycache__/
 data/raw/
 backups/
-*.rbxl
 .DS_Store
 # regenerable intermediates (rerun the pipeline)
 data/processed/*.tif
@@ -14,7 +13,3 @@ data/processed/roads_exposure.geojson
 data/processed/facilities_exposure.geojson
 data/processed/facilities_consequences.geojson
 data/processed/buildings_final.geojson
-data/processed/roblox/terrain/
-data/processed/previews_dem_1m.npy
-data/processed/previews/
-data/raw/lidar_lpc/

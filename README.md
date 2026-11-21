@@ -1,14 +1,13 @@
 # Oakland Flood Consequence Explorer
 
-DataFest 2026. A walkable 3D Roblox model of West Oakland and the waterfront that shows what sea-level rise *means for people*: who floods, who gets cut off from emergency services, which flooded areas are near contaminated sites, and which neighborhoods should be prioritized. It is built on official flood maps and open data.
+DataFest 2026. What flooding *means for people* in Oakland, today and with sea-level rise: who floods, who gets cut off from emergency services, which flooded areas are near contaminated sites, which services sit where it already floods, and where help should start. It is built on official flood maps and open data.
 
 > Official flood maps show where water goes. We show what it means for the people who live there, and where help should start.
 
-**Status (2026-11-21):** all six items in the definition of done exist.
-- The pipeline is validated.
-- The **3D Roblox world** is built: terrain, buildings, rising water, and five map modes (Flood, Cut off, Contamination, Priority, FloodWatch). It's walkable, with a water-depth readout, and saved in the team place.
+**Status (2026-11-21):** the demo is Kai's **FloodWatch website** ([`oakland-flood-vulnerability/`](oakland-flood-vulnerability/)), backed by this repo's sea-level-rise pipeline.
+- The sea-level-rise pipeline is validated, and `stats.json` is the single source for its numbers.
 - The planner brief is in [`brief/findings_brief.md`](brief/findings_brief.md), and a presenter's walkthrough is in [`docs/demo_script.md`](docs/demo_script.md).
-- Still open: a visual playtest, screenshots for the brief, and teammates' follow-up tasks (see "Team").
+- The Roblox 3D viewer was dropped on 2026-11-21. Its code is kept on the `archive/roblox` branch.
 
 This is an exploration tool, **not an official hazard or evacuation map**. Defer to ART, BCDC, and City of Oakland plans.
 
@@ -36,21 +35,13 @@ This is an exploration tool, **not an official hazard or evacuation map**. Defer
 - **They are mostly different places.** Only 47 blocks have both 311 rain flooding and sea-level flooding at +5 ft. Only 17 of the 91 High / Very high rain-risk blocks flood at +5 ft, and just 25% of the reports (382 of 1,521) come from blocks that sea-level rise floods. (Kai's K1 found the same 47-block overlap.)
 - So West Oakland faces **two different flood problems**: storm drains overwhelmed in the residential flatlands today, and permanent shoreline flooding at the waterfront later. Adaptation plans need both.
 
-## 3D Roblox world
+## The FloodWatch website (the demo)
 
-A walkable model of the study area (1 stud = 0.28 m) in the team's Roblox place "DataFest2026" (placeId 139477133252061). Setup and rebuild steps are in [`roblox/SETUP.md`](roblox/SETUP.md).
-- **Scenario buttons** (Today to +5 ft) raise the bay. Each scenario's flood water appears only where the hazard data floods.
-- **Map modes:**
-  - **Flood:** depth on buildings; impassable roads in red.
-  - **Cut off:** cut-off or degraded emergency access.
-  - **Contamination:** cleanup sites near flooding.
-  - **Priority:** equity-weighted tracts.
-  - **FloodWatch:** Kai's website in 3D, with the same hexagons, risk colors, percentiles and 311 counts (289/289 blocks identical), plus columns sized by flood reports.
-- **Stats panel and "where help should start" list** are read straight from `stats.json`, so the numbers always match this README.
-- **Walk mode:** solid buildings; you're dropped onto the nearest street. An on-screen readout shows the street name, **how deep the water is at your feet** (ankle-, knee-, waist-deep) and the FloodWatch block you're in. Wading slows you down.
-- **Fly camera and viewpoints:** Overview, West Oakland, Jack London, Port, Fire Station 2. Click a building for its depth, emergency access, height, tract and FloodWatch risk.
-- **Deep link from the FloodWatch website:** `https://www.roblox.com/games/start?placeId=139477133252061&launchData=<h3>` opens the world walking in that block. Production use needs the experience to be published.
-- **Verified in Studio:** the flooded and cut-off counts of building parts match `stats.json` for all 6 scenarios. Not yet verified by eye: overall visuals and button clicks. The MCP screenshot tool returned stale frames, so this needs a human playtest.
+[FloodWatch](oakland-flood-vulnerability/) (Kai) is an interactive map of all of Oakland:
+- **Risk today:** rain and storm-drain flood risk per H3 block (311 reports, an ML model, FEMA zones, CDC SVI), weighted by what a flood would disrupt (key facilities, main roads, bus stops, groceries and pharmacies), with a "where to act first" list.
+- **Search an address:** its hazards and tailored actions. Inside the West Oakland study area it adds this pipeline's **building-level** sea-level-rise results (floods from +N ft, depth, cut off from emergency services, near a contaminated site), read from `data/processed/export/buildings/`.
+- **Future flooding slider:** Today to +5 ft from the same ART maps (5 ft = ART 66 in).
+- **Services and storm prep:** community service markers, plus a Storm prep page with the drains to clear first and shelter sites on safe ground.
 
 ## Method
 
@@ -90,14 +81,13 @@ A walkable model of the study area (1 stud = 0.28 m) in the team's Roblox place 
 
 - Exploration tool, not an official hazard or evacuation map. Still-water flooding only: no storm surge, rainfall, groundwater rise, or compound events. A 100-year storm tide adds ~0.84 m; supplementary bathtub runs are in `hazard/bathtub_summary.json`.
 - **Depth is estimated** (ART extent combined with LiDAR). "+5 ft" is ART's 5.5 ft map, so it overstates exactly 5 ft on purpose.
-- **Residents per building** is an area-based estimate. **97% of building heights are estimated** (OSM rarely tags height here). Roblox buildings are boxes.
+- **Residents per building** is an area-based estimate. **97% of building heights are estimated** (OSM rarely tags height here).
 - Drive times are free-flow estimates by road class, with no traffic, signals or dispatch time. TIGER ring roads are treated as two-way. Fire stations are Oakland's only, so Alameda and Emeryville stations are missing; the bbox includes part of Alameda.
 - Contaminated-site proximity **does not mean residents are exposed**.
 - CalEnviroScreen 4.0 uses 2010 tracts and population uses 2020 tracts; they are joined per building.
 - **Priority sensitivity:** with equal weights, one lost facility in a tract carries a full third of the exposure score. At +5 ft this ranks a tract with zero affected residents #2. Adjust `PRIORITY_WEIGHTS` if that's not the intended emphasis.
 - Overpass (the OSM API) refused automated requests during the build, so facilities come from authoritative agency datasets and the outer road ring comes from TIGER.
 - **FloodWatch:** 311 reports partly reflect who calls 311 (see its README). It covers Oakland only, so the Alameda and Emeryville parts of the study area have no FloodWatch data.
-- **Roblox world:** box buildings, 1.12 m terrain cells, flat water surfaces per scenario. It's for exploring, not for measuring.
 
 ## Data sources (all accessed 2026-11-21)
 
@@ -139,21 +129,22 @@ All downloads are cached in `data/raw/`. After the first run, a full rerun takes
 | 5 | `05_flood_exposure`, `05b_validate_hazard` | `flood_<ft>ft.png`, `exposure_summary.json`, `hazard_validation.json` |
 | 6 | `06_consequences` | `consequences_summary.json`, `contaminated_sites_flagged.geojson` |
 | 7 | `07_equity_priority` | `tract_table.csv`, `equity_priority.json` |
-| 8 | `08_export_for_roblox`, `08b_export_roblox_world` | `roblox/` (heightmap, terrain tiles, sharded buildings and roads, water rectangles, points, manifest), **`stats.json`** |
+| 8 | `08_export` | `export/` (per-building and per-road flags sharded by 1 km cell, facilities, contaminated sites, manifest; read by the FloodWatch website), **`stats.json`** |
 | 9 | `09_findings_brief` | `brief/findings_brief.md` |
 | 10 | `10_floodwatch_slr` (Kai, K1) | `floodwatch/hex_slr.csv`: sea-level-rise exposure per FloodWatch block |
-| 8c | `08c_import_floodwatch` (runs last) | `roblox/floodwatch.json`: FloodWatch layer for the 3D world |
+| 11 | `11_services` (Kai) | `floodwatch/services.csv`, `oakland-flood-vulnerability/outputs/facilities.geojson` |
+| 12 | `12_storm_prep` (Kai) | `floodwatch/storm_prep_*.csv`, the website's Storm prep page |
 
-Shared constants (bbox, datum, scenarios, ART levels, rules, weights, scale) are in `pipeline/config.py`. To build the 3D world from these outputs, see [`roblox/SETUP.md`](roblox/SETUP.md). The 76 MB of terrain tiles are gitignored and regenerated by `08b`.
+Shared constants (bbox, datum, scenarios, ART levels, rules, weights) are in `pipeline/config.py`.
 
 ## Team and repository layout
 
 | Area | Owner | Where |
 |---|---|---|
-| Sea-level-rise pipeline + 3D Roblox world | Cooper (+ Claude Code) | `pipeline/`, `roblox/`, `brief/` |
-| FloodWatch (flooding today) + flood-analysis tasks K1–K8 | Kai (+ agents) | `oakland-flood-vulnerability/`, `pipeline/10_*` and later, `data/processed/floodwatch/` |
+| Sea-level-rise pipeline + brief | Cooper (+ Claude Code) | `pipeline/` (01–09), `brief/` |
+| FloodWatch website (the demo) + flood-analysis tasks K1–K8 | Kai (+ agents) | `oakland-flood-vulnerability/`, `pipeline/10_*` and later, `data/processed/floodwatch/` |
 | Glossary, presentation outline, Spanish findings (H1–H3) | Henry (+ agent) | `docs/` |
-| `stats.json` checks, viewer viewpoints, README links (L1–L3) | Leo (+ agent) | `tests/`, `tools/`, `roblox/viewpoints.json` |
+| `stats.json` checks, README links (L1, L3) | Leo (+ agent) | `tests/` |
 
 - Task plans: [`docs/delegation_plan_kai.md`](docs/delegation_plan_kai.md) and [`docs/delegation_plan_henry_leo.md`](docs/delegation_plan_henry_leo.md).
 - The team's shared Google Doc mirrors these plans and holds the running work log. Ask a teammate for access.
@@ -161,4 +152,4 @@ Shared constants (bbox, datum, scenarios, ART levels, rules, weights, scale) are
   - Work on a branch and open a PR into `main`.
   - Claim a task in the work log before starting it.
   - `stats.json` is the single source of truth for numbers.
-  - Add new fields freely, but don't rename fields the viewer reads.
+  - Add new fields freely, but don't rename fields the website reads (`data/processed/export/buildings/`, `hex_scores.csv`).

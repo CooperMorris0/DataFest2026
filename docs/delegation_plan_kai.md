@@ -1,5 +1,7 @@
 # Delegation plan: flood analysis for Kai's agents
 
+> **Update 2026-11-21:** the Roblox viewer was dropped; the FloodWatch website is the demo. Roblox parts below (the `roblox/` folder, viewer contract, L2 viewpoints) no longer apply. The building export moved to `data/processed/export/` (step `08_export`). Current plan: section 19 of the team doc.
+
 *Created 2026-11-21. Mirrors section 14 of the team Google Doc. Keep both in sync.*
 
 ## Why this split

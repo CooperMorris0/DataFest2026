@@ -1,18 +1,17 @@
-"""Write Roblox-ready files + stats.json, then validate them.
+"""Write the per-building / per-road export files + stats.json, then validate them.
 
-Frame: EPSG:26910 meters minus the grid's southwest corner (origin 0,0).
-Roblox axes: X = east, Z = -north (south positive), Y = up.  Scale: STUDS_PER_METER.
-Elevations stay in meters NAVD88 in the files (Luau converts with STUDS_PER_METER), so the
-terrain, water levels and building bases share one vertical datum.
+Frame: EPSG:26910 meters minus the grid's southwest corner (origin 0,0); local axes
+X = east, Z = -north (south positive). Elevations in meters NAVD88.
+The FloodWatch website (oakland-flood-vulnerability/) reads the building files for its
+building-level address results.
 
-data/processed/roblox/
-  heightmap.png             16-bit grayscale, <= 2048 px wide; z = zmin + v/65535*(zmax-zmin)
+data/processed/export/
   buildings/cell_<i>_<j>.json  sharded by 1 km cell; per building:
       id, cx, cz, w, d, rot, h, base, est, tract, ces, res,
       depth[6], flooded/cut/deg/contam/low flags as 6-char strings ("010011"), pri[6]
   roads/cell_<i>_<j>.json   polylines [[x,z,elev],...], width_m, imp (6-char flag string)
   facilities.json, contaminated_sites.json, manifest.json
-data/processed/stats.json   single source for all UI numbers
+data/processed/stats.json   single source for all numbers
 """
 import json
 import math
@@ -22,15 +21,14 @@ from datetime import date
 
 import geopandas as gpd
 import numpy as np
-from PIL import Image
 
 from common import read
 from config import (ART_BRACKET_LEVELS_IN, ART_LEVEL_FOR_FT, CONTAMINATION_BUFFER_M, CRS_METRIC,
                     DEGRADED_FACTOR, DEGRADED_MIN_EXTRA_S, GRID_BOUNDS, HAZ, HIGH_BURDEN_PCTL,
                     MHHW_NAVD88_M, NOAA_STATION, PRIORITY_WEIGHTS, PROC, ROAD_IMPASSABLE_DEPTH_M,
-                    SCENARIO_IDS, SCENARIOS_FT, STUDS_PER_METER, water_level_m)
+                    SCENARIO_IDS, SCENARIOS_FT, water_level_m)
 
-OUT = PROC / "roblox"
+OUT = PROC / "export"
 if OUT.exists():
     shutil.rmtree(OUT)
 (OUT / "buildings").mkdir(parents=True)
@@ -55,17 +53,7 @@ def flags(row, prefix):
     return "".join("1" if bool(row[f"{prefix}_{s}"]) else "0" for s in SCENARIO_IDS)
 
 
-# ------------------------------------------------------------ terrain heightmap
-z = read(HAZ / "dem_filled.tif")
-H0, W0 = z.shape
-wpx = min(2048, W0)
-hpx = int(round(H0 * wpx / W0))
-zs = np.array(Image.fromarray(z.astype(np.float32)).resize((wpx, hpx), Image.BILINEAR))
-zmin, zmax = float(np.floor(zs.min())), float(np.ceil(zs.max()))
-v = np.round((zs - zmin) / (zmax - zmin) * 65535).astype(np.uint16)
-Image.fromarray(v).save(OUT / "heightmap.png")
-terrain = dict(file="heightmap.png", width_px=wpx, height_px=hpx, meters_per_px=round(W0 / wpx, 4),
-               elev_min_m=zmin, elev_max_m=zmax, extent_m=[W0, H0])
+z = read(HAZ / "dem_filled.tif")  # road vertex elevations
 
 # ------------------------------------------------------------ buildings
 b = gpd.read_file(PROC / "buildings_final.geojson").to_crs(CRS_METRIC)
@@ -141,8 +129,8 @@ sites = sites[sites["in_study_area"]]
 manifest = dict(buildings=sorted(f"buildings/{p.name}" for p in (OUT / "buildings").glob("*.json")),
                 roads=sorted(f"roads/{p.name}" for p in (OUT / "roads").glob("*.json")),
                 facilities="facilities.json", contaminated_sites="contaminated_sites.json",
-                terrain=terrain, scenario_ids=SCENARIO_IDS, studs_per_meter=STUDS_PER_METER,
-                origin_epsg26910=[X0, Y0], axes="X=east, Z=-north, Y=up; elevations in m NAVD88")
+                scenario_ids=SCENARIO_IDS,
+                origin_epsg26910=[X0, Y0], axes="X=east, Z=-north; elevations in m NAVD88")
 (OUT / "manifest.json").write_text(json.dumps(manifest, indent=1))
 
 # ------------------------------------------------------------ stats.json
@@ -150,8 +138,6 @@ eq = json.loads((PROC / "equity_priority.json").read_text())
 expo = json.loads((PROC / "exposure_summary.json").read_text())
 cons = json.loads((PROC / "consequences_summary.json").read_text())
 val = json.loads((PROC / "hazard_validation.json").read_text()) if (PROC / "hazard_validation.json").exists() else None
-for s in eq["scenarios"]:
-    s["water_level_studs"] = round(s["water_level_navd88_m"] * STUDS_PER_METER, 2)
 stats = dict(
     generated=str(date.today()), title="Oakland Flood Consequence Explorer",
     scenario_ids=SCENARIO_IDS, scenarios_ft=SCENARIOS_FT,
@@ -168,7 +154,6 @@ stats = dict(
                degraded_min_extra_s=DEGRADED_MIN_EXTRA_S, contamination_buffer_m=CONTAMINATION_BUFFER_M,
                high_burden=f"CalEnviroScreen 4.0 percentile >= {HIGH_BURDEN_PCTL}",
                priority="Exposure x Vulnerability", priority_weights=PRIORITY_WEIGHTS),
-    terrain=terrain, studs_per_meter=STUDS_PER_METER,
     n_buildings=len(b), road_km_total=expo["road_km_total"],
     facilities_in_study_area=expo["facilities_in_study_area"],
     population_in_area_est=eq["population_in_area_est"],
@@ -203,5 +188,4 @@ print(f"buildings {len(allb)} in {len(shards)} shards; roads in {len(rshards)} s
       f"facilities {len(fac)}; contaminated sites {len(sites)}")
 print("largest files (KB):", [(n, round(s / 1024)) for s, n in sizes[:4]],
       " total MB:", round(sum(s for s, _ in sizes) / 1e6, 2))
-print(f"heightmap {wpx}x{hpx} px @ {terrain['meters_per_px']} m/px, elev {zmin}..{zmax} m")
 print("validation passed: counts in JSON == stats.json")

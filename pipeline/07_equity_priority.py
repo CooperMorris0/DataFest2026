@@ -209,7 +209,7 @@ tt = tt.sort_values("priority_4ft", ascending=False)
 tt.to_csv(PROC / "tract_table.csv", index=False)
 b["priority_tract_" + "dummy"] = 0  # placeholder removed below
 b = b.drop(columns=["priority_tract_dummy"])
-for sid in SCENARIO_IDS:  # per-building copy of its tract's priority, for the Roblox map mode
+for sid in SCENARIO_IDS:  # per-building copy of its tract's priority (export files)
     b[f"priority_{sid}"] = b["tract_id"].map(tt.set_index("tract_id")[f"priority_{sid}"]).fillna(0)
 b.to_file(PROC / "buildings_final.geojson", driver="GeoJSON")
 roads.to_file(PROC / "roads_final.geojson", driver="GeoJSON")
