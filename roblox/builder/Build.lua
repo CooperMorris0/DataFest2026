@@ -10,6 +10,7 @@ local Config = require(ReplicatedStorage.FloodViewer.Config)
 local DataLoader = require(script.Parent.DataLoader)
 local TerrainWriter = require(script.Parent.TerrainWriter)
 local WorldBuilder = require(script.Parent.WorldBuilder)
+local StyledBuilder = require(script.Parent.StyledBuilder)
 
 local Build = {}
 
@@ -122,6 +123,38 @@ function Build.upgrade()
 	writeStatsModule()
 	WorldBuilder.floodwatch(city)
 	city:SetAttribute("Progress", "done")
+end
+
+-- Replace the plain boxes with the styled city (textured walls, roofs, storefronts, roads with
+-- markings + sidewalks, street/park trees), then re-tag FloodWatch blocks and set the look.
+-- Terrain, water parts, markers and FloodWatch layers are kept. Resume-aware per shard.
+function Build.restyle(opts)
+	opts = opts or {}
+	local city = workspace.City
+	local ok, err = pcall(function()
+		local manifest = DataLoader.json("manifest.json")
+		StyledBuilder.setup(manifest)
+		if not city:GetAttribute("Styled") then
+			for _, name in ipairs({ "Buildings", "Roads", "Trees" }) do
+				if city:FindFirstChild(name) then city[name]:Destroy() end
+			end
+			city:SetAttribute("Styled", true)
+		end
+		StyledBuilder.build(manifest, city, "buildings")
+		StyledBuilder.build(manifest, city, "roads")
+		StyledBuilder.build(manifest, city, "trees")
+		city:SetAttribute("Progress", "restyle: floodwatch")
+		WorldBuilder.floodwatch(city)
+		if not opts.skipEnvironment then
+			city:SetAttribute("Progress", "restyle: environment")
+			StyledBuilder.environment(manifest)
+		end
+		city:SetAttribute("Progress", "done")
+	end)
+	if not ok then
+		city:SetAttribute("Progress", "ERROR: " .. tostring(err))
+		warn("[Build.restyle] " .. tostring(err))
+	end
 end
 
 return Build

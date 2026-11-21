@@ -25,12 +25,17 @@ local SPM = Config.STUDS_PER_METER
 -- ------------------------------------------------------------------ cache data
 local buildings = {}
 for _, p in ipairs(city:WaitForChild("Buildings"):GetDescendants()) do
-	if p:IsA("BasePart") then
+	if p:IsA("BasePart") and p:GetAttribute("Flooded") then -- main wall part (roofs are its children)
+		local extras = {}
+		for _, c in ipairs(p:GetChildren()) do
+			if c:IsA("BasePart") then table.insert(extras, { part = c, base = c:GetAttribute("BaseColor") or c.Color }) end
+		end
 		local depth, pri = {}, {}
 		for v in string.gmatch(p:GetAttribute("Depth") or "", "[^,]+") do table.insert(depth, tonumber(v)) end
 		for v in string.gmatch(p:GetAttribute("Pri") or "", "[^,]+") do table.insert(pri, tonumber(v)) end
 		table.insert(buildings, {
-			part = p, depth = depth, pri = pri, risk = p:GetAttribute("Risk"),
+			part = p, depth = depth, pri = pri, risk = p:GetAttribute("Risk"), extras = extras,
+			base = p:GetAttribute("BaseColor") or C.building,
 			flooded = p:GetAttribute("Flooded") or "000000", cut = p:GetAttribute("Cut") or "000000",
 			deg = p:GetAttribute("Deg") or "000000", contam = p:GetAttribute("Contam") or "000000",
 			low = p:GetAttribute("Low") or "000000",
@@ -39,7 +44,9 @@ for _, p in ipairs(city:WaitForChild("Buildings"):GetDescendants()) do
 end
 local roads = {}
 for _, p in ipairs(city:WaitForChild("Roads"):GetDescendants()) do
-	if p:IsA("BasePart") then table.insert(roads, { part = p, imp = p:GetAttribute("Imp") or "000000" }) end
+	if p:IsA("BasePart") and p:GetAttribute("Imp") then -- road surface (sidewalks are its children)
+		table.insert(roads, { part = p, imp = p:GetAttribute("Imp"), base = p:GetAttribute("BaseColor") or C.road })
+	end
 end
 local water = city:WaitForChild("Water")
 local seaFolder = water:WaitForChild("Sea")
@@ -87,27 +94,42 @@ local function hexAt(xm, zm)
 end
 
 -- ------------------------------------------------------------------ coloring
+local GRAY = Color3.fromRGB(150, 150, 150)
+-- returns the highlight color for this building, or nil = show its natural (textured) colors;
+-- dim = true greys natural colors out so highlights stand out
 local function buildingColor(b, i, mode)
 	local fl = flag(b.flooded, i)
 	if mode == "Flood" then
 		if fl then return C.floodShallow:Lerp(C.floodDeep, math.clamp((b.depth[i] or 0) / 2, 0, 1)) end
 		if flag(b.low, i) then return C.lowLying end
-		return C.building
+		return nil, false
 	elseif mode == "Cut off" then
 		if flag(b.cut, i) then return C.cutOff end
 		if flag(b.deg, i) then return C.degraded end
 		if fl then return C.floodShallow end
-		return C.buildingDim
+		return nil, true
 	elseif mode == "Contamination" then
 		if flag(b.contam, i) then return C.contam end
 		if fl then return C.floodShallow end
-		return C.buildingDim
+		return nil, true
 	elseif mode == "Priority" then
 		local v = b.pri[i] or 0
-		if v <= 0 or maxPri[i] <= 0 then return C.buildingDim end
+		if v <= 0 or maxPri[i] <= 0 then return nil, true end
 		return C.priorityLow:Lerp(C.priorityHigh, math.clamp(v / maxPri[i], 0, 1))
 	else -- FloodWatch: same colors as the website's hexes
-		return b.risk and Config.RISK_COLORS[b.risk] or C.buildingDim
+		if b.risk and Config.RISK_COLORS[b.risk] then return Config.RISK_COLORS[b.risk] end
+		return nil, true
+	end
+end
+
+local function paint(b, i, mode)
+	local col, dim = buildingColor(b, i, mode)
+	if col then
+		b.part.Color = col
+		for _, e in ipairs(b.extras) do e.part.Color = col end
+	else
+		b.part.Color = dim and b.base:Lerp(GRAY, 0.6) or b.base
+		for _, e in ipairs(b.extras) do e.part.Color = dim and e.base:Lerp(GRAY, 0.6) or e.base end
 	end
 end
 
@@ -124,12 +146,12 @@ end
 local function recolor()
 	local i, mode = state.scenario, state.mode
 	for n, b in ipairs(buildings) do
-		b.part.Color = buildingColor(b, i, mode)
-		if n % 2000 == 0 then task.wait() end
+		paint(b, i, mode)
+		if n % 1500 == 0 then task.wait() end
 	end
 	local showImp = mode == "Flood" or mode == "Cut off"
 	for n, r in ipairs(roads) do
-		r.part.Color = (showImp and flag(r.imp, i)) and C.roadImpassable or C.road
+		r.part.Color = (showImp and flag(r.imp, i)) and C.roadImpassable or r.base
 		if n % 3000 == 0 then task.wait() end
 	end
 	for _, s in ipairs(sites) do
@@ -144,6 +166,7 @@ local function setWater(i)
 	local target = Stats.scenarios[i].water_level_studs
 	local info = TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
 	for _, p in ipairs(seaParts) do
+		p.Transparency = (i == 1) and 1 or 0.3 -- "Today" = the terrain water at high tide
 		TweenService:Create(p, info, { Position = Vector3.new(p.Position.X, target - 1, p.Position.Z) }):Play()
 	end
 	for k, sid in ipairs(Config.SCENARIOS) do
@@ -289,7 +312,7 @@ local hudHex = text(hud, "", 15, { TextColor3 = MUTED, Size = UDim2.new(1, 0, 0,
 local scenButtons, modeButtons = {}, {}
 
 local LEGENDS = {
-	["Flood"] = { { C.floodShallow, "Flooded (shallow)" }, { C.floodDeep, "Flooded (deep, 2 m+)" }, { C.lowLying, "Below water level but protected (low-lying)" }, { C.roadImpassable, "Road impassable (> 15 cm)" }, { C.building, "Dry" } },
+	["Flood"] = { { C.floodShallow, "Flooded (shallow)" }, { C.floodDeep, "Flooded (deep, 2 m+)" }, { C.lowLying, "Below water level but protected (low-lying)" }, { C.roadImpassable, "Road impassable (> 15 cm)" }, { Color3.fromRGB(205, 190, 160), "Dry (natural colors)" } },
 	["Cut off"] = { { C.cutOff, "Cut off from fire or medical services" }, { C.degraded, "Response time more than doubles" }, { C.floodShallow, "Flooded" }, { C.roadImpassable, "Road impassable" } },
 	["Contamination"] = { { C.contam, "Within 100 m of a cleanup site near flooding" }, { C.floodShallow, "Flooded" }, { Color3.fromRGB(150, 150, 150), "Cleanup site (not near flooding)" } },
 	["Priority"] = { { C.priorityHigh, "Highest priority tract" }, { C.priorityLow, "Lower priority" }, { C.buildingDim, "Not exposed / not ranked" } },
@@ -579,6 +602,9 @@ UserInputService.InputBegan:Connect(function(input, gp)
 	clear(info)
 	if not hit then info.Visible = false return end
 	local p, i = hit.Instance, state.scenario
+	if not p:GetAttribute("Flooded") and p.Parent and p.Parent:IsA("BasePart") and p.Parent:GetAttribute("Flooded") then
+		p = p.Parent -- clicked a roof / storefront: show its building
+	end
 	info.Visible = true
 	if p:GetAttribute("HexId") then
 		hexPanel(hexById[p:GetAttribute("HexId")])

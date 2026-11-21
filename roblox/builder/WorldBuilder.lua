@@ -266,7 +266,9 @@ function WorldBuilder.floodwatch(city)
 	-- building attributes
 	local partsById = {}
 	for _, p in ipairs(city.Buildings:GetDescendants()) do
-		if p:IsA("BasePart") then partsById[tonumber(p.Name)] = p end
+		-- only the main (wall) parts: roofs/details are children without the flood attributes
+		local id = tonumber(p.Name)
+		if id and p:IsA("BasePart") and p:GetAttribute("Flooded") then partsById[id] = p end
 	end
 	for n, bh in ipairs(fw.bldg_hex) do
 		local p, h = partsById[bh[1]], byId[bh[2]]

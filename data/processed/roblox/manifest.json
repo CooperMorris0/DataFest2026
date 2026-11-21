@@ -124,5 +124,176 @@
   ],
   "layout": "u16 cols,u16 rows,u16 h[rows*cols],u8 mat[rows*cols]; rows from south"
  },
- "water": "water.json"
+ "water": "water.json",
+ "styled": {
+  "buildings": [
+   "styled/buildings/cell_0_0.json",
+   "styled/buildings/cell_0_1.json",
+   "styled/buildings/cell_0_2.json",
+   "styled/buildings/cell_0_3.json",
+   "styled/buildings/cell_1_0.json",
+   "styled/buildings/cell_1_1.json",
+   "styled/buildings/cell_1_2.json",
+   "styled/buildings/cell_1_3.json",
+   "styled/buildings/cell_1_4.json",
+   "styled/buildings/cell_2_0.json",
+   "styled/buildings/cell_2_1.json",
+   "styled/buildings/cell_2_2.json",
+   "styled/buildings/cell_2_3.json",
+   "styled/buildings/cell_3_-1.json",
+   "styled/buildings/cell_3_0.json",
+   "styled/buildings/cell_3_1.json",
+   "styled/buildings/cell_3_2.json",
+   "styled/buildings/cell_3_3.json",
+   "styled/buildings/cell_3_4.json",
+   "styled/buildings/cell_4_0.json",
+   "styled/buildings/cell_4_1.json",
+   "styled/buildings/cell_4_2.json",
+   "styled/buildings/cell_4_3.json",
+   "styled/buildings/cell_4_4.json",
+   "styled/buildings/cell_5_0.json",
+   "styled/buildings/cell_5_1.json",
+   "styled/buildings/cell_5_2.json",
+   "styled/buildings/cell_5_3.json",
+   "styled/buildings/cell_5_4.json",
+   "styled/buildings/cell_6_0.json",
+   "styled/buildings/cell_6_1.json",
+   "styled/buildings/cell_6_2.json",
+   "styled/buildings/cell_6_3.json",
+   "styled/buildings/cell_6_4.json",
+   "styled/buildings/cell_7_0.json",
+   "styled/buildings/cell_7_1.json",
+   "styled/buildings/cell_7_2.json",
+   "styled/buildings/cell_7_3.json",
+   "styled/buildings/cell_7_4.json"
+  ],
+  "roads": [
+   "styled/roads/cell_0_1.json",
+   "styled/roads/cell_0_3.json",
+   "styled/roads/cell_1_1.json",
+   "styled/roads/cell_1_2.json",
+   "styled/roads/cell_1_3.json",
+   "styled/roads/cell_2_1.json",
+   "styled/roads/cell_2_2.json",
+   "styled/roads/cell_2_3.json",
+   "styled/roads/cell_2_4.json",
+   "styled/roads/cell_3_0.json",
+   "styled/roads/cell_3_1.json",
+   "styled/roads/cell_3_2.json",
+   "styled/roads/cell_3_3.json",
+   "styled/roads/cell_3_4.json",
+   "styled/roads/cell_4_0.json",
+   "styled/roads/cell_4_1.json",
+   "styled/roads/cell_4_2.json",
+   "styled/roads/cell_4_3.json",
+   "styled/roads/cell_4_4.json",
+   "styled/roads/cell_5_0.json",
+   "styled/roads/cell_5_1.json",
+   "styled/roads/cell_5_2.json",
+   "styled/roads/cell_5_3.json",
+   "styled/roads/cell_5_4.json",
+   "styled/roads/cell_6_-1.json",
+   "styled/roads/cell_6_0.json",
+   "styled/roads/cell_6_1.json",
+   "styled/roads/cell_6_2.json",
+   "styled/roads/cell_6_3.json",
+   "styled/roads/cell_6_4.json",
+   "styled/roads/cell_7_0.json",
+   "styled/roads/cell_7_1.json",
+   "styled/roads/cell_7_2.json",
+   "styled/roads/cell_7_3.json",
+   "styled/roads/cell_7_4.json"
+  ],
+  "trees": [
+   "styled/trees/cell_0_0.json",
+   "styled/trees/cell_1_0.json",
+   "styled/trees/cell_1_2.json",
+   "styled/trees/cell_2_0.json",
+   "styled/trees/cell_2_1.json",
+   "styled/trees/cell_2_2.json",
+   "styled/trees/cell_3_0.json",
+   "styled/trees/cell_3_1.json",
+   "styled/trees/cell_3_2.json",
+   "styled/trees/cell_3_3.json",
+   "styled/trees/cell_4_0.json",
+   "styled/trees/cell_4_1.json",
+   "styled/trees/cell_4_2.json",
+   "styled/trees/cell_4_3.json",
+   "styled/trees/cell_4_4.json",
+   "styled/trees/cell_5_0.json",
+   "styled/trees/cell_5_1.json",
+   "styled/trees/cell_5_2.json",
+   "styled/trees/cell_5_3.json",
+   "styled/trees/cell_5_4.json",
+   "styled/trees/cell_6_0.json",
+   "styled/trees/cell_6_1.json",
+   "styled/trees/cell_6_2.json",
+   "styled/trees/cell_6_3.json",
+   "styled/trees/cell_6_4.json",
+   "styled/trees/cell_7_0.json",
+   "styled/trees/cell_7_1.json",
+   "styled/trees/cell_7_2.json",
+   "styled/trees/cell_7_3.json",
+   "styled/trees/cell_7_4.json"
+  ],
+  "looks": {
+   "siding": {
+    "base": "SmoothPlastic",
+    "texture": "facade_siding",
+    "tile_m": 3.2
+   },
+   "stucco": {
+    "base": "SmoothPlastic",
+    "texture": "facade_stucco",
+    "tile_m": 3.2
+   },
+   "brick": {
+    "base": "SmoothPlastic",
+    "texture": "facade_brick",
+    "tile_m": 3.2
+   },
+   "concrete": {
+    "base": "SmoothPlastic",
+    "texture": "facade_concrete",
+    "tile_m": 3.2
+   },
+   "glass": {
+    "base": "SmoothPlastic",
+    "texture": "facade_glass",
+    "tile_m": 3.2
+   },
+   "metal": {
+    "base": "SmoothPlastic",
+    "texture": "facade_metal",
+    "tile_m": 3.2
+   },
+   "shingle": {
+    "base": "SmoothPlastic",
+    "texture": "roof_shingle",
+    "tile_m": 2.0
+   },
+   "flatroof": {
+    "base": "SmoothPlastic",
+    "texture": "roof_flat",
+    "tile_m": 4.0
+   },
+   "sidewalk": {
+    "base": "SmoothPlastic",
+    "texture": "sidewalk",
+    "tile_m": 3.2
+   },
+   "storefront": {
+    "base": "SmoothPlastic",
+    "texture": "facade_storefront",
+    "tile_m": 3.2
+   }
+  },
+  "markings": {
+   "2": "road_2lane",
+   "4": "road_4lane"
+  },
+  "decals": {
+   "foliage": "foliage"
+  }
+ }
 }
