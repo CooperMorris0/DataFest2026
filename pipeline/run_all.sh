@@ -7,7 +7,7 @@ for s in 01_fetch_osm 01b_fetch_landuse 01c_fetch_network_osm 01d_fetch_faciliti
          01e_fetch_tiger_roads 01f_fetch_contamination 02_fetch_hazard 03_fetch_elevation \
          04_building_heights 04b_alignment_check hazard_bathtub 05_flood_exposure \
          05b_validate_hazard 06_consequences 07_equity_priority 08_export_for_roblox \
-         09_findings_brief; do
+         09_findings_brief 10_floodwatch_slr; do
   echo "=== $s"
   $PY "$s.py"
 done
