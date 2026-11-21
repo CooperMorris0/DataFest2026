@@ -12,7 +12,8 @@ function Verify.run()
 	local stats = HttpService:JSONDecode(require(ReplicatedStorage.FloodViewer.StatsJSON))
 	local parts = {}
 	for _, p in ipairs(workspace.City.Buildings:GetDescendants()) do
-		if p:IsA("BasePart") then table.insert(parts, p) end
+		-- main building parts only (styled roofs/storefronts are children without attributes)
+		if p:IsA("BasePart") and p:GetAttribute("Flooded") then table.insert(parts, p) end
 	end
 	local lines = { ("buildings in place: %d (stats.json n_buildings = %d)"):format(#parts, stats.n_buildings) }
 	local allOk = #parts == stats.n_buildings
@@ -33,8 +34,9 @@ function Verify.run()
 	for _, pr in ipairs(probes) do
 		local origin = Vector3.new(Config.m(pr[1]), 600, Config.m(pr[2]))
 		local params = RaycastParams.new()
-		params.FilterDescendantsInstances = { workspace.City }
-		params.FilterType = Enum.RaycastFilterType.Exclude
+		params.FilterDescendantsInstances = { workspace.Terrain }
+		params.FilterType = Enum.RaycastFilterType.Include
+		params.IgnoreWater = true -- measure the bay floor under the terrain water
 		local hit = workspace:Raycast(origin, Vector3.new(0, -1200, 0), params)
 		local y = hit and hit.Position.Y / Config.STUDS_PER_METER or nil
 		table.insert(lines, ("bay probe (%d,%d) m: terrain at %s m (MHHW %.2f) %s"):format(pr[1], pr[2],

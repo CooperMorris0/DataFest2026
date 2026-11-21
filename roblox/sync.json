@@ -20,6 +20,11 @@
     "class": "ModuleScript"
   },
   {
+    "file": "roblox/builder/StyledBuilder.lua",
+    "path": "ServerStorage.FloodBuilder.StyledBuilder",
+    "class": "ModuleScript"
+  },
+  {
     "file": "roblox/builder/Build.lua",
     "path": "ServerStorage.FloodBuilder.Build",
     "class": "ModuleScript"
