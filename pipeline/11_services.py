@@ -21,7 +21,9 @@ Exposure per site:
     impassable (> 0.15 m deep, as in 05_flood_exposure.py). Empty = not affected up to 5 ft.
     streets_impassable_<ft>ft = share of local street length within 400 m (~5-minute walk) that is impassable,
     since the single nearest road can stay dry while the streets around it flood.
-Outputs: data/processed/floodwatch/services.csv, data/processed/floodwatch/services_summary.json
+Outputs: data/processed/floodwatch/services.csv, data/processed/floodwatch/services_summary.json,
+         oakland-flood-vulnerability/outputs/facilities.geojson (K2: one marker list for the website and Roblox;
+         flooded / access_lost are 6-character per-scenario flags, 0..5 ft)
 """
 import json
 
@@ -111,9 +113,10 @@ def title(s):
 parts = []
 
 
-def add(g, ftype, name, address, detail="", source=""):
+def add(g, ftype, name, address, detail="", source="", enrollment=None):
     parts.append(gpd.GeoDataFrame(dict(ftype=ftype, name=name.values, address=address.values,
-                                       detail=detail if isinstance(detail, str) else detail.values, source=source),
+                                       detail=detail if isinstance(detail, str) else detail.values, source=source,
+                                       enrollment=np.nan if enrollment is None else enrollment.values),
                                   geometry=g.geometry.values, crs=CRS_GEO))
 
 
@@ -130,7 +133,8 @@ g = arcgis("schools")
 g = g[col(g, "Status").replace("", "Active").eq("Active")]
 enroll = pd.to_numeric(g.get("EnrollTotal"), errors="coerce")
 add(g, "school", col(g, "SchoolName"), col(g, "Street"),
-    pd.Series([f"{int(e):,} students" if pd.notna(e) and e > 0 else "" for e in enroll], index=g.index), source="CDE")
+    pd.Series([f"{int(e):,} students" if pd.notna(e) and e > 0 else "" for e in enroll], index=g.index), source="CDE",
+    enrollment=enroll)
 g = arcgis("bart")
 add(g, "bart", col(g, "NAME_LONG", "NAME"), col(g, "ADDRESS"), source="BART")
 g = socrata("library")
@@ -240,6 +244,32 @@ cols = ["site_id", "category", "ftype", "name", "address", "detail", "source", "
         "site_flood_ft", "access_loss_ft"] + [f"site_flooded_{s}" for s in SCENARIO_IDS] + \
     [f"access_lost_{s}" for s in SCENARIO_IDS] + [f"streets_impassable_{s}" for s in SCENARIO_IDS]
 svc[cols].to_csv(OUT / "services.csv", index=False)
+
+# K2: facility markers shared by the FloodWatch website and the Roblox viewer (one list, same types and risk).
+# Flags are 6-character strings, one per scenario (0..5 ft), like the Roblox building shards.
+WEBSITE_TYPES = {"hospital", "nursing_home", "dialysis", "fire_station", "school", "bart"}
+
+
+def flags(r, prefix):
+    return "".join("1" if r[f"{prefix}_{s}"] else "0" for s in SCENARIO_IDS)
+
+
+feats = []
+for _, r in svc.iterrows():
+    feats.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [r.lng, r.lat]}, "properties": dict(
+        site_id=r.site_id, name=r["name"], ftype=r.ftype, category=r.category, address=r.address, detail=r.detail,
+        source=r.source, website_type=r.ftype in WEBSITE_TYPES,
+        enrollment=None if pd.isna(r.enrollment) else int(r.enrollment),
+        h3=r.h3, risk=r.risk, at_risk=bool(r.risk in ("High", "Very high")),
+        flood_reports_250m=int(r.flood_reports_250m), in_study_area=bool(r.in_study_area),
+        flooded=flags(r, "site_flooded"), access_lost=flags(r, "access_lost"),
+        streets_impassable=[None if pd.isna(r[f"streets_impassable_{s}"]) else float(r[f"streets_impassable_{s}"])
+                            for s in SCENARIO_IDS],
+        site_flood_ft=None if pd.isna(r.site_flood_ft) else int(r.site_flood_ft),
+        access_loss_ft=None if pd.isna(r.access_loss_ft) else int(r.access_loss_ft))})
+fac_path = ROOT / "oakland-flood-vulnerability" / "outputs" / "facilities.geojson"
+fac_path.write_text(json.dumps({"type": "FeatureCollection", "features": feats}, allow_nan=False), encoding="utf-8")
+print(f"wrote {fac_path.name}: {len(feats)} sites ({sum(f['properties']['website_type'] for f in feats)} website types)")
 
 high = svc.risk.isin(["High", "Very high"])
 by_type = []
