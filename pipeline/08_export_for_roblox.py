@@ -89,7 +89,7 @@ for r in b.itertuples(index=False):
                pri=[round(float(row[f"priority_{s}"]), 3) for s in SCENARIO_IDS])
     shards[cell_of(c.x, c.y)].append(rec)
 for (i, j), recs in shards.items():
-    (OUT / "buildings" / f"cell_{i}_{j}.json").write_text(json.dumps(recs, separators=(",", ":")))
+    (OUT / "buildings" / f"cell_{i}_{j}.json").write_text(json.dumps(recs, separators=(",", ":"), allow_nan=False))
 
 # ------------------------------------------------------------ roads
 roads = gpd.read_file(PROC / "roads_final.geojson").to_crs(CRS_METRIC)
@@ -107,34 +107,36 @@ def elev_at(x, y):
 for r in roads.itertuples(index=False):
     row = r._asdict()
     hwy = str(r.highway).split(";")[0].replace("_link", "")
-    try:
-        width = float(str(row.get("width")).split(";")[0])
-    except (TypeError, ValueError):
+    def num(v):
         try:
-            width = float(str(row.get("lanes")).split(";")[0]) * 3.5
+            x = float(str(v).split(";")[0])
+            return x if math.isfinite(x) and x > 0 else None
         except (TypeError, ValueError):
-            width = DEFAULT_W.get(hwy, 7)
-    pts = [[lx(x), lz(y), elev_at(x, y)] for x, y in r.geometry.coords]
+            return None
+    # missing OSM tags come back as NaN, so check finiteness, not just parseability
+    width = num(row.get("width")) or ((num(row.get("lanes")) or 0) * 3.5) or DEFAULT_W.get(hwy, 7)
+    # simplify (1.5 m) so a road becomes ~4.7k segment parts instead of ~16k
+    pts = [[lx(x), lz(y), elev_at(x, y)] for x, y in r.geometry.simplify(1.5).coords]
     mid = r.geometry.interpolate(0.5, normalized=True)
     rshards[cell_of(mid.x, mid.y)].append(dict(pts=pts, width_m=round(width, 1), hwy=hwy,
                                                elevated=bool(r.elevated_or_tunnel), name=row.get("name") if isinstance(row.get("name"), str) else None,
                                                imp=flags(row, "impassable")))
 for (i, j), recs in rshards.items():
-    (OUT / "roads" / f"cell_{i}_{j}.json").write_text(json.dumps(recs, separators=(",", ":")))
+    (OUT / "roads" / f"cell_{i}_{j}.json").write_text(json.dumps(recs, separators=(",", ":"), allow_nan=False))
 
 # ------------------------------------------------------------ points
 fac = gpd.read_file(PROC / "facilities_final.geojson").to_crs(CRS_METRIC)
 fac = fac[fac["in_study_area"]]
 (OUT / "facilities.json").write_text(json.dumps([
     dict(id=r.fid, type=r.ftype, name=r.name, x=lx(r.geometry.x), z=lz(r.geometry.y), elev=elev_at(r.geometry.x, r.geometry.y),
-         flooded=flags(r._asdict(), "flooded")) for r in fac.itertuples(index=False)], separators=(",", ":")))
+         flooded=flags(r._asdict(), "flooded")) for r in fac.itertuples(index=False)], separators=(",", ":"), allow_nan=False))
 sites = gpd.read_file(PROC / "contaminated_sites_flagged.geojson").to_crs(CRS_METRIC)
 sites = sites[sites["in_study_area"]]
 (OUT / "contaminated_sites.json").write_text(json.dumps([
     dict(id=r.site_id, name=r.name, source=r.source, category=r.category, case_type=r.case_type,
          x=lx(r.geometry.x), z=lz(r.geometry.y), elev=elev_at(r.geometry.x, r.geometry.y),
          in_flood=flags(r._asdict(), "in_flood"), near_flood=flags(r._asdict(), "near_flood"))
-    for r in sites.itertuples(index=False)], separators=(",", ":")))
+    for r in sites.itertuples(index=False)], separators=(",", ":"), allow_nan=False))
 
 manifest = dict(buildings=sorted(f"buildings/{p.name}" for p in (OUT / "buildings").glob("*.json")),
                 roads=sorted(f"roads/{p.name}" for p in (OUT / "roads").glob("*.json")),
