@@ -1,0 +1,245 @@
+{
+ "facilities": {
+  "0ft": {
+   "count": 0,
+   "by_type": {},
+   "list": []
+  },
+  "1ft": {
+   "count": 0,
+   "by_type": {},
+   "list": []
+  },
+  "2ft": {
+   "count": 0,
+   "by_type": {},
+   "list": []
+  },
+  "3ft": {
+   "count": 0,
+   "by_type": {},
+   "list": []
+  },
+  "4ft": {
+   "count": 1,
+   "by_type": {
+    "fire_station": 1
+   },
+   "list": [
+    {
+     "name": "Oakland Fire Station 2",
+     "type": "fire_station"
+    }
+   ]
+  },
+  "5ft": {
+   "count": 2,
+   "by_type": {
+    "fire_station": 1,
+    "clinic": 1
+   },
+   "list": [
+    {
+     "name": "Oakland Fire Station 2",
+     "type": "fire_station"
+    },
+    {
+     "name": "Order Of Malta Clinic Of Northern California",
+     "type": "clinic"
+    }
+   ]
+  }
+ },
+ "isolation": {
+  "0ft": {
+   "edges_removed": 0,
+   "fire": {
+    "cut_off": 0,
+    "degraded": 0
+   },
+   "medical": {
+    "cut_off": 0,
+    "degraded": 0
+   },
+   "hospital": {
+    "cut_off": 0,
+    "degraded": 0
+   },
+   "buildings_cut_off": 0,
+   "buildings_degraded": 0
+  },
+  "1ft": {
+   "edges_removed": 0,
+   "fire": {
+    "cut_off": 0,
+    "degraded": 0
+   },
+   "medical": {
+    "cut_off": 0,
+    "degraded": 0
+   },
+   "hospital": {
+    "cut_off": 0,
+    "degraded": 0
+   },
+   "buildings_cut_off": 0,
+   "buildings_degraded": 0
+  },
+  "2ft": {
+   "edges_removed": 0,
+   "fire": {
+    "cut_off": 0,
+    "degraded": 0
+   },
+   "medical": {
+    "cut_off": 0,
+    "degraded": 0
+   },
+   "hospital": {
+    "cut_off": 0,
+    "degraded": 0
+   },
+   "buildings_cut_off": 0,
+   "buildings_degraded": 0
+  },
+  "3ft": {
+   "edges_removed": 16,
+   "fire": {
+    "cut_off": 17,
+    "degraded": 0
+   },
+   "medical": {
+    "cut_off": 17,
+    "degraded": 0
+   },
+   "hospital": {
+    "cut_off": 17,
+    "degraded": 0
+   },
+   "buildings_cut_off": 17,
+   "buildings_degraded": 0
+  },
+  "4ft": {
+   "edges_removed": 25,
+   "fire": {
+    "cut_off": 27,
+    "degraded": 140
+   },
+   "medical": {
+    "cut_off": 47,
+    "degraded": 0
+   },
+   "hospital": {
+    "cut_off": 47,
+    "degraded": 0
+   },
+   "buildings_cut_off": 50,
+   "buildings_degraded": 140
+  },
+  "5ft": {
+   "edges_removed": 207,
+   "fire": {
+    "cut_off": 354,
+    "degraded": 106
+   },
+   "medical": {
+    "cut_off": 383,
+    "degraded": 85
+   },
+   "hospital": {
+    "cut_off": 383,
+    "degraded": 0
+   },
+   "buildings_cut_off": 391,
+   "buildings_degraded": 191
+  }
+ },
+ "contamination": {
+  "0ft": {
+   "sites_in_flood": 0,
+   "sites_near_flood": 0,
+   "by_category": {},
+   "buildings_within_buffer": 0
+  },
+  "1ft": {
+   "sites_in_flood": 1,
+   "sites_near_flood": 17,
+   "by_category": {
+    "open": 15,
+    "managed_in_place": 2
+   },
+   "buildings_within_buffer": 36
+  },
+  "2ft": {
+   "sites_in_flood": 2,
+   "sites_near_flood": 17,
+   "by_category": {
+    "open": 15,
+    "managed_in_place": 2
+   },
+   "buildings_within_buffer": 36
+  },
+  "3ft": {
+   "sites_in_flood": 4,
+   "sites_near_flood": 23,
+   "by_category": {
+    "open": 21,
+    "managed_in_place": 2
+   },
+   "buildings_within_buffer": 77
+  },
+  "4ft": {
+   "sites_in_flood": 12,
+   "sites_near_flood": 30,
+   "by_category": {
+    "open": 26,
+    "managed_in_place": 4
+   },
+   "buildings_within_buffer": 104
+  },
+  "5ft": {
+   "sites_in_flood": 28,
+   "sites_near_flood": 62,
+   "by_category": {
+    "open": 51,
+    "managed_in_place": 11
+   },
+   "buildings_within_buffer": 387
+  }
+ },
+ "network": {
+  "osm_nodes": 1628,
+  "tiger_ring_nodes": 9349,
+  "stitches": 198,
+  "nodes": 10955,
+  "edges": 28918,
+  "speeds_kmh": {
+   "osm": {
+    "motorway": 88,
+    "trunk": 72,
+    "primary": 56,
+    "secondary": 48,
+    "tertiary": 40,
+    "unclassified": 40,
+    "residential": 40,
+    "living_street": 16,
+    "service": 24,
+    "road": 32
+   },
+   "tiger": {
+    "S1100": 88,
+    "S1200": 56,
+    "S1400": 40,
+    "S1630": 48,
+    "S1640": 24,
+    "S1730": 16
+   }
+  },
+  "buildings_without_baseline_route": 88
+ },
+ "routing_facilities": {
+  "fire": 12,
+  "medical": 96,
+  "hospital": 5
+ }
+}

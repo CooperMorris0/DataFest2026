@@ -1,0 +1,100 @@
+{
+  "vs_noaa": [
+    {
+      "slr_ft": 1,
+      "noaa_connected_km2": 0.165,
+      "noaa_lowlying_disconnected_km2": 0.033,
+      "used_km2": 0.179,
+      "used_iou": 0.623,
+      "used_covers_noaa": 0.8,
+      "bathtub_km2": 0.218,
+      "bathtub_iou": 0.641,
+      "bathtub_covers_noaa": 0.906
+    },
+    {
+      "slr_ft": 2,
+      "noaa_connected_km2": 0.285,
+      "noaa_lowlying_disconnected_km2": 0.118,
+      "used_km2": 0.322,
+      "used_iou": 0.684,
+      "used_covers_noaa": 0.865,
+      "bathtub_km2": 0.311,
+      "bathtub_iou": 0.669,
+      "bathtub_covers_noaa": 0.838
+    },
+    {
+      "slr_ft": 3,
+      "noaa_unavailable": "NOAA service returned a blank all-low-lying render"
+    },
+    {
+      "slr_ft": 4,
+      "noaa_connected_km2": 1.345,
+      "noaa_lowlying_disconnected_km2": 1.114,
+      "used_km2": 1.495,
+      "used_iou": 0.729,
+      "used_covers_noaa": 0.89,
+      "bathtub_km2": 1.491,
+      "bathtub_iou": 0.859,
+      "bathtub_covers_noaa": 0.974
+    },
+    {
+      "slr_ft": 5,
+      "noaa_connected_km2": 3.066,
+      "noaa_lowlying_disconnected_km2": 1.342,
+      "used_km2": 3.377,
+      "used_iou": 0.882,
+      "used_covers_noaa": 0.985,
+      "bathtub_km2": 3.377,
+      "bathtub_iou": 0.882,
+      "bathtub_covers_noaa": 0.985
+    }
+  ],
+  "art_vs_bathtub": [
+    {
+      "slr_ft": 1,
+      "art_km2": 0.301,
+      "bathtub_km2": 0.31,
+      "iou": 0.743,
+      "art_buildings": 6,
+      "bathtub_buildings": 7
+    },
+    {
+      "slr_ft": 2,
+      "art_km2": 0.426,
+      "bathtub_km2": 0.396,
+      "iou": 0.795,
+      "art_buildings": 14,
+      "bathtub_buildings": 9
+    },
+    {
+      "slr_ft": 3,
+      "art_km2": 0.857,
+      "bathtub_km2": 0.881,
+      "iou": 0.676,
+      "art_buildings": 49,
+      "bathtub_buildings": 46
+    },
+    {
+      "slr_ft": 4,
+      "art_km2": 1.527,
+      "bathtub_km2": 1.589,
+      "iou": 0.732,
+      "art_buildings": 117,
+      "bathtub_buildings": 109
+    }
+  ],
+  "art_bracket_for_5ft": [
+    {
+      "art_level_in": 52,
+      "slr_ft": 4.33,
+      "flooded_land_km2": 3.516,
+      "buildings_flooded": 620
+    },
+    {
+      "art_level_in": 66,
+      "slr_ft": 5.5,
+      "flooded_land_km2": 5.789,
+      "buildings_flooded": 1137
+    }
+  ]
+}

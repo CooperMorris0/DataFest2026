@@ -1,0 +1,578 @@
+{
+ "scenarios": [
+  {
+   "id": "0ft",
+   "slr_ft": 0,
+   "water_level_navd88_m": 1.941,
+   "hazard_source": "ART",
+   "art_level_in": 0,
+   "flooded_land_km2": 0.0,
+   "lowlying_km2": 0.0,
+   "buildings_flooded": 0,
+   "buildings_lowlying_only": 0,
+   "residents_affected": 0,
+   "residents_lowlying_only": 0,
+   "facilities_lost": 0,
+   "facilities_lost_list": [],
+   "buildings_cut_off": 0,
+   "residents_cut_off": 0,
+   "buildings_degraded": 0,
+   "residents_degraded": 0,
+   "contaminated_sites_near_flooding": 0,
+   "contaminated_sites_in_flooding": 0,
+   "residents_near_flooded_contamination": 0,
+   "road_km_impassable": 0.0,
+   "residents_affected_high_burden": 0,
+   "share_affected_high_burden": null
+  },
+  {
+   "id": "1ft",
+   "slr_ft": 1,
+   "water_level_navd88_m": 2.246,
+   "hazard_source": "ART",
+   "art_level_in": 12,
+   "flooded_land_km2": 0.3013,
+   "lowlying_km2": 0.1204,
+   "buildings_flooded": 6,
+   "buildings_lowlying_only": 5,
+   "residents_affected": 8,
+   "residents_lowlying_only": 0,
+   "facilities_lost": 0,
+   "facilities_lost_list": [],
+   "buildings_cut_off": 0,
+   "residents_cut_off": 0,
+   "buildings_degraded": 0,
+   "residents_degraded": 0,
+   "contaminated_sites_near_flooding": 17,
+   "contaminated_sites_in_flooding": 1,
+   "residents_near_flooded_contamination": 125,
+   "road_km_impassable": 0.0,
+   "residents_affected_high_burden": 0,
+   "share_affected_high_burden": null
+  },
+  {
+   "id": "2ft",
+   "slr_ft": 2,
+   "water_level_navd88_m": 2.551,
+   "hazard_source": "ART",
+   "art_level_in": 24,
+   "flooded_land_km2": 0.4261,
+   "lowlying_km2": 0.2952,
+   "buildings_flooded": 14,
+   "buildings_lowlying_only": 24,
+   "residents_affected": 8,
+   "residents_lowlying_only": 552,
+   "facilities_lost": 0,
+   "facilities_lost_list": [],
+   "buildings_cut_off": 0,
+   "residents_cut_off": 0,
+   "buildings_degraded": 0,
+   "residents_degraded": 0,
+   "contaminated_sites_near_flooding": 17,
+   "contaminated_sites_in_flooding": 2,
+   "residents_near_flooded_contamination": 125,
+   "road_km_impassable": 0.0,
+   "residents_affected_high_burden": 0,
+   "share_affected_high_burden": null
+  },
+  {
+   "id": "3ft",
+   "slr_ft": 3,
+   "water_level_navd88_m": 2.855,
+   "hazard_source": "ART",
+   "art_level_in": 36,
+   "flooded_land_km2": 0.8575,
+   "lowlying_km2": 0.7211,
+   "buildings_flooded": 49,
+   "buildings_lowlying_only": 119,
+   "residents_affected": 907,
+   "residents_lowlying_only": 1614,
+   "facilities_lost": 0,
+   "facilities_lost_list": [],
+   "buildings_cut_off": 17,
+   "residents_cut_off": 71,
+   "buildings_degraded": 0,
+   "residents_degraded": 0,
+   "contaminated_sites_near_flooding": 23,
+   "contaminated_sites_in_flooding": 4,
+   "residents_near_flooded_contamination": 199,
+   "road_km_impassable": 2.861,
+   "residents_affected_high_burden": 869,
+   "share_affected_high_burden": 0.958,
+   "representation_ratio": {
+    "study_area": 1.56,
+    "oakland": 3.48,
+    "alameda_county": 11.27
+   },
+   "affected_demographics": {
+    "Hispanic/Latino": 12.2,
+    "Black/African American": 13.1,
+    "Asian American": 39.5,
+    "White": 28.0,
+    "Other/multiple": 6.1,
+    "Below 2x poverty line": 34.7,
+    "Linguistically isolated households": 13.4,
+    "Age 65+": 13.0,
+    "Under age 10": 11.9
+   }
+  },
+  {
+   "id": "4ft",
+   "slr_ft": 4,
+   "water_level_navd88_m": 3.16,
+   "hazard_source": "ART",
+   "art_level_in": 48,
+   "flooded_land_km2": 1.5274,
+   "lowlying_km2": 1.6269,
+   "buildings_flooded": 117,
+   "buildings_lowlying_only": 422,
+   "residents_affected": 1341,
+   "residents_lowlying_only": 3132,
+   "facilities_lost": 1,
+   "facilities_lost_list": [
+    {
+     "name": "Oakland Fire Station 2",
+     "type": "fire_station"
+    }
+   ],
+   "buildings_cut_off": 50,
+   "residents_cut_off": 217,
+   "buildings_degraded": 140,
+   "residents_degraded": 235,
+   "contaminated_sites_near_flooding": 30,
+   "contaminated_sites_in_flooding": 12,
+   "residents_near_flooded_contamination": 421,
+   "road_km_impassable": 4.708,
+   "residents_affected_high_burden": 1264,
+   "share_affected_high_burden": 0.943,
+   "representation_ratio": {
+    "study_area": 1.53,
+    "oakland": 3.43,
+    "alameda_county": 11.09
+   },
+   "affected_demographics": {
+    "Hispanic/Latino": 13.4,
+    "Black/African American": 14.0,
+    "Asian American": 37.3,
+    "White": 28.3,
+    "Other/multiple": 6.0,
+    "Below 2x poverty line": 33.9,
+    "Linguistically isolated households": 11.6,
+    "Age 65+": 11.8,
+    "Under age 10": 13.0
+   }
+  },
+  {
+   "id": "5ft",
+   "slr_ft": 5,
+   "water_level_navd88_m": 3.465,
+   "hazard_source": "bathtub (fallback: no ART layer at this level)",
+   "art_level_in": null,
+   "flooded_land_km2": 3.3841,
+   "lowlying_km2": 1.653,
+   "buildings_flooded": 417,
+   "buildings_lowlying_only": 560,
+   "residents_affected": 3796,
+   "residents_lowlying_only": 3290,
+   "facilities_lost": 2,
+   "facilities_lost_list": [
+    {
+     "name": "Oakland Fire Station 2",
+     "type": "fire_station"
+    },
+    {
+     "name": "Order Of Malta Clinic Of Northern California",
+     "type": "clinic"
+    }
+   ],
+   "buildings_cut_off": 391,
+   "residents_cut_off": 1999,
+   "buildings_degraded": 191,
+   "residents_degraded": 1123,
+   "contaminated_sites_near_flooding": 62,
+   "contaminated_sites_in_flooding": 28,
+   "residents_near_flooded_contamination": 4020,
+   "road_km_impassable": 21.596,
+   "residents_affected_high_burden": 1929,
+   "share_affected_high_burden": 0.508,
+   "representation_ratio": {
+    "study_area": 0.83,
+    "oakland": 1.85,
+    "alameda_county": 5.98
+   },
+   "affected_demographics": {
+    "Hispanic/Latino": 10.8,
+    "Black/African American": 15.8,
+    "Asian American": 35.0,
+    "White": 31.9,
+    "Other/multiple": 5.6,
+    "Below 2x poverty line": 33.2,
+    "Linguistically isolated households": 16.1,
+    "Age 65+": 15.2,
+    "Under age 10": 8.8
+   }
+  }
+ ],
+ "equity_baselines": {
+  "study_area": {
+   "share_high_burden": 0.615
+  },
+  "oakland": {
+   "share_high_burden": 0.275
+  },
+  "alameda_county": {
+   "share_high_burden": 0.085
+  }
+ },
+ "demographic_baselines": {
+  "study_area": {
+   "Hispanic/Latino": 13.5,
+   "Black/African American": 26.7,
+   "Asian American": 21.8,
+   "White": 31.8,
+   "Other/multiple": 5.7,
+   "Below 2x poverty line": 38.9,
+   "Linguistically isolated households": 13.0,
+   "Age 65+": 14.4,
+   "Under age 10": 7.4
+  },
+  "oakland": {
+   "Hispanic/Latino": 27.0,
+   "Black/African American": 23.2,
+   "Asian American": 15.9,
+   "White": 28.3,
+   "Other/multiple": 5.2,
+   "Below 2x poverty line": 34.4,
+   "Linguistically isolated households": 10.6,
+   "Age 65+": 13.1,
+   "Under age 10": 11.5
+  },
+  "alameda_county": {
+   "Hispanic/Latino": 22.4,
+   "Black/African American": 10.3,
+   "Asian American": 30.7,
+   "White": 31.4,
+   "Other/multiple": 4.8,
+   "Below 2x poverty line": 21.6,
+   "Linguistically isolated households": 8.9,
+   "Age 65+": 13.5,
+   "Under age 10": 11.6
+  }
+ },
+ "top_priority": {
+  "0ft": [],
+  "0ft_unranked_exposed_tracts": [],
+  "1ft": [
+   {
+    "rank": 1,
+    "tract_id": "06001983200",
+    "name": "Census Tract 9832",
+    "city": "Oakland",
+    "ces_pctl": 55.3,
+    "priority": 0.184,
+    "exposure": 0.333,
+    "buildings_flooded": 3,
+    "residents_affected": 8,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 2,
+    "tract_id": "06001401700",
+    "name": "Census Tract 4017",
+    "city": "Oakland",
+    "ces_pctl": 80.1,
+    "priority": 0.04,
+    "exposure": 0.05,
+    "buildings_flooded": 3,
+    "residents_affected": 0,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   }
+  ],
+  "1ft_unranked_exposed_tracts": [],
+  "2ft": [
+   {
+    "rank": 1,
+    "tract_id": "06001403302",
+    "name": "Census Tract 4033.02",
+    "city": "Oakland",
+    "ces_pctl": 83.1,
+    "priority": 0.277,
+    "exposure": 0.333,
+    "buildings_flooded": 4,
+    "residents_affected": 0,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 2,
+    "tract_id": "06001428700",
+    "name": "Census Tract 4287",
+    "city": "Alameda",
+    "ces_pctl": 77.5,
+    "priority": 0.185,
+    "exposure": 0.239,
+    "buildings_flooded": 2,
+    "residents_affected": 0,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 3,
+    "tract_id": "06001983200",
+    "name": "Census Tract 9832",
+    "city": "Oakland",
+    "ces_pctl": 55.3,
+    "priority": 0.128,
+    "exposure": 0.231,
+    "buildings_flooded": 3,
+    "residents_affected": 8,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 4,
+    "tract_id": "06001406000",
+    "name": "Census Tract 4060",
+    "city": "Oakland",
+    "ces_pctl": 88.1,
+    "priority": 0.054,
+    "exposure": 0.061,
+    "buildings_flooded": 1,
+    "residents_affected": 0,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 5,
+    "tract_id": "06001401700",
+    "name": "Census Tract 4017",
+    "city": "Oakland",
+    "ces_pctl": 80.1,
+    "priority": 0.037,
+    "exposure": 0.046,
+    "buildings_flooded": 4,
+    "residents_affected": 0,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   }
+  ],
+  "2ft_unranked_exposed_tracts": [],
+  "3ft": [
+   {
+    "rank": 1,
+    "tract_id": "06001403302",
+    "name": "Census Tract 4033.02",
+    "city": "Oakland",
+    "ces_pctl": 83.1,
+    "priority": 0.512,
+    "exposure": 0.616,
+    "buildings_flooded": 17,
+    "residents_affected": 331,
+    "residents_cut_off": 71,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 2,
+    "tract_id": "06001428700",
+    "name": "Census Tract 4287",
+    "city": "Alameda",
+    "ces_pctl": 77.5,
+    "priority": 0.258,
+    "exposure": 0.333,
+    "buildings_flooded": 14,
+    "residents_affected": 539,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 3,
+    "tract_id": "06001406000",
+    "name": "Census Tract 4060",
+    "city": "Oakland",
+    "ces_pctl": 88.1,
+    "priority": 0.075,
+    "exposure": 0.085,
+    "buildings_flooded": 7,
+    "residents_affected": 0,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 4,
+    "tract_id": "06001983200",
+    "name": "Census Tract 9832",
+    "city": "Oakland",
+    "ces_pctl": 55.3,
+    "priority": 0.042,
+    "exposure": 0.077,
+    "buildings_flooded": 5,
+    "residents_affected": 38,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 5,
+    "tract_id": "06001401700",
+    "name": "Census Tract 4017",
+    "city": "Oakland",
+    "ces_pctl": 80.1,
+    "priority": 0.011,
+    "exposure": 0.014,
+    "buildings_flooded": 6,
+    "residents_affected": 0,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   }
+  ],
+  "3ft_unranked_exposed_tracts": [],
+  "4ft": [
+   {
+    "rank": 1,
+    "tract_id": "06001403302",
+    "name": "Census Tract 4033.02",
+    "city": "Oakland",
+    "ces_pctl": 83.1,
+    "priority": 0.383,
+    "exposure": 0.461,
+    "buildings_flooded": 29,
+    "residents_affected": 335,
+    "residents_cut_off": 125,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 2,
+    "tract_id": "06001428700",
+    "name": "Census Tract 4287",
+    "city": "Alameda",
+    "ces_pctl": 77.5,
+    "priority": 0.258,
+    "exposure": 0.333,
+    "buildings_flooded": 53,
+    "residents_affected": 899,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 3,
+    "tract_id": "06001983200",
+    "name": "Census Tract 9832",
+    "city": "Oakland",
+    "ces_pctl": 55.3,
+    "priority": 0.227,
+    "exposure": 0.411,
+    "buildings_flooded": 12,
+    "residents_affected": 76,
+    "residents_cut_off": 3,
+    "facilities_lost": 1
+   },
+   {
+    "rank": 4,
+    "tract_id": "06001401700",
+    "name": "Census Tract 4017",
+    "city": "Oakland",
+    "ces_pctl": 80.1,
+    "priority": 0.119,
+    "exposure": 0.149,
+    "buildings_flooded": 11,
+    "residents_affected": 0,
+    "residents_cut_off": 89,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 5,
+    "tract_id": "06001406000",
+    "name": "Census Tract 4060",
+    "city": "Oakland",
+    "ces_pctl": 88.1,
+    "priority": 0.034,
+    "exposure": 0.038,
+    "buildings_flooded": 12,
+    "residents_affected": 31,
+    "residents_cut_off": 0,
+    "facilities_lost": 0
+   }
+  ],
+  "4ft_unranked_exposed_tracts": [],
+  "5ft": [
+   {
+    "rank": 1,
+    "tract_id": "06001428700",
+    "name": "Census Tract 4287",
+    "city": "Alameda",
+    "ces_pctl": 77.5,
+    "priority": 0.434,
+    "exposure": 0.56,
+    "buildings_flooded": 60,
+    "residents_affected": 1017,
+    "residents_cut_off": 386,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 2,
+    "tract_id": "06001402900",
+    "name": "Census Tract 4029",
+    "city": "Oakland",
+    "ces_pctl": 69.7,
+    "priority": 0.241,
+    "exposure": 0.345,
+    "buildings_flooded": 3,
+    "residents_affected": 0,
+    "residents_cut_off": 0,
+    "facilities_lost": 1
+   },
+   {
+    "rank": 3,
+    "tract_id": "06001983200",
+    "name": "Census Tract 9832",
+    "city": "Oakland",
+    "ces_pctl": 55.3,
+    "priority": 0.235,
+    "exposure": 0.425,
+    "buildings_flooded": 22,
+    "residents_affected": 206,
+    "residents_cut_off": 18,
+    "facilities_lost": 1
+   },
+   {
+    "rank": 4,
+    "tract_id": "06001403401",
+    "name": "Census Tract 4034.01",
+    "city": "Oakland",
+    "ces_pctl": 57.7,
+    "priority": 0.182,
+    "exposure": 0.316,
+    "buildings_flooded": 15,
+    "residents_affected": 795,
+    "residents_cut_off": 925,
+    "facilities_lost": 0
+   },
+   {
+    "rank": 5,
+    "tract_id": "06001403302",
+    "name": "Census Tract 4033.02",
+    "city": "Oakland",
+    "ces_pctl": 83.1,
+    "priority": 0.172,
+    "exposure": 0.207,
+    "buildings_flooded": 43,
+    "residents_affected": 636,
+    "residents_cut_off": 208,
+    "facilities_lost": 0
+   }
+  ],
+  "5ft_unranked_exposed_tracts": [
+   "06001981900",
+   "06001982000"
+  ]
+ },
+ "priority_weights": {
+  "flooded_building_share": 0.3333333333333333,
+  "facilities_lost": 0.3333333333333333,
+  "residents_cut_off_share": 0.3333333333333333
+ },
+ "population_in_area_est": 81845,
+ "pct_buildings_residential": 79.5,
+ "pct_heights_estimated": 97.3
+}

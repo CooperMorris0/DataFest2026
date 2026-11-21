@@ -1,0 +1,146 @@
+{
+  "scenarios": [
+    {
+      "id": "0ft",
+      "slr_ft": 0,
+      "water_level_navd88_m": 1.941,
+      "source": "ART",
+      "art_level_in": 0,
+      "share_art_cells_dem_above_water": null,
+      "flooded_land_km2": 0.0,
+      "lowlying_km2": 0.0,
+      "buildings_flooded": 0,
+      "buildings_lowlying_only": 0,
+      "road_km_impassable": 0.0,
+      "facilities_flooded": 0
+    },
+    {
+      "id": "1ft",
+      "slr_ft": 1,
+      "water_level_navd88_m": 2.246,
+      "source": "ART",
+      "art_level_in": 12,
+      "share_art_cells_dem_above_water": 0.049,
+      "flooded_land_km2": 0.3013,
+      "lowlying_km2": 0.1204,
+      "buildings_flooded": 6,
+      "buildings_lowlying_only": 5,
+      "road_km_impassable": 0.0,
+      "facilities_flooded": 0
+    },
+    {
+      "id": "2ft",
+      "slr_ft": 2,
+      "water_level_navd88_m": 2.551,
+      "source": "ART",
+      "art_level_in": 24,
+      "share_art_cells_dem_above_water": 0.046,
+      "flooded_land_km2": 0.4261,
+      "lowlying_km2": 0.2952,
+      "buildings_flooded": 14,
+      "buildings_lowlying_only": 24,
+      "road_km_impassable": 0.0,
+      "facilities_flooded": 0
+    },
+    {
+      "id": "3ft",
+      "slr_ft": 3,
+      "water_level_navd88_m": 2.855,
+      "source": "ART",
+      "art_level_in": 36,
+      "share_art_cells_dem_above_water": 0.078,
+      "flooded_land_km2": 0.8575,
+      "lowlying_km2": 0.7211,
+      "buildings_flooded": 49,
+      "buildings_lowlying_only": 119,
+      "road_km_impassable": 2.861,
+      "facilities_flooded": 0
+    },
+    {
+      "id": "4ft",
+      "slr_ft": 4,
+      "water_level_navd88_m": 3.16,
+      "source": "ART",
+      "art_level_in": 48,
+      "share_art_cells_dem_above_water": 0.102,
+      "flooded_land_km2": 1.5274,
+      "lowlying_km2": 1.6269,
+      "buildings_flooded": 117,
+      "buildings_lowlying_only": 422,
+      "road_km_impassable": 4.708,
+      "facilities_flooded": 1
+    },
+    {
+      "id": "5ft",
+      "slr_ft": 5,
+      "water_level_navd88_m": 3.465,
+      "source": "bathtub (fallback: no ART layer at this level)",
+      "art_level_in": null,
+      "flooded_land_km2": 3.3841,
+      "lowlying_km2": 1.653,
+      "buildings_flooded": 417,
+      "buildings_lowlying_only": 560,
+      "road_km_impassable": 21.596,
+      "facilities_flooded": 2
+    }
+  ],
+  "art_bracket": [
+    {
+      "art_level_in": 52,
+      "slr_ft": 4.33,
+      "flooded_land_km2": 3.516,
+      "buildings_flooded": 620
+    },
+    {
+      "art_level_in": 66,
+      "slr_ft": 5.5,
+      "flooded_land_km2": 5.789,
+      "buildings_flooded": 1137
+    }
+  ],
+  "art_vs_bathtub": [
+    {
+      "slr_ft": 1,
+      "art_km2": 0.301,
+      "bathtub_km2": 0.31,
+      "iou": 0.743,
+      "art_buildings": 6,
+      "bathtub_buildings": 7
+    },
+    {
+      "slr_ft": 2,
+      "art_km2": 0.426,
+      "bathtub_km2": 0.396,
+      "iou": 0.795,
+      "art_buildings": 14,
+      "bathtub_buildings": 9
+    },
+    {
+      "slr_ft": 3,
+      "art_km2": 0.857,
+      "bathtub_km2": 0.881,
+      "iou": 0.676,
+      "art_buildings": 49,
+      "bathtub_buildings": 46
+    },
+    {
+      "slr_ft": 4,
+      "art_km2": 1.527,
+      "bathtub_km2": 1.589,
+      "iou": 0.732,
+      "art_buildings": 117,
+      "bathtub_buildings": 109
+    }
+  ],
+  "n_buildings": 13581,
+  "n_road_segments": 2691,
+  "road_km_total": 365.358,
+  "facilities_in_study_area": {
+    "clinic": 49,
+    "school": 20,
+    "fire_station": 6,
+    "nursing_facility": 6,
+    "rail_station": 5,
+    "hospital": 3
+  }
+}

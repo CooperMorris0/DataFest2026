@@ -1,70 +1,94 @@
-# Oakland Sea-Level Rise & Flooding Simulator
+# Oakland Flood Consequence Explorer
 
-DataFest 2026. Which buildings, roads, and communities in West Oakland, Jack London Square, and the Port of Oakland shoreline flood at **+1, 2, 3, and 5 ft** of sea-level rise, and who bears the risk?
+DataFest 2026. A walkable 3D Roblox model of West Oakland and the waterfront that shows what sea-level rise *means for people*: who floods, who gets cut off from emergency services, which flooded areas are near contaminated sites, and which neighborhoods should be prioritized. It is built on official flood maps and open data.
 
-**Status:** the data pipeline and flood model are working and validated against NOAA. The 3D Roblox viewer is next (see `oakland_flooding.md` for the plan).
+> Official flood maps show where water goes. We show what it means for the people who live there, and where help should start.
 
-## Headline results
+**Status:** the data pipeline is complete and validated (definition of done #1), and the isolation, equity-priority and contamination analyses are working. The Roblox viewer is next: its data files are already exported to `data/processed/roblox/`. The planner brief is in [`brief/findings_brief.md`](brief/findings_brief.md).
 
-Study area: bbox −122.335, 37.790 → −122.255, 37.830 (≈ 7.1 × 4.5 km). It contains 13,602 buildings, 365 km of drivable road, and ≈ 82,000 residents (estimated). Water levels are relative to today's Mean Higher High Water (MHHW).
+This is an exploration tool, **not an official hazard or evacuation map**. Defer to ART, BCDC, and City of Oakland plans.
 
-| SLR | Water level (NAVD88) | Flooded land | Buildings flooded | in high-burden tracts | Residents affected (est.) | Impassable road |
-|---|---|---|---|---|---|---|
-| 0 ft (today's MHHW) | 1.94 m | 0.19 km² | 6 | 1 | ~6 | 0 km |
-| +1 ft | 2.25 m | 0.31 km² | 7 | 1 | ~6 | 0.7 km |
-| +2 ft | 2.55 m | 0.40 km² | 9 | 2 | ~28 | 1.0 km |
-| +3 ft | 2.86 m | 0.88 km² | 46 | 28 | ~1,200 | 4.2 km |
-| +5 ft | 3.47 m | 3.38 km² | 417 (357 Oakland, 60 Alameda) | 275 | ~4,170 | 22.6 km |
+## Results (study area: 13,581 buildings, ~82,000 residents, 365 km of drivable road)
 
-- **There's a threshold between 3 and 5 ft.** Up to 2 ft the waterfront mostly holds. At 3 ft the Jack London/Brooklyn Basin edge starts to go. At 5 ft water reaches inland south of West Oakland (around Howard Terminal and the Jack London district) and the I-80/Bay Bridge approach shoreline.
-- **Equity, stated carefully:** most flooded buildings at 5 ft (66%) are in high-burden tracts (CalEnviroScreen 4.0 ≥ 75th percentile statewide). Tract 06001402200 in West Oakland (93rd percentile) has the most flooded buildings (127). However, 68% of *all* buildings in the study area are already in high-burden tracts, so within this bbox flooding is **not disproportionate** to the baseline. Affected residents are 49% high-burden, against a 61% baseline, because much of the flooding hits Port and industrial land and newer waterfront housing. The honest framing is that the communities exposed here are overwhelmingly ones that already carry the state's highest pollution burdens. A comparison against the wider region would be needed to claim disproportionality.
-- Full per-tract numbers are in `data/processed/tract_table.csv`, and everything is in `data/processed/stats.json`.
+| Sea-level rise | Hazard source | Buildings flooded | Residents affected | Facilities lost | Residents cut off | Residents degraded access | Contaminated sites ≤100 m of flooding | Impassable road |
+|---|---|---|---|---|---|---|---|---|
+| 0 ft | ART | 0 | 0 | 0 | 0 | 0 | 0 | 0 km |
+| +1 ft | ART 12 in | 6 | 8 | 0 | 0 | 0 | 17 | 0 km |
+| +2 ft | ART 24 in | 14 | 8 | 0 | 0 | 0 | 17 | 0 km |
+| +3 ft | ART 36 in | 49 | 907 | 0 | 71 | 0 | 23 | 2.9 km |
+| +4 ft | ART 48 in | 117 | 1,341 | 1 (Fire Station 2) | 217 | 235 | 30 | 4.7 km |
+| +5 ft | bathtub model* | 417 | 3,796 | 2 | 1,999 | 1,123 | 62 | 21.6 km |
+
+\*ART has no 60-inch layer. ART's own maps flood 620 buildings at 52 in (4.3 ft) and 1,137 at 66 in (5.5 ft), so our +5 ft row is likely an **underestimate** relative to ART. To use an ART level instead, change `ART_LEVEL_FOR_FT[5]` in `pipeline/config.py`.
+
+- **Equity:** at +3 and +4 ft, 96% and 94% of affected residents live in CalEnviroScreen top-quartile tracts, against 28% of all Oakland residents (3.4× over-represented). At +5 ft the share is 51%. Within the study area itself, 62% of residents are in such tracts. These are ecological, tract-level comparisons.
+- **Emergency access:** Oakland Fire Station 2 (Jack London waterfront) floods from +4 ft, which more than doubles response times for 235 residents. At +5 ft, 1,999 residents are cut off from fire or medical services.
+- **Hidden risk:** at +4 ft, 422 more buildings sit below the water level but behind higher ground (ART "low-lying" areas). Groundwater rise and drainage failure are not modeled.
+- **Top priority tracts (+4 ft):** 4033.02 (Oakland, CalEnviroScreen 83rd percentile), 4287 (Alameda, 78), 9832 (Oakland, 55), 4017 (Oakland, 80), 4060 (Oakland, 88). The full ranking per scenario is in `stats.json` → `top_priority`, and the tract table is in `tract_table.csv`.
 
 ## Method
 
-Connected "bathtub" model on a 1 m LiDAR DEM:
+**Hazard (02, 05).** Flood extents come from the **ART Bay Shoreline Flood Explorer** (BCDC), read from its official MapServer (`mapserver.adaptingtorisingtides.org`, WMS layers `inundation<N>` / `lowlying<N>`). Each layer is rendered onto our 1 m grid. ART's WMS doesn't expose depth values, so **depth is estimated** inside ART's extent as water level minus 2021 USGS LiDAR ground, with a 1 cm floor so ART's extent is kept. Water level is MHHW 1.941 m NAVD88 (NOAA 9414750, Alameda) plus the scenario. For +5 ft, which ART doesn't publish, a **connected bathtub model** on the same LiDAR is used (`hazard_bathtub.py`): 4-connected flood fill from verified open-water seeds, with the sea mask cut from the OSM coastline and Lake Merritt treated as inland water.
 
-1. **Water level:** $W_s = \text{MHHW}_{\text{NAVD88}} + \Delta_s$, with MHHW = **1.941 m NAVD88** from NOAA CO-OPS station **9414750 (Alameda)**, epoch 1983–2001 (MHHW 3.027 m − NAVD88 1.086 m above station datum). Alameda is closer to the study area than San Francisco (9414290, which would give 1.798 m).
-2. **Sea mask:** OSM's "San Francisco Bay" polygon is too coarse because it misses the harbors and the estuary. The DEM extent is cut along OSM `natural=coastline` instead, and the pieces containing hand-verified seed points in open water are kept (open bay, Outer Harbor, Inner Harbor/estuary, estuary at Jack London). See `data/processed/sea_mask.png`.
-3. **Flood fill:** a cell floods if $z < W_s$ **and** it is 4-connected to the sea (`scipy.ndimage.label`). 4-connectivity stops water leaking diagonally through 1-pixel seawalls. Low ground that isn't connected is reported separately as "low but disconnected" and is not counted as flooded. Lake Merritt and its channel are treated as inland water: they can convey flooding but are not counted as flooded land.
-4. **Buildings:** flooded if any 1 m cell under the footprint has depth > 0. The script stores max depth, the wet fraction of the footprint, and base elevation (the lowest ground under the footprint).
-5. **Roads:** each segment is sampled every 1 m. It is impassable if max depth > 0.15 m (6 in). Bridges, viaducts, and tunnels are excluded, because the bare-earth DEM doesn't represent their deck height.
-6. **Equity:** each building is joined, by representative point, to a 2020 Census tract (population), a CalEnviroScreen 4.0 tract (score), and an incorporated place (city). Tract population inside the bbox (POP100 × land fraction inside the bbox) is allocated to residential-candidate buildings in proportion to footprint area × height.
+**Exposure (05).**
+- Building: flooded if any 1 m cell under the footprint floods.
+- Road: impassable above 0.15 m depth. Bridges and tunnels are excluded.
+- Facility: flooded if its building or its own cell floods.
 
-## Validation against the NOAA Sea Level Rise Viewer
+**Consequences (06).**
+- *Facilities:* schools, hospitals, clinics, nursing facilities, fire stations and BART stations in flooded areas.
+- *Isolation:* the drivable network is the OSM study-area graph (directed) plus a ring of Census TIGER roads, stitched at the boundary, so routes reach Children's Hospital and Highland. Flooded edges and flooded facilities are removed.
+  - Fire: response time *from* the nearest station.
+  - Medical: travel time *to* the nearest hospital or clinic.
+  - **Cut off** = no path. **Degraded** = more than 2× the baseline time *and* at least 1 minute longer.
+- *Contamination:* open or managed-in-place EnviroStor and GeoTracker sites in or within 100 m of flooding.
 
-`04b_validate_noaa.py` exports NOAA's connected-inundation layer for our exact bbox and compares it with our flooded land cell by cell at 4 m:
+**Equity and priority (07).** Tract population (2020 Census) is allocated to residential parcels (MTC/SFEI land use) by footprint area × height. Priority = Exposure × Vulnerability:
+- Exposure is the mean of three components, each normalized 0–1 across tracts: share of buildings flooded, facilities lost, and share of residents cut off. The weights are in `PRIORITY_WEIGHTS`.
+- Vulnerability is the CalEnviroScreen 4.0 percentile ÷ 100.
 
-| SLR | NOAA connected | Ours | IoU | Share of NOAA area we also flood |
-|---|---|---|---|---|
-| +1 ft | 0.17 km² | 0.22 km² | 0.64 | 91% |
-| +2 ft | 0.29 km² | 0.31 km² | 0.67 | 84% |
-| +3 ft | n/a | 0.76 km² | n/a | NOAA's `slr_3ft` service returns a blank all-"low-lying" image for this area (any projection or size, checked 2026-11-21); 4 ft renders fine |
-| +5 ft | 3.07 km² | 3.38 km² | **0.88** | **98.5%** |
+## Validation
 
-Main discrepancy: a strip of Port land near the Outer Harbor that we flood and NOAA classifies as low-lying but disconnected. A seawall or berm captured in NOAA's hydro-connectivity edits is probably missing from the bare-earth DEM. See `data/processed/noaa_compare_5ft.png`.
+| Check | 1 ft | 2 ft | 3 ft | 4 ft | 5 ft |
+|---|---|---|---|---|---|
+| ART vs our bathtub (IoU, land) | 0.74 | 0.80 | 0.68 | 0.73 | n/a |
+| ART vs NOAA SLR Viewer (IoU) | 0.62 | 0.68 | NOAA n/a† | 0.73 | n/a |
+| Bathtub vs NOAA (IoU) | 0.64 | 0.67 | NOAA n/a† | 0.86 | 0.88 |
+| Buildings flooded: ART / bathtub | 6 / 7 | 14 / 9 | 49 / 46 | 117 / 109 | n/a / 417 |
+
+†NOAA's `slr_3ft` service returns a blank render for this area (checked 2026-11-21).
+- A Port strip that NOAA treats as disconnected connects in our model through a single 1 m cell at an at-grade intersection, at +4.73 ft (`port_discrepancy_sill.png`). That's a threshold effect, not a missing seawall.
+- The bathtub's ±0.196 m DEM-accuracy runs give 150–1,200 flooded buildings at 5 ft. West Oakland is flat around 3.4–3.7 m, so counts near that level are very sensitive.
 
 ## Limitations and assumptions
 
-- **No storm surge, waves, rainfall, groundwater rise, levee failure, or pump/tide-gate operation.** This is a still-water, permanent-inundation view. Real flood risk (for example a 100-year storm on top of +3 ft) is substantially worse.
-- The bare-earth DEM may not capture seawalls, floodwalls, or bulkheads narrower than ~1 m, which can make our model flood areas that are actually protected (see the Port discrepancy above).
-- The LiDAR is hydro-flattened over water; bay depths aren't real bathymetry. This doesn't affect the land flood results.
-- **Building heights are 97% estimated** (92% use the 6 m default, because OSM rarely has `height` or `building:levels` here). Heights don't affect flood counts, only 3D massing and the population floor-area proxy.
-- Residential vs. non-residential is inferred from OSM `building` tags. 87% are `building=yes`, which is treated as potentially residential. Resident counts are **estimates**.
-- CalEnviroScreen 4.0 uses 2010 tract geography and population uses 2020 tracts. They're joined per building, not tract-to-tract.
-- Houseboats (28) are excluded because they float. Also dropped: roofs/canopies (89), slivers < 8 m² (249), and duplicate or overlapping `building:part` polygons (446).
-- The "phantom footprint by LiDAR height < 1 m" rule from the brief wasn't applied, because it needs a surface model (DSM) and only the bare-earth DEM was used.
-- The bbox includes part of Alameda (60 flooded buildings at 5 ft) and a sliver of Emeryville. Totals are split by city in `stats.json` → `by_city`.
+- Exploration tool, not an official hazard or evacuation map. Still-water flooding only: no storm surge, rainfall, groundwater rise, or compound events. A 100-year storm tide adds ~0.84 m; supplementary bathtub runs are in `hazard/bathtub_summary.json`.
+- **Depth is estimated** (ART extent combined with LiDAR). +5 ft uses our model, not ART.
+- **Residents per building** is an area-based estimate. **97% of building heights are estimated** (OSM rarely tags height here). Roblox buildings are boxes.
+- Drive times are free-flow estimates by road class, with no traffic, signals or dispatch time. TIGER ring roads are treated as two-way. Fire stations are Oakland's only, so Alameda and Emeryville stations are missing; the bbox includes part of Alameda.
+- Contaminated-site proximity **does not mean residents are exposed**.
+- CalEnviroScreen 4.0 uses 2010 tracts and population uses 2020 tracts; they are joined per building.
+- **Priority sensitivity:** with equal weights, one lost facility in a tract carries a full third of the exposure score. At +5 ft this ranks a tract with zero affected residents #2. Adjust `PRIORITY_WEIGHTS` if that's not the intended emphasis.
+- Overpass (the OSM API) refused automated requests during the build, so facilities come from authoritative agency datasets and the outer road ring comes from TIGER.
 
-## Data sources (accessed 2026-11-21)
+## Data sources (all accessed 2026-11-21)
 
-- **OpenStreetMap** via OSMnx 2.2: buildings, drivable roads, coastline and water. © OpenStreetMap contributors, ODbL.
-- **USGS 3DEP 1 m DEM**, project `CA_AlamedaCounty_2021_B21`, tiles x55y419 and x56y419, found via the TNM Access API and read as windowed COG reads. NAD83 / UTM 10N, NAVD88 meters.
-- **NOAA CO-OPS** tidal datums, station 9414750 (Alameda): `api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations/9414750/datums.json`
-- **NOAA Office for Coastal Management Sea Level Rise Viewer** map services (`coast.noaa.gov/arcgis/rest/services/dc_slr/slr_<N>ft`), used for validation only.
-- **CalEnviroScreen 4.0** (CA OEHHA), from OEHHA's ArcGIS feature service `CalEnviroScreen_4_0_Results_`.
-- **U.S. Census Bureau TIGERweb**, 2020 Census tracts (with POP100) and incorporated places.
-- **Esri World Imagery** tiles, used for the alignment check image only.
+| Data | Source |
+|---|---|
+| Flood hazard | ART Bay Shoreline Flood Explorer, SF Bay Conservation and Development Commission (WMS `mapserver.adaptingtorisingtides.org`, layers `inundation0/12/24/36/48/52/66`, `lowlying*`) |
+| Elevation | USGS 3DEP 1 m DEM, project CA_AlamedaCounty_2021_B21 (QL1, 10 cm RMSEz class) |
+| Tide datum | NOAA CO-OPS 9414750 Alameda datums; Extreme Water Levels product |
+| Validation | NOAA Office for Coastal Management Sea Level Rise Viewer (`coast.noaa.gov/arcgis/rest/services/dc_slr`) |
+| Buildings, study-area roads, coastline | OpenStreetMap via OSMnx, © OpenStreetMap contributors (ODbL) |
+| Outer road ring | U.S. Census Bureau TIGER/Line 2025 roads, Alameda County |
+| Land use (residential parcels) | MTC / SFEI Existing Land Use 2020 |
+| Fire stations | City of Oakland GIS, OFD_Basemap |
+| Hospitals, clinics, nursing facilities | CDPH Licensed and Certified Healthcare Facilities (CalHHS) |
+| Schools | California Department of Education, California Public Schools 2024-25 |
+| BART stations | City of Oakland GIS, Bart_Stations |
+| Contaminated sites | DTSC EnviroStor (`Envirostor_Public_Data_Export`); SWRCB GeoTracker (`geotracker_sites_download`) |
+| Equity | CalEnviroScreen 4.0 (OEHHA); 2020 Census tracts and places (TIGERweb) |
+| Alignment check | Esri World Imagery |
 
 ## How to run
 
@@ -74,20 +98,19 @@ Main discrepancy: a strip of Port land near the Outer Harbor that we flood and N
 pipeline/run_all.sh
 ```
 
-Scripts, run in order and all reading `pipeline/config.py` (bbox, datum, scenarios, seeds, scale):
+All downloads are cached in `data/raw/`. After the first run, a full rerun takes about 4 minutes.
 
-| Script | Does | Key outputs (`data/processed/`) |
+| Step | Script | Key outputs (`data/processed/`) |
 |---|---|---|
-| `01_fetch_osm.py` | OSM buildings, roads, water | `data/raw/osm_*.geojson` |
-| `02_fetch_elevation.py` | 3DEP 1 m DEM, merged and clipped | `data/raw/dem_1m_navd88.tif` |
-| `03_building_heights.py` | clean, dedupe, heights | `buildings.geojson` |
-| `03b_alignment_check.py` | OSM over hillshade and imagery | `alignment_check.png` |
-| `04_flood_model.py` | sea mask, connected flood fill, building and road flags | `sea_mask.png`, `flood_<ft>ft.png`, `flood_depth_<ft>ft.tif`, `flood_model_summary.json` |
-| `04b_validate_noaa.py` | comparison with NOAA SLR Viewer | `noaa_compare_<ft>ft.png`, `noaa_validation.json` |
-| `05_equity_overlay.py` | tracts, CalEnviroScreen, population, cities | `buildings_final.geojson`, `roads_final.geojson`, `tract_table.csv`, **`stats.json`** |
+| 1 | `01_fetch_osm`, `01b_fetch_landuse`, `01c_fetch_network_osm` (optional), `01d_fetch_facilities`, `01e_fetch_tiger_roads`, `01f_fetch_contamination` | `data/raw/*` |
+| 2 | `02_fetch_hazard` | `hazard/art_<N>in.tif` |
+| 3 | `03_fetch_elevation` | `data/raw/dem_1m_navd88.tif` |
+| 4 | `04_building_heights`, `04b_alignment_check` | `buildings.geojson`, `alignment_check.png` |
+| fallback | `hazard_bathtub` | `hazard/bathtub_*.tif`, `sea_mask.png` |
+| 5 | `05_flood_exposure`, `05b_validate_hazard` | `flood_<ft>ft.png`, `exposure_summary.json`, `hazard_validation.json` |
+| 6 | `06_consequences` | `consequences_summary.json`, `contaminated_sites_flagged.geojson` |
+| 7 | `07_equity_priority` | `tract_table.csv`, `equity_priority.json` |
+| 8 | `08_export_for_roblox` | `roblox/` (heightmap, sharded buildings and roads, points, manifest), **`stats.json`** |
+| 9 | `09_findings_brief` | `brief/findings_brief.md` |
 
-Downloads are cached in `data/raw/` and are never re-fetched once present. The full run takes about 2 minutes after the first download.
-
-## Next
-
-The Roblox Studio viewer (`06_export_for_roblox.py` plus Luau modules), built from `buildings_final.geojson`, `roads_final.geojson`, the DEM, and `stats.json`, following the plan in `oakland_flooding.md`.
+Shared constants (bbox, datum, scenarios, ART levels, rules, weights, scale) are in `pipeline/config.py`.

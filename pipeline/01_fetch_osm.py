@@ -1,4 +1,4 @@
-"""Fetch OSM buildings, roads, and water/coastline for the bbox. Cached in data/raw."""
+"""Fetch OSM buildings, roads, and water/coastline for the study bbox. Cached in data/raw."""
 import geopandas as gpd
 import osmnx as ox
 import pandas as pd
@@ -43,6 +43,7 @@ if not out.exists():
                  "bridge", "tunnel", "layer", "length"])
     stringify(e).to_crs(CRS_GEO).to_file(out, driver="GeoJSON")
 print("road edges:", len(gpd.read_file(out)))
+
 
 out = RAW / "osm_water.geojson"
 if not out.exists():

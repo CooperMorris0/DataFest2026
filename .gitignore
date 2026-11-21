@@ -6,6 +6,11 @@ backups/
 .DS_Store
 # regenerable intermediates (rerun the pipeline)
 data/processed/*.tif
+data/processed/hazard/
 data/processed/buildings.geojson
-data/processed/buildings_flood.geojson
-data/processed/roads_flood.geojson
+data/processed/buildings_exposure.geojson
+data/processed/buildings_consequences.geojson
+data/processed/roads_exposure.geojson
+data/processed/facilities_exposure.geojson
+data/processed/facilities_consequences.geojson
+data/processed/buildings_final.geojson
