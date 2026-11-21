@@ -13,7 +13,20 @@ Config.SCENARIO_LABELS = { "Today", "+1 ft", "+2 ft", "+3 ft", "+4 ft", "+5 ft*"
 Config.MHHW_M = 1.941                   -- NOAA 9414750 Alameda, NAVD88
 Config.BUILDING_SINK_M = 1.0            -- sink buildings below their lowest ground point
 
-Config.MODES = { "Flood", "Cut off", "Contamination", "Priority" }
+Config.MODES = { "Flood", "Cut off", "Contamination", "Priority", "FloodWatch" }
+
+-- FloodWatch website (oakland-flood-vulnerability/map_template.html): identical categories + colors
+Config.RISK_ORDER = { "Very high", "High", "Moderate", "Low", "Very low" }
+Config.RISK_COLORS = {
+	["Very low"] = Color3.fromHex("#fef0d9"), ["Low"] = Color3.fromHex("#fdcc8a"),
+	["Moderate"] = Color3.fromHex("#fc8d59"), ["High"] = Color3.fromHex("#e34a33"),
+	["Very high"] = Color3.fromHex("#b30000"),
+}
+Config.FLOODWATCH_URL = "https://github.com/CooperMorris0/DataFest2026/tree/main/oakland-flood-vulnerability"
+
+-- walking (1 stud = 0.28 m): ~3.4 m/s walk, ~7.8 m/s sprint, slower when wading
+Config.WALK_SPEED, Config.SPRINT_SPEED = 12, 28
+Config.WADE_SPEED, Config.DEEP_WADE_SPEED = 7, 4
 
 Config.COLORS = {
 	building = Color3.fromRGB(200, 200, 196),
@@ -32,13 +45,14 @@ Config.COLORS = {
 	inlandWater = Color3.fromRGB(50, 120, 170),
 }
 
+-- marker colors match the FloodWatch website for the types both show (clinic is viewer-only)
 Config.FACILITY_COLORS = {
-	fire_station = Color3.fromRGB(230, 50, 40),
-	hospital = Color3.fromRGB(240, 240, 240),
+	fire_station = Color3.fromHex("#3a3a3a"),
+	hospital = Color3.fromHex("#1f4e9c"),
 	clinic = Color3.fromRGB(120, 220, 230),
-	nursing_facility = Color3.fromRGB(240, 170, 220),
-	school = Color3.fromRGB(250, 210, 60),
-	rail_station = Color3.fromRGB(80, 160, 255),
+	nursing_facility = Color3.fromHex("#6a3d9a"),
+	school = Color3.fromHex("#2b7a3b"),
+	rail_station = Color3.fromHex("#0b5c8a"),
 }
 
 Config.TERRAIN_MATERIALS = {

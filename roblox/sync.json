@@ -1,9 +1,42 @@
 [
-  {"file": "roblox/Config.lua", "path": "ReplicatedStorage.FloodViewer.Config", "class": "ModuleScript"},
-  {"file": "roblox/builder/DataLoader.lua", "path": "ServerStorage.FloodBuilder.DataLoader", "class": "ModuleScript"},
-  {"file": "roblox/builder/TerrainWriter.lua", "path": "ServerStorage.FloodBuilder.TerrainWriter", "class": "ModuleScript"},
-  {"file": "roblox/builder/WorldBuilder.lua", "path": "ServerStorage.FloodBuilder.WorldBuilder", "class": "ModuleScript"},
-  {"file": "roblox/builder/Build.lua", "path": "ServerStorage.FloodBuilder.Build", "class": "ModuleScript"},
-  {"file": "roblox/builder/Verify.lua", "path": "ServerStorage.FloodBuilder.Verify", "class": "ModuleScript"},
-  {"file": "roblox/client/FloodClient.client.lua", "path": "StarterPlayer.StarterPlayerScripts.FloodClient", "class": "LocalScript"}
+  {
+    "file": "roblox/Config.lua",
+    "path": "ReplicatedStorage.FloodViewer.Config",
+    "class": "ModuleScript"
+  },
+  {
+    "file": "roblox/builder/DataLoader.lua",
+    "path": "ServerStorage.FloodBuilder.DataLoader",
+    "class": "ModuleScript"
+  },
+  {
+    "file": "roblox/builder/TerrainWriter.lua",
+    "path": "ServerStorage.FloodBuilder.TerrainWriter",
+    "class": "ModuleScript"
+  },
+  {
+    "file": "roblox/builder/WorldBuilder.lua",
+    "path": "ServerStorage.FloodBuilder.WorldBuilder",
+    "class": "ModuleScript"
+  },
+  {
+    "file": "roblox/builder/Build.lua",
+    "path": "ServerStorage.FloodBuilder.Build",
+    "class": "ModuleScript"
+  },
+  {
+    "file": "roblox/builder/Verify.lua",
+    "path": "ServerStorage.FloodBuilder.Verify",
+    "class": "ModuleScript"
+  },
+  {
+    "file": "roblox/client/FloodClient.client.lua",
+    "path": "StarterPlayer.StarterPlayerScripts.FloodClient",
+    "class": "LocalScript"
+  },
+  {
+    "file": "roblox/server/LaunchLink.server.lua",
+    "path": "ServerScriptService.LaunchLink",
+    "class": "Script"
+  }
 ]

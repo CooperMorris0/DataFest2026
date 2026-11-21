@@ -39,7 +39,9 @@ local function writeStatsModule()
 	-- Bake stats.json into a ModuleScript so play mode never needs HTTP.
 	local json = DataLoader.get(Config.SERVER .. "/data/processed/stats.json")
 	local fv = ReplicatedStorage.FloodViewer
-	local mod = fv:FindFirstChild("StatsJSON") or Instance.new("ModuleScript")
+	-- always a fresh instance: require() caches a ModuleScript's first result per session
+	if fv:FindFirstChild("StatsJSON") then fv.StatsJSON:Destroy() end
+	local mod = Instance.new("ModuleScript")
 	mod.Name = "StatsJSON"
 	mod.Source = "-- generated from data/processed/stats.json by FloodBuilder.Build; do not edit\nreturn [==[" .. json .. "]==]\n"
 	mod.Parent = fv
@@ -89,6 +91,7 @@ function Build.run(opts)
 		WorldBuilder.roads(manifest, city, filter)
 		WorldBuilder.water(manifest, city, levels)
 		WorldBuilder.markers(manifest, city)
+		WorldBuilder.floodwatch(city)
 		city:SetAttribute("BuiltSub", opts.sub == true)
 		city:SetAttribute("Progress", "done")
 	end)
@@ -96,6 +99,29 @@ function Build.run(opts)
 		city:SetAttribute("Progress", "ERROR: " .. tostring(err))
 		warn("[Build] " .. tostring(err))
 	end
+end
+
+-- Upgrade an already-built place in place (no terrain rewrite): solid buildings, street
+-- names on roads (roads rebuilt), water detectable by raycasts, FloodWatch layer.
+function Build.upgrade()
+	local city = workspace.City
+	city:SetAttribute("Progress", "upgrade: buildings")
+	for n, p in ipairs(city.Buildings:GetDescendants()) do
+		if p:IsA("BasePart") then p.CanCollide = true end
+		if n % 3000 == 0 then task.wait() end
+	end
+	for n, p in ipairs(city.Water:GetDescendants()) do
+		if p:IsA("BasePart") then p.CanQuery = true end
+		if n % 3000 == 0 then task.wait() end
+	end
+	city:SetAttribute("Progress", "upgrade: roads")
+	city.Roads:Destroy()
+	local manifest = DataLoader.json("manifest.json")
+	WorldBuilder.roads(manifest, city)
+	city:SetAttribute("Progress", "upgrade: floodwatch")
+	writeStatsModule()
+	WorldBuilder.floodwatch(city)
+	city:SetAttribute("Progress", "done")
 end
 
 return Build
