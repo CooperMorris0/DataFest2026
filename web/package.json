@@ -1,0 +1,15 @@
+{
+  "name": "floodwatch-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Demo server for the Oakland flood map with community help requests",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.3.0"
+  }
+}

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log in · Oakland FloodWatch</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px;
+    background: #f3f3f0; color: #1d2327; font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { background: #fff; border: 1px solid #e3e5e6; border-radius: 10px; padding: 22px 22px 18px; width: 100%; max-width: 360px; }
+  h1 { font-size: 20px; margin: 0 0 2px; letter-spacing: -0.01em; }
+  .sub, .note { color: #5f6b73; margin: 0 0 14px; }
+  .note { font-size: 12px; margin: 12px 0 0; }
+  label { display: block; font-weight: 600; font-size: 13px; }
+  input { display: block; width: 100%; margin-top: 4px; padding: 9px 12px; border: 1px solid #c8cdd1; border-radius: 8px; font: inherit; }
+  input:focus { outline: 2px solid #1f4e9c; outline-offset: 0; }
+  .btns { display: flex; gap: 8px; margin-top: 12px; }
+  button { flex: 1; border: 1px solid #e3e5e6; background: #f6f7f8; color: #1d2327; border-radius: 8px; padding: 8px 12px;
+    font: inherit; font-weight: 600; cursor: pointer; }
+  button.primary { background: #1f4e9c; border-color: #1f4e9c; color: #fff; }
+  button:disabled { opacity: .6; cursor: default; }
+  #err { color: #b30000; font-size: 13px; margin: 10px 0 0; }
+  a { color: #1f4e9c; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Oakland FloodWatch</h1>
+  <p class="sub">Log in or sign up to ask for help or volunteer.</p>
+  <form id="f">
+    <label for="name">Your name</label>
+    <input id="name" name="name" required autocomplete="nickname" autofocus>
+    <div class="btns">
+      <button type="submit" class="primary">Log in</button>
+      <button type="submit">Sign up</button>
+    </div>
+    <p id="err" role="alert" hidden></p>
+  </form>
+  <p class="note">Demo login: no password needed. Real accounts come later.</p>
+  <p class="note"><a href="/">&larr; Back to the map</a></p>
+</main>
+<script>
+  const next = new URLSearchParams(location.search).get("next") || "";
+  const dest = /^\/(?![\/\\])/.test(next) ? next : "/";   // same-site paths only
+  const form = document.getElementById("f"), err = document.getElementById("err");
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const buttons = form.querySelectorAll("button");
+    buttons.forEach(b => (b.disabled = true));
+    err.hidden = true;
+    try {
+      const r = await fetch("/api/login", {
+        method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({name: document.getElementById("name").value.trim()}),
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data.error || "Could not log in (" + r.status + ").");
+      location.href = dest;
+    } catch (ex) {
+      err.textContent = ex.message;
+      err.hidden = false;
+      buttons.forEach(b => (b.disabled = false));
+    }
+  });
+</script>
+</body>
+</html>

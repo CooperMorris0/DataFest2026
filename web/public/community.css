@@ -1,0 +1,52 @@
+/* Community help requests: styles for the new elements only. */
+
+/* account box (bottom left of the map) */
+.cm-box { background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.25); padding: 8px 10px;
+  font: 13px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #1d2327; }
+.cm-box a { color: #1f4e9c; font-weight: 600; }
+.cm-box label { display: flex; align-items: center; gap: 6px; margin-top: 4px; cursor: pointer; }
+
+/* "Ask for help" map button */
+.leaflet-bar.cm-ask { display: block; background: #1f4e9c; color: #fff; padding: 4px 10px; font-size: 13px;
+  font-weight: 600; line-height: 22px; white-space: nowrap; text-decoration: none; }
+.leaflet-bar.cm-ask:hover { background: #183f7f; color: #fff; }
+
+/* pick-a-spot mode */
+.cm-banner { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 1000;
+  background: #1d2327; color: #fff; padding: 7px 12px; border-radius: 8px; font-size: 13px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.3); pointer-events: none; white-space: nowrap; }
+.cm-banner[hidden] { display: none; }
+.cm-picking, .cm-picking .leaflet-interactive { cursor: crosshair !important; }
+
+/* form */
+.cm-form label { display: block; font-weight: 600; font-size: 13px; margin-top: 10px; }
+.cm-form label:first-child { margin-top: 0; }
+.cm-form select, .cm-form textarea, .cm-form input { display: block; width: 100%; margin-top: 4px; padding: 7px 9px;
+  border: 1px solid #c8cdd1; border-radius: 8px; font: inherit; font-weight: 400; background: #fff; color: #1d2327; }
+.cm-form input[type=number] { width: 90px; }
+.cm-form textarea { resize: vertical; }
+.cm-form select:focus, .cm-form textarea:focus, .cm-form input:focus { outline: 2px solid #1f4e9c; outline-offset: 0; }
+
+/* buttons */
+.cm-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.cm-btn { display: inline-block; border: 1px solid #e3e5e6; background: #f6f7f8; color: #1d2327; border-radius: 8px;
+  padding: 7px 12px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; }
+.cm-btn.cm-primary { background: #1f4e9c; border-color: #1f4e9c; color: #fff; }
+.cm-btn.cm-primary:hover { background: #183f7f; }
+.cm-btn:disabled { opacity: .6; cursor: default; }
+.cm-btn:focus-visible { outline: 2px solid #1f5fbf; outline-offset: 2px; }
+.cm-err { color: #b30000; font-size: 13px; margin: 8px 0 0; }
+.cm-err[hidden] { display: none; }
+.cm-details { margin: 10px 0 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* status colors (chips and markers) */
+.cm-open { background: #d62828; }
+.cm-help_on_the_way { background: #e8820c; }
+.cm-resolved { background: #5f6b73; }
+.cm-new { background: #1f4e9c; }
+.cm-chip { padding: 3px 10px; border-radius: 999px; font-weight: 600; font-size: 13px; color: #fff; white-space: nowrap; }
+
+/* help markers */
+.cm-marker { background: none; border: none; }
+.cm-pin { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 12px; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.45); box-sizing: border-box; }
