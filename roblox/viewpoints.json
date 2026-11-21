@@ -1,0 +1,50 @@
+[
+  {
+    "name": "West Oakland (Mandela Pkwy & 7th St)",
+    "lon": -122.2931,
+    "lat": 37.8053,
+    "x_m": 3708.06,
+    "z_m": -1725.32,
+    "look_height_m": 120
+  },
+  {
+    "name": "Jack London Square",
+    "lon": -122.2746851,
+    "lat": 37.7957886,
+    "x_m": 5337.32,
+    "z_m": -682.45,
+    "look_height_m": 120
+  },
+  {
+    "name": "Port of Oakland (Middle Harbor)",
+    "lon": -122.3241804,
+    "lat": 37.8032,
+    "x_m": 973.72,
+    "z_m": -1472.09,
+    "look_height_m": 120
+  },
+  {
+    "name": "Oakland Fire Station 2 (47 Clay St)",
+    "lon": -122.2795429,
+    "lat": 37.7959773,
+    "x_m": 4909.47,
+    "z_m": -700.08,
+    "look_height_m": 120
+  },
+  {
+    "name": "Prescott neighborhood",
+    "lon": -122.291,
+    "lat": 37.8038,
+    "x_m": 3894.18,
+    "z_m": -1560.3,
+    "look_height_m": 120
+  },
+  {
+    "name": "Lake Merritt channel",
+    "lon": -122.2606799,
+    "lat": 37.7990453,
+    "x_m": 6567.51,
+    "z_m": -1053.44,
+    "look_height_m": 120
+  }
+]
