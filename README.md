@@ -41,7 +41,7 @@ This is an exploration tool, **not an official hazard or evacuation map**. Defer
 - **Risk today:** rain and storm-drain flood risk per H3 block (311 reports, an ML model, FEMA zones, CDC SVI), weighted by what a flood would disrupt (key facilities, main roads, bus stops, groceries and pharmacies), with a "where to act first" list.
 - **Search an address:** its hazards and tailored actions. Inside the West Oakland study area it adds this pipeline's **building-level** sea-level-rise results (floods from +N ft, depth, cut off from emergency services, near a contaminated site), read from `data/processed/export/buildings/`.
 - **Future flooding slider:** Today to +5 ft from the same ART maps (5 ft = ART 66 in).
-- **Services and storm prep:** community service markers, plus a Storm prep page with the drains to clear first and shelter sites on safe ground.
+- **Services and storm prep:** community service markers, plus a Storm prep page with shelter sites on safe ground.
 
 ## Method
 
